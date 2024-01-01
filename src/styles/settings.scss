@@ -8,3 +8,18 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+@use 'vuetify' with ($body-font-family: ('IranSans', 'Tahoma', "Arial"),
+    $typography: ('h1': ('letter-spacing': 0),
+        'h2': ('letter-spacing': 0),
+        'h3': ('letter-spacing': 0),
+        'h4': ('letter-spacing': 0),
+        'h5': ('letter-spacing': 0),
+        'h6': ('letter-spacing': 0),
+        'subtitle-1': ('letter-spacing': 0),
+        'subtitle-2': ('letter-spacing': 0),
+        'body-1': ('letter-spacing': 0),
+        'body-2': ('letter-spacing': 0),
+        'button': ('letter-spacing': 0),
+    ),
+    $line-height-root: 2,
+);

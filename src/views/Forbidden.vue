@@ -1,0 +1,1 @@
+<template><h1>forbiden</h1></template>

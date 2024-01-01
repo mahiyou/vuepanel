@@ -1,20 +1,10 @@
-/**
- * main.ts
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
+import App from "./App.vue";
+import { createApp } from "vue";
+import { registerPlugins } from "@/plugins";
+import VueCountdown from "@chenfengyuan/vue-countdown";
 
-// Components
-import App from './App.vue'
+const app = createApp(App);
+app.component(VueCountdown.name, VueCountdown);
 
-// Composables
-import { createApp } from 'vue'
-
-// Plugins
-import { registerPlugins } from '@/plugins'
-
-const app = createApp(App)
-
-registerPlugins(app)
-
-app.mount('#app')
+registerPlugins(app);
+app.mount("#app");
