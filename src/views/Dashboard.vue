@@ -1,3 +1,6 @@
 <template>
-    <h1>Dashboard</h1>
+    <v-container>
+        <h1>داشبورد</h1>
+    </v-container>
+    
 </template>

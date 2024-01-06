@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import LoginView from "@/views/Auth/Login.vue";
 import DashboardView from "@/views/Dashboard.vue";
 import ForbiddenView from "@/views/Forbidden.vue";
@@ -48,15 +47,12 @@ const routes = [
     },
     {
         path: "/",
-        component: DashboardLayout,
+        component: DefaultLayout,
         children: [
             {
                 path: "",
                 name: "dashboard",
                 component: DashboardView,
-                meta: {
-                    authenticaion: false,
-                }
             },
 
             {

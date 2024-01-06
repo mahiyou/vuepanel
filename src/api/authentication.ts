@@ -3,6 +3,7 @@ export interface IUser {
     abilities: string[];
     name?: string;
     avatar?: string;
+    notifications?: number;
 }
 
 export interface ILoginRequest {
