@@ -1,9 +1,10 @@
+import { INotification } from "./notification";
+
 export interface IUser {
     token: string;
     abilities: string[];
     name?: string;
     avatar?: string;
-    notifications?: number;
 }
 
 export interface ILoginRequest {
@@ -12,6 +13,7 @@ export interface ILoginRequest {
 }
 export interface ILoginResponse {
     user: IUser;
+    notifications: INotification[];
 }
 
 export interface IRegisterRequest {

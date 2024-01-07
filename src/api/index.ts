@@ -1,11 +1,14 @@
 import { MockAPI } from "@/api/mock";
 import { ILoginRequest, ILoginResponse, IResetPasswordRequest, IResetPasswordResponse, IRegisterRequest, IRegisterResponse, IChangePasswordRequest } from "./authentication";
+import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest } from "./notification";
 
 export interface IAPI {
     login(request: ILoginRequest): Promise<ILoginResponse>;
     register(request: IRegisterRequest): Promise<IRegisterResponse>;
     resetPassword(request: IResetPasswordRequest): Promise<IResetPasswordResponse | ILoginResponse>;
     changePassword(request: IChangePasswordRequest): Promise<void>;
+    getNotifications(request: IGetNotificationsRequest): Promise<IGetNotificationsResponse>;
+    markNotificationsAsRead(request: IMarkNotificationsAsReadRequest): Promise<IGetNotificationsResponse>;
 }
 
 export function useAPI(): IAPI {

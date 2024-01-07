@@ -11,7 +11,7 @@
 
     <v-container class="form-frame text-center">
         <v-row justify="center">
-            <div class="text-white mb-15">
+            <div class="text-light mb-15">
                 <h1>پنل کاربری</h1>
                 <div class="sub-title font-weight-bold mt-2">یوزر پنل جامع، مناسب برای همه ی پروژه ها</div>
             </div>

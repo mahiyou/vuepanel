@@ -25,8 +25,7 @@
             </v-btn>
             <v-alert class="my-2" v-if="invalidInputError" text="اطلاعات وارد شده صحیح نیست" type="error"
                 variant="tonal"></v-alert>
-            <v-alert class="my-2" v-if="serverError" text="خطای سرور" type="error"
-                variant="tonal"></v-alert>
+            <v-alert class="my-2" v-if="serverError" text="خطای سرور" type="error" variant="tonal"></v-alert>
 
             <div class="text-center mt-8">
                 <p class="mb-6">ورود از طریق:</p>
@@ -46,10 +45,17 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useAuthStore } from "@/store/auth";
+import { useNotificationStore } from "@/store/notification";
 import { useAPI } from "@/api";
 import UserLoginError from "@/api/errors/UserLoginError";
 
 export default defineComponent({
+    setup() {
+        return {
+            authStore: useAuthStore(),
+            notificationStore: useNotificationStore()
+        };
+    },
     data() {
         return {
             valid: false,
@@ -71,10 +77,10 @@ export default defineComponent({
             this.invalidInputError = false;
             try {
                 const response = await useAPI().login({ username: this.username, password: this.password });
-                const authStore = useAuthStore();
-                authStore.setUser(response.user);
-                this.$router.push({ name: "dashboard" });
-            } catch(e) {
+                this.authStore.setUser(response.user);
+                this.notificationStore.set(response.notifications);
+                this.$router.push({name: "dashboard"});
+            } catch (e) {
                 if (e instanceof UserLoginError) {
                     this.invalidInputError = true;
                 } else {
