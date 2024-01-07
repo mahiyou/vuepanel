@@ -4,8 +4,8 @@
         <v-spacer></v-spacer>
         <v-menu>
             <template v-slot:activator="{ props }">
-                <v-btn variant="text" color="secondary" rounded="circle" v-bind="props"><span
-                        class="fi fi-ir flag" /></v-btn>
+                <v-btn variant="text" color="secondary" width="30px" height="100%" rounded="circle" v-bind="props"><span
+                        class="fi fi-ir flag px-0" /></v-btn>
             </template>
             <v-list>
                 <v-list-item v-for="(language, i) in languages" :key="i" :value="language">
@@ -22,11 +22,11 @@
                 <div class="notifications">
                     <span class="notification-number" v-if="notificationStore.unreadCount">{{ notificationStore.unreadCount
                     }}</span>
-                    <v-btn variant="text" color="secondary" icon="mdi-bell-outline" class="ml-3 px-5"
+                    <v-btn variant="text" color="secondary" width="65px" height="100%"  icon="mdi-bell-outline px-0" class="ml-3 px-5"
                         v-bind="props"></v-btn>
                 </div>
             </template>
-            <v-list lines="two" class="py-0">
+            <v-list lines="two" class="py-0" :elevation="3">
                 <v-list-item class="bg-primary ">
                     <v-list-item-title class="font-weight-bold">اعلانات</v-list-item-title>
                     <template v-slot:append v-if="notificationStore.unreadCount">
@@ -48,7 +48,7 @@
                         </v-list-item-action>
                     </template>
                 </v-list-item>
-                <v-btn width="100%" height="80px" variant="text" prepend-icon="mdi-arrow-right-thin all-notifications-btn">
+                <v-btn width="100%" height="80px" variant="text" prepend-icon="mdi-arrow-left-thin all-notifications-btn">
                     نشان دادن همه ی اعلان ها</v-btn>
             </v-list>
 
@@ -139,6 +139,7 @@ export default defineComponent({
 
 </script>
 <style lang="scss">
+$menu-content-elevation: 0;
 .appbar {
     padding: 0px auto;
 
@@ -154,14 +155,14 @@ export default defineComponent({
             text-overflow: ellipsis;
         }
     }
-
     .notifications {
         position: relative;
         height: 100%;
 
         .notification-number {
             position: absolute;
-            top: 8px;
+            top: 10px;
+            right: 6px;
             background-color: #f06548;
             color: white;
             padding: 0px 7px;

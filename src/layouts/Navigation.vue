@@ -26,7 +26,7 @@ export default defineComponent({
                         value: "Dashboard22", icon: "mdi-account-circle-outline",
                         items: [{
                             title: "آنالیزها", value: "Analytics", props: {
-                                prependIcon: "mdi-circle-medium"
+                                prependIcon: "mdi-circle-outline"
                             }
                         }, {
                             title: "آنالیزها", value: "Analytics2", props: {
@@ -52,7 +52,22 @@ export default defineComponent({
                     items: [{
                         title: "آنالیزها", value: "Analytics3", props: {
                             prependIcon: "mdi-menu-left"
-                        }
+                        },
+                        items: [{
+                            title: "آنالیزها", value: "Analytics4", props: {
+                                prependIcon: "mdi-menu-left"
+                            },
+                            items: [{
+                                title: "آنالیزها", value: "Analytics5", props: {
+                                    prependIcon: "mdi-menu-left"
+                                },
+                                items: [{
+                                    title: "آنالیزها", value: "Analytics9", props: {
+                                        prependIcon: "mdi-menu-left"
+                                    }
+                                }]
+                            }]
+                        }]
                     }, {
                         title: "سی آر ام", value: "CRM2", props: {
                             prependIcon: "mdi-menu-left"
@@ -69,10 +84,19 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .navigation {
+    
     .list-item {
-
-        .v-list-item__prepend {
-            width: 25px;
+        .v-list-item__prepend > .v-icon ~ .v-list-item__spacer {
+            width: 8px;
+        }
+        .v-list-group {
+            // --parent-padding: 32px;
+           --list-indent-size: 0px;
+            //--prepend-width: 5px;
+            // --indent-padding: 5px;
+        }
+        > .v-list-group > .v-list-group__items {
+            --indent-padding: 0px;
         }
 
         .v-list-item__overlay,
