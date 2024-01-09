@@ -1,7 +1,5 @@
 import { INotification } from "@/api/notification";
 import { defineStore } from "pinia";
-import { useAPI } from "@/api";
-import { useAuthStore } from "@/store/auth";
 
 export interface IRenderedNotification {
     id: number;
@@ -9,9 +7,10 @@ export interface IRenderedNotification {
     subtitle: string;
     avatar: string;
     date: Date;
+    seen: Date | undefined;
 }
 
-export const useNotificationStore = defineStore("notif", {
+export const useNotificationStore = defineStore("notification", {
     state: () => ({
         items: [] as INotification[],
     }),
@@ -33,28 +32,21 @@ export const useNotificationStore = defineStore("notif", {
 export function renderNotificationItem(item: INotification): IRenderedNotification {
     if (item.action == "like") {
         return {
-            id: 0,
+            id: item.id,
             avatar: item.meta.user.avatar,
             date: item.created_at,
+            seen: item.seen_at,
             subtitle: `${item.meta.user.name} پست ${item.subject.id} را لایک کرد.`,
             title: "لایک شدید!",
         };
     }
     return {
-        id: 1,
+        id: item.id,
         avatar: "/pics/laptop.jpg",
         title: item.action,
         date: item.created_at,
-        subtitle: ""
+        seen: item.seen_at,
+        subtitle: "",
     };
 }
 
-// setInterval(async () => {
-
-//     const authStore = useAuthStore();
-
-//     if (authStore.user) {
-//         const notificatio = useAPI().getNotifications({ user: authStore.user });
-//     }
-
-// }, 300000);

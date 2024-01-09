@@ -5,12 +5,7 @@ import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("auth", {
     state: () => ({
-        user: {
-            token: "ddd",
-            abilities: ["addProduct"],
-            name: " الکس",
-            avatar: "/pics/avatar.jpg"
-        } as undefined | IUser,
+        user: undefined as undefined | IUser,
     }),
     getters: {
         isUserLoggedIn(): boolean {

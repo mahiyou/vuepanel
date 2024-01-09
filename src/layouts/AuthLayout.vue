@@ -91,13 +91,7 @@ export default defineComponent({
 
     .footer {
         font-size: 14px;
-
-        .link {
-            font-weight: 500;
-        }
-
         .footer-sentence {
-
             color: #9294a3
         }
     }

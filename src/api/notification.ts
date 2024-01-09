@@ -6,6 +6,7 @@ export interface INotificationSubject {
 }
 
 export interface INotification {
+    id: number;
     meta: any;
     created_at: Date;
     seen_at: Date | undefined;

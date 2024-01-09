@@ -7,7 +7,7 @@
                 <v-btn variant="text" color="secondary" width="30px" height="100%" rounded="circle" v-bind="props"><span
                         class="fi fi-ir flag px-0" /></v-btn>
             </template>
-            <v-list>
+            <v-list :elevation="3">
                 <v-list-item v-for="(language, i) in languages" :key="i" :value="language">
                     <template v-slot:prepend>
                         <span class="fi ml-2 rounded" :class="`fi-${language.value}`" />
@@ -18,22 +18,24 @@
         </v-menu>
 
         <v-menu v-if="notificationStore" width="300px">
+            <v-toolbar color="primary" class="px-2 fixed-bar">
+                <v-toolbar-title class="font-weight-bold">اعلانات</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <template v-if="notificationStore.unreadCount">
+                    <span class="bg-light px-2 rounded-lg">{{ notificationStore.unreadCount }} اعلان جدید</span>
+                </template>
+            </v-toolbar>
+
             <template v-slot:activator="{ props }">
                 <div class="notifications">
                     <span class="notification-number" v-if="notificationStore.unreadCount">{{ notificationStore.unreadCount
                     }}</span>
-                    <v-btn variant="text" color="secondary" width="65px" height="100%"  icon="mdi-bell-outline px-0" class="ml-3 px-5"
-                        v-bind="props"></v-btn>
+                    <v-btn variant="text" color="secondary" width="65px" height="100%" icon="mdi-bell-outline px-0"
+                        class="ml-3 px-5" v-bind="props"></v-btn>
                 </div>
             </template>
-            <v-list lines="two" class="py-0" :elevation="3">
-                <v-list-item class="bg-primary ">
-                    <v-list-item-title class="font-weight-bold">اعلانات</v-list-item-title>
-                    <template v-slot:append v-if="notificationStore.unreadCount">
-                        <span class="bg-light px-2 rounded-lg">{{ notificationStore.unreadCount }} اعلان جدید</span>
-                    </template>
-                </v-list-item>
 
+            <v-list lines="two" class="py-0" :elevation="3">
                 <v-list-item v-for="(item, index) in notifications" :key="index" :value="item.id" :title="item.title"
                     :subtitle="item.subtitle" @click.stop>
                     <template v-slot:prepend>
@@ -42,9 +44,9 @@
                         </v-avatar>
                     </template>
 
-                    <template v-slot:append="{ isActive }">
+                    <template v-slot:append>
                         <v-list-item-action>
-                            <v-checkbox-btn :model-value="isActive" />
+                            <v-checkbox-btn :model-value="item.seen !== undefined" @click="$emit('messageSeen',item.id)"/>
                         </v-list-item-action>
                     </template>
                 </v-list-item>
@@ -88,6 +90,7 @@ export default defineComponent({
     },
     data() {
         return {
+            checked: true,
             wideNav: true,
             items: [
                 {
@@ -98,7 +101,7 @@ export default defineComponent({
                 { title: "پیام ها", value: "messages", props: { prependIcon: "mdi-message-text-outline" } },
                 { title: "راهنما", value: "help", props: { prependIcon: "mdi-lifebuoy" } },
                 { title: "تنظیمات", value: "settings", props: { prependIcon: "mdi-cog" } },
-                { title: "خروج از حساب کاربری", value: "logout", props: { prependIcon: "mdi-logout" } },
+                { title: "خروج از حساب کاربری", value: "logout", props: { prependIcon: "mdi-logout", to: { name: "logout" } } },
             ],
             languages: [
                 { title: "انگلیسی", value: "us" },

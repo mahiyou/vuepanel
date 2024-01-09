@@ -7,6 +7,7 @@ import ForbiddenView from "@/views/Forbidden.vue";
 import NotFoundView from "@/views/NotFound.vue";
 import ResetPasswordView from "@/views/Auth/ResetPassword.vue";
 import RegisterView from "@/views/Auth/register.vue";
+import Logout from "@/views/Auth/Logout.vue";
 import { useAuthStore } from "@/store/auth";
 
 const routes = [
@@ -37,6 +38,11 @@ const routes = [
                 meta: {
                     authenticaion: false,
                 }
+            },
+            {
+                path: "logout",
+                name: "logout",
+                component: Logout,
             },
         ],
     },

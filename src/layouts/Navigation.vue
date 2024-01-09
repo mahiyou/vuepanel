@@ -26,7 +26,7 @@ export default defineComponent({
                         value: "Dashboard22", icon: "mdi-account-circle-outline",
                         items: [{
                             title: "آنالیزها", value: "Analytics", props: {
-                                prependIcon: "mdi-circle-outline"
+                                prependIcon: "mdi-circle-medium"
                             }
                         }, {
                             title: "آنالیزها", value: "Analytics2", props: {

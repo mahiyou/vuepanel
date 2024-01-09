@@ -7,9 +7,10 @@ import ServerInternalError from "./errors/ServerInternalError";
 export class MockAPI implements IAPI {
     public getNotificationsItems(): INotification[] {
         return [{
+            id: 1,
             meta: {
                 user: {
-                    id: 40,
+                    id: 41,
                     name: "علی اصغر",
                     avatar: "https://files.virgool.io/upload/users/2123818/avatar/WNZLo4.jpg?width=256"
                 }
@@ -19,10 +20,28 @@ export class MockAPI implements IAPI {
             action: "like",
             subject: {
                 type: "photo",
-                id: 30,
+                id: 32,
             },
         },
         {
+            id: 1,
+            meta: {
+                user: {
+                    id: 41,
+                    name: "علی اصغر",
+                    avatar: "https://files.virgool.io/upload/users/2123818/avatar/WNZLo4.jpg?width=256"
+                }
+            },
+            created_at: new Date(1683369808),
+            seen_at: undefined,
+            action: "like",
+            subject: {
+                type: "photo",
+                id: 32,
+            },
+        },
+        {
+            id: 2,
             meta: "system",
             created_at: new Date(1688640208),
             seen_at: new Date(1704550408),
@@ -30,6 +49,73 @@ export class MockAPI implements IAPI {
             subject: {
                 type: "service",
                 id: 51,
+            },
+        },
+        {
+            id: 3,
+            meta: "system",
+            created_at: new Date(1688640208),
+            seen_at: new Date(1704550408),
+            action: "service expired",
+            subject: {
+                type: "service",
+                id: 54,
+            },
+        },
+        {
+            id: 4,
+            meta: {
+                user: {
+                    id: 42,
+                    name: "علی اصغر",
+                    avatar: "https://files.virgool.io/upload/users/2123818/avatar/WNZLo4.jpg?width=256"
+                }
+            },
+            created_at: new Date(1683369808),
+            seen_at: undefined,
+            action: "like",
+            subject: {
+                type: "photo",
+                id: 34,
+            },
+        },
+        {
+            id: 5,
+            meta: "system",
+            created_at: new Date(1688640208),
+            seen_at: new Date(1704550408),
+            action: "service expired",
+            subject: {
+                type: "service",
+                id: 56,
+            },
+        },
+        {
+            id: 6,
+            meta: {
+                user: {
+                    id: 43,
+                    name: "علی اصغر",
+                    avatar: "https://files.virgool.io/upload/users/2123818/avatar/WNZLo4.jpg?width=256"
+                }
+            },
+            created_at: new Date(1683369808),
+            seen_at: undefined,
+            action: "like",
+            subject: {
+                type: "photo",
+                id: 38,
+            },
+        },
+        {
+            id: 7,
+            meta: "system",
+            created_at: new Date(1688640208),
+            seen_at: new Date(1704550408),
+            action: "service expired",
+            subject: {
+                type: "service",
+                id: 59,
             },
         }];
     }
@@ -108,12 +194,18 @@ export class MockAPI implements IAPI {
         }, [request]);
     }
     public async markNotificationsAsRead(request: IMarkNotificationsAsReadRequest): Promise<IGetNotificationsResponse> {
-        return this.call((request: IGetNotificationsRequest) => {
+        return this.call((request: IMarkNotificationsAsReadRequest) => {
             if (Math.random() > 0.9) {
                 throw new ServerInternalError();
             }
+            const oldData = this.getNotificationsItems();
+            for (let i = 0; i < oldData.length; i++) {
+                if (oldData[i].id == request.ids[0]) {
+                    oldData[i].seen_at = new Date();
+                }
+            }
             return {
-                notifications: this.getNotificationsItems(),
+                notifications: oldData,
             };
 
         }, [request]);
@@ -123,10 +215,6 @@ export class MockAPI implements IAPI {
     private call<T extends Function>(fn: T, args: Parameters<any>): Promise<ReturnType<any>> {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                // if (Math.random() > 0.7) {
-                //     reject(new Error());
-                //     return;
-                // }
                 try {
                     resolve(fn(...args));
                 } catch (e) {
