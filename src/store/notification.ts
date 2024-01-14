@@ -31,13 +31,21 @@ export const useNotificationStore = defineStore("notification", {
 
 export function renderNotificationItem(item: INotification): IRenderedNotification {
     if (item.action == "like") {
+        // return {
+        //     id: item.id,
+        //     avatar: item.meta.user.avatar,
+        //     date: item.created_at,
+        //     seen: item.seen_at,
+        //     subtitle: `${item.meta.user.name} پست ${item.subject.id} را لایک کرد.`,
+        //     title: "لایک شدید!",
+        // };
         return {
             id: item.id,
             avatar: item.meta.user.avatar,
             date: item.created_at,
             seen: item.seen_at,
-            subtitle: `${item.meta.user.name} پست ${item.subject.id} را لایک کرد.`,
-            title: "لایک شدید!",
+            subtitle: `${item.meta.user.name} liked post ${item.subject.id}`,
+            title: "Your post was liked",
         };
     }
     return {

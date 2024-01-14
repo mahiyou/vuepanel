@@ -1,11 +1,11 @@
 <template>
     <v-container class="reset-password">
-        <div class="text-primary title">رمز عبور خود را فراموش کرده اید؟</div>
-        <div class="sub-title mt-2 text-secondary">رمز خود را تغییر دهید</div>
+        <div class="text-primary title">{{ $t("forgot your password?") }}</div>
+        <div class="sub-title mt-2 text-secondary">{{ $t("change your password") }}</div>
         <v-img width="180px" src="../../assets/pics/letter.svg" class="mx-auto"></v-img>
-        <v-alert class="my-4 text-right" v-if="invalidInputError" text="اطلاعات وارد شده صحیح نیست" type="error"
+        <v-alert class="my-4 text-start" v-if="invalidInputError" :text="$t('wrong inputed information')" type="error"
             variant="tonal"></v-alert>
-        <v-alert class="my-4 text-right" v-if="serverError" text="خطای سرور" type="error" variant="tonal"></v-alert>
+        <v-alert class="my-4 text-start" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
         <EnterUsername v-if="resetPassStep === 'enterUsername'" @submit="onSubmit" :loading="loading" />
         <Otp v-if="resetPassStep === 'otp'" @submitOtp="onSubmitOtp" @submit="onSubmit" :otpDigits="otpDigits"
             :loadingResend="loadingResend" :loadingConfirmOtp="loadingConfirmOtp"
@@ -76,10 +76,10 @@ export default defineComponent({
         },
         usernameValidation(value: string): boolean | string {
             if (!value) {
-                return "وارد کردن نام کاربری الزامی است.";
+                return this.$t("username is necessary");
             }
             if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) && !/^0\d{10}$/.test(value)) {
-                return "نام کاربری وارد شده معتبر نیست.";
+                return this.$t("inputed username is invalid");
             }
             return true;
         },

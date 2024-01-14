@@ -5,10 +5,10 @@
         <v-main>
             <RouterView />
             <v-footer class="footer bg-light text-secondary py-5" app>
-                <span>{{ getYear() }}&copy;</span> داده نگار جی
+                <span dir="ltr" class="mx-1">&copy;{{ getYear() }}</span>{{ $t("Dade Negar Jey") }}
                 <v-spacer></v-spacer>
-                <span>طراحی و توسعه توسط تیم فنی شرکت داده نگار جی</span>
-        </v-footer>
+                <span>{{ $t("Design & Develop by Dade Negar") }}</span>
+            </v-footer>
         </v-main>
     </v-layout>
 </template>
@@ -17,6 +17,7 @@ import Navigation from "./Navigation.vue";
 import AppBar from "./AppBar.vue";
 import { useAPI } from "@/api";
 import { useNotificationStore } from "@/store/notification";
+import { useI18n } from 'vue-i18n';
 
 export default {
     components: {
@@ -26,7 +27,8 @@ export default {
     },
     setup() {
         return {
-            notificationStore: useNotificationStore()
+            notificationStore: useNotificationStore(),
+            t: useI18n().t,
         };
     },
     data: () => ({
@@ -48,7 +50,7 @@ export default {
             catch {
                 throw new Error;
             }
-        }
+        },
     }
 };
 </script>                                                                                                  

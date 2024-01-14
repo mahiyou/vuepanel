@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <h1>داشبورد</h1>
+        <h1>{{$t("Dashboard")}}</h1>
     </v-container>
     
 </template>

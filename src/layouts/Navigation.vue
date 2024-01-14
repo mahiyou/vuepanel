@@ -2,10 +2,7 @@
     <v-navigation-drawer :modelValue="true" permanent :rail="drawer" color="primary" class="navigation">
         <v-img v-if="!drawer" width="60%" src="@/assets/pics/wideNavLogo.png" class="mx-auto mt-8 mb-4" />
         <v-img v-if="drawer" width="50%" src="@/assets/pics/navLogo.png" class="mx-auto mt-5" />
-        <v-list :items="items" item-value="value" item-children="items" item-title="title" class="list-item"
-            active-color="white" base-color="lighBlue">
-        </v-list>
-
+        <v-list :items="items" item-value="value" item-children="items" class="list-item" active-color="white" base-color="lighBlue" />
     </v-navigation-drawer>
 </template>
 <script lang="ts">
@@ -16,89 +13,78 @@ export default defineComponent({
         drawer: Boolean,
     },
     data() {
-        return {
-            items: [
+        return {};
+    },
+    computed: {
+        items() {
+            return [
                 {
-                    title: "داشبورد",
+                    title: this.$t("Dashboard"),
                     value: "Dashboard",
                     items: [{
-                        title: "22داشبورد",
-                        value: "Dashboard22", icon: "mdi-account-circle-outline",
-                        items: [{
-                            title: "آنالیزها", value: "Analytics", props: {
-                                prependIcon: "mdi-circle-medium"
-                            }
-                        }, {
-                            title: "آنالیزها", value: "Analytics2", props: {
-                                prependIcon: "mdi-circle-medium",
-                            }
-                        }],
-                        props: {
-                            prependIcon: "mdi-menu-left"
+                        title: this.$t("Analytics"), value: "Analytics", props: {
+                            prependIcon: "mdi-square-medium"
                         }
                     },
                     {
-                        title: "سی آر ام", value: "CRM", props: {
-                            prependIcon: "mdi-menu-left"
+                        title: this.$t("CRM"), value: "CRM", props: {
+                            prependIcon: "mdi-square-medium"
                         }
                     }],
                     props: {
-                        prependIcon: "mdi-view-dashboard-outline"
+                        prependIcon: "mdi-view-dashboard"
                     }
+                }, {
+                    title: this.$t("Charts"),
+                    value: "Charts",
+                    items: [
+                        {
+                            title: this.$t("Apexcharts"), value: "apexcharts", props: {
+                                prependIcon: "mdi-square-medium"
+                            },
+                            items: [
+                                {
+                                    title: this.$t("Line"), value: "aine", props: {
+                                        prependIcon: "mdi-circle-medium"
+                                    },
+                                },
+                                {
+                                    title: this.$t("Area"), value: "aria", props: {
+                                        prependIcon: "mdi-circle-medium"
+                                    }
+                                }
+                            ]
+                        },
+                    ],
+                    props: {
+                        prependIcon: "mdi-chart-bar"
+                    },
                 },
                 {
-                    title: "احراز هویت",
+                    title: this.$t("Authentication"),
                     value: "Authentication",
-                    items: [{
-                        title: "آنالیزها", value: "Analytics3", props: {
-                            prependIcon: "mdi-menu-left"
-                        },
-                        items: [{
-                            title: "آنالیزها", value: "Analytics4", props: {
-                                prependIcon: "mdi-menu-left"
-                            },
-                            items: [{
-                                title: "آنالیزها", value: "Analytics5", props: {
-                                    prependIcon: "mdi-menu-left"
-                                },
-                                items: [{
-                                    title: "آنالیزها", value: "Analytics9", props: {
-                                        prependIcon: "mdi-menu-left"
-                                    }
-                                }]
-                            }]
-                        }]
-                    }, {
-                        title: "سی آر ام", value: "CRM2", props: {
-                            prependIcon: "mdi-menu-left"
-                        }
-                    }],
                     props: {
-                        prependIcon: "mdi-account-circle-outline"
+                        prependIcon: "mdi-account-circle"
                     }
                 }
-            ],
-        };
+            ];
+        }
     }
 });
 </script>
 <style lang="scss">
 .navigation {
-    
+
     .list-item {
-        .v-list-item__prepend > .v-icon ~ .v-list-item__spacer {
+        .v-list-item__prepend>.v-icon~.v-list-item__spacer {
             width: 8px;
         }
         .v-list-group {
-            // --parent-padding: 32px;
-           --list-indent-size: 0px;
-            //--prepend-width: 5px;
-            // --indent-padding: 5px;
+            --list-indent-size: 0px;
         }
-        > .v-list-group > .v-list-group__items {
+        >.v-list-group>.v-list-group__items {
             --indent-padding: 0px;
         }
-
         .v-list-item__overlay,
         .v-ripple__container {
             display: none;

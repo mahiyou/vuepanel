@@ -10,10 +10,32 @@ import "vuetify/styles";
 import "@/assets/main.scss";
 // Composables
 import { createVuetify } from "vuetify";
+import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
+import { createI18n, useI18n } from "vue-i18n";
+import en from "../locales/en.json"
+import fa from "../locales/fa.json";
 
+
+const i18n = createI18n({
+    locale: "fa",
+    legacy: false,
+    fallbackLocale: "fa",
+    messages: {
+        en: {
+            ...en,
+        },
+        fa: {
+            ...fa,
+        }
+    },
+});
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
+    locale: {
+        locale: "fa",
+        adapter: createVueI18nAdapter({ i18n, useI18n }),
+    },
     theme: {
         themes: {
             light: {
@@ -28,3 +50,5 @@ export default createVuetify({
         },
     },
 });
+
+export {i18n};

@@ -12,8 +12,8 @@
     <v-container class="form-frame text-center">
         <v-row justify="center">
             <div class="text-light mb-15">
-                <h1>پنل کاربری</h1>
-                <div class="sub-title font-weight-bold mt-2">یوزر پنل جامع، مناسب برای همه ی پروژه ها</div>
+                <h1>{{ $t('user panel') }}</h1>
+                <div class="sub-title font-weight-bold mt-2">{{ $t('general user panel') }}</div>
             </div>
         </v-row>
         <v-row justify="center">
@@ -24,7 +24,7 @@
             </v-col>
         </v-row>
         <div class="footer">
-            <div class="footer-sentence mt-3 mb-4 text-center"><span>{{getYear()}}&copy;</span> داده نگار جی</div>
+            <div class="footer-sentence mt-3 mb-4 text-center"><span dir="ltr">&copy;{{getYear()}}</span> {{ $t('Dade Negar Jey') }}</div>
         </div>
     </v-container>
 </template>

@@ -1,7 +1,5 @@
 <template>
-    <v-locale-provider rtl>
-        <router-view />
-    </v-locale-provider>
+    <router-view :class="{'v-locale--is-rtl': $vuetify.locale.isRtl}" />
 </template>
 
 <script lang="ts">

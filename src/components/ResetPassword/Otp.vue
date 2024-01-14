@@ -1,5 +1,5 @@
 <template>
-    <div>کد ارسال شده را وارد کنید.</div>
+    <div>{{ $t("enter the sent code") }}</div>
     <v-form @submit.prevent="$emit('submitOtp', otp)" v-model="validOtp">
         <v-otp-input dir="ltr" :length="otpDigits" autofocus height="57px" width="390px" base-color="primary"
             v-model="otp"></v-otp-input>
@@ -8,17 +8,16 @@
             {{ persianNumber(minutes) }}:{{ persianNumber(seconds) }}
         </vue-countdown>
         <v-btn :disabled="!sendCode" :loading="loadingResend" @click="sendCode = false; $emit('submit')"
-            variant="text">ارسال
-            مجدد کد</v-btn>
+            variant="text">{{ $t("resend code") }}</v-btn>
 
         <div class="mt-12 mb-4">
-            <v-btn class="px-0 edit-btn ml-5" width="150px" color="secondary" variant="flat"
+            <v-btn class="px-0 edit-btn mx-3" width="150px" color="secondary" variant="flat"
                 @click="$emit('goToEnterUsername'); otp = ''; sendCode = false;">
-                ویرایش نام کاربری
+                {{ $t("edit username") }}
             </v-btn>
-            <v-btn type="submit" class="px-2 btn" width="150px" color="primary" variant="flat"
+            <v-btn type="submit" class="px-2 btn mx-3" width="150px" color="primary" variant="flat"
                 :disabled="otp.length != otpDigits" :loading="loadingConfirmOtp">
-                تایید
+                {{ $t("confirm") }}
             </v-btn>
         </div>
     </v-form>

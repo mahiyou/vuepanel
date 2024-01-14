@@ -1,41 +1,40 @@
 <template>
     <v-container class="register">
-        <div class="text-primary title">حساب کاربری جدید</div>
-        <div class="sub-title mt-2 text-secondary">حساب کاربری خود را ایجاد کنید.</div>
-        <v-form @submit.prevent="onSubmit" v-model="valid" class="text-right">
-            <div class="mt-6 mb-2">نام کاربری (ایمیل و یا شماره موبایل)<span class="text-red"> *</span></div>
+        <div class="text-primary title">{{ $t("new account") }}</div>
+        <div class="sub-title mt-2 text-secondary">{{ $t("creat your own acount") }}</div>
+        <v-form @submit.prevent="onSubmit" v-model="valid" class="text-start">
+            <div class="mt-6 mb-2">{{ $t("username(email or cell phone)") }}<span class="text-red"> *</span></div>
             <v-text-field variant="outlined" v-model="username" dir="ltr" :rules="[usernameValidation]" />
 
-            <div class="mt-2 mb-2">رمز عبور<span class="text-red"> *</span></div>
+            <div class="mt-2 mb-2">{{ $t("password") }}<span class="text-red"> *</span></div>
             <v-text-field variant="outlined" v-model="password" dir="ltr" :rules="[passwordValidation]" />
 
-            <div class="mt-2 mb-2">تکرار رمز عبور<span class="text-red"> *</span></div>
+            <div class="mt-2 mb-2">{{ $t("confirm password") }}<span class="text-red"> *</span></div>
             <v-text-field variant="outlined" v-model="repeartPassword" dir="ltr" :rules="[repeatPasswordValidation]" />
 
-            <div class="text-secondary mt-2">در صورت ثبت نام تمامی قوانین سایت راپذیرفته اید. <router-link
-                    :to="{ name: 'register' }" class="text-primary">مطالعه قوانین سایت</router-link></div>
+            <div class="text-secondary mt-2">{{ $t("By registering you agree to the terms") }} <router-link
+                    :to="{ name: 'register' }" class="text-primary">{{ $t("terms and conditions") }}</router-link></div>
 
             <v-btn class="mt-6 px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat"
                 :disabled="!valid" :loading="loading">
-                ثبت نام
+                {{ $t("sign up") }}
             </v-btn>
-            <v-alert class="my-2" v-if="invalidInputError" text="اطلاعات وارد شده صحیح نیست" type="error"
+            <v-alert class="my-2" v-if="invalidInputError" :text="$t('wrong inputed information')" type="error"
                 variant="tonal"></v-alert>
-            <v-alert class="my-2" v-if="serverError" text="خطای سرور" type="error" variant="tonal"></v-alert>
-            <v-alert class="my-2" v-if="incorrectRepeatPass" text="تکرار رمز عبور با رمز یکسان نیست"
+            <v-alert class="my-2" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
+            <v-alert class="my-2" v-if="incorrectRepeatPass" :text="$t('password and confirm password')"
                 type="error" variant="tonal"></v-alert>
             <div class="text-center mt-8">
-                <p class="mb-6">ایجاد حساب کاربری از طریق:</p>
+                <p class="mb-6">{{ $t("create account with") }}</p>
                 <v-btn icon="mdi-facebook" size="small" variant="flat" color="#405189" class="mx-1"></v-btn>
                 <v-btn icon="mdi-google" size="small" variant="flat" color="#f06548" class="mx-1"></v-btn>
                 <v-btn icon="mdi-github" size="small" variant="flat" color="#212529" class="mx-1"></v-btn>
                 <v-btn icon="mdi-twitter" size="small" variant="flat" color="#299cdb" class="mx-1"></v-btn>
                 <div class="mt-8">
-                    قبلا ثبت نام کرده اید؟
-                    <router-link :to="{ name: 'login' }" class="link text-primary">ورود</router-link>
+                    {{ $t("already have an account") }}
+                    <router-link :to="{ name: 'login' }" class="link text-primary">{{ $t("sign in") }}</router-link>
                 </div>
             </div>
-
         </v-form>
     </v-container>
 </template>
@@ -96,22 +95,22 @@ export default defineComponent({
         },
         usernameValidation(value: string): boolean | string {
             if (!value) {
-                return "وارد کردن نام کاربری الزامی است.";
+                return this.$t("username is necessary");
             }
             if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) && !/^0\d{10}$/.test(value)) {
-                return "نام کاربری وارد شده معتبر نیست.";
+                return this.$t("inputed username is invalid");
             }
             return true;
         },
         passwordValidation(value: string): boolean | string {
             if (!value) {
-                return "وارد کردن رمز عبور الزامی است.";
+                return this.$t("password is necessary");
             }
             return true;
         },
         repeatPasswordValidation(value: string): boolean | string {
             if (!value) {
-                return "وارد کردن تکرار رمز عبور الزامی است.";
+                return this.$t("password confirmation is necessary");
             }
             return true;
         },

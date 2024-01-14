@@ -1,44 +1,43 @@
 <template>
     <v-container class="login">
-        <div class="text-primary title">خوش آمدید!</div>
-        <div class="sub-title mt-2 text-secondary">برای ادامه وارد شوید</div>
-        <v-form @submit.prevent="onSubmit" v-model="valid" class="text-right">
-            <div class="mt-9 mb-2">نام کاربری (ایمیل و یا شماره موبایل)</div>
+        <div class="text-primary title">{{ $t("welcom") }}</div>
+        <div class="sub-title mt-2 text-secondary">{{ $t("signin to continue") }}</div>
+        <v-form @submit.prevent="onSubmit" v-model="valid" class="text-start">
+            <div class="mt-9 mb-2">{{ $t("username(email or cell phone)") }}</div>
             <v-text-field variant="outlined" v-model="username" dir="ltr" :rules="[usernameValidation]" />
             <v-row class="mt-2">
                 <v-col cols="6">
-                    <div class="mb-2">رمز عبور</div>
+                    <div class="mb-2">{{ $t("password") }}</div>
                 </v-col>
                 <v-col cols="6" class="">
                     <router-link :to="{ name: 'resetPassword' }"
-                        class="link text-secondary text-decoration-none float-left">فراموشی رمز عبور</router-link>
+                        class="link text-secondary text-decoration-none float-end">{{ $t("forget password") }}</router-link>
                 </v-col>
             </v-row>
 
             <v-text-field variant="outlined" v-model="password" dir="ltr" :rules="[passwordValidation]" />
 
-            <v-checkbox color="primary" v-model="checkbox" label="مرا به خاطر بسپار" class="checkbox"></v-checkbox>
+            <v-checkbox color="primary" v-model="checkbox" :label="$t('remember me')" class="checkbox"></v-checkbox>
 
             <v-btn class="px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat" :loading="loading"
                 :disabled="!valid">
-                ورود
+                {{ $t('sign in')}}
             </v-btn>
-            <v-alert class="my-2" v-if="invalidInputError" text="اطلاعات وارد شده صحیح نیست" type="error"
+            <v-alert class="my-2" v-if="invalidInputError" :text="$t('wrong inputed information')" type="error"
                 variant="tonal"></v-alert>
-            <v-alert class="my-2" v-if="serverError" text="خطای سرور" type="error" variant="tonal"></v-alert>
+            <v-alert class="my-2" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
 
             <div class="text-center mt-8">
-                <p class="mb-6">ورود از طریق:</p>
+                <p class="mb-6">{{ $t('sign in with') }}</p>
                 <v-btn icon="mdi-facebook" size="small" variant="flat" color="#405189" class="mx-1"></v-btn>
                 <v-btn icon="mdi-google" size="small" variant="flat" color="#f06548" class="mx-1"></v-btn>
                 <v-btn icon="mdi-github" size="small" variant="flat" color="#212529" class="mx-1"></v-btn>
                 <v-btn icon="mdi-twitter" size="small" variant="flat" color="#299cdb" class="mx-1"></v-btn>
                 <div class="mt-8">
-                    هنوز حساب کاربری ندارید؟
-                    <router-link :to="{ name: 'register' }" class="link text-primary">ثبت نام</router-link>
+                    {{ $t('dont have account') }}
+                    <router-link :to="{ name: 'register' }" class="link text-primary">{{ $t('sign up') }}</router-link>
                 </div>
             </div>
-
         </v-form>
     </v-container>
 </template>
@@ -92,16 +91,16 @@ export default defineComponent({
         },
         usernameValidation(value: string): boolean | string {
             if (!value) {
-                return "وارد کردن نام کاربری الزامی است.";
+                return this.$t("username is necessary");
             }
             if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) && !/^0\d{10}$/.test(value)) {
-                return "نام کاربری وارد شده معتبر نیست.";
+                return this.$t("inputed username is invalid");
             }
             return true;
         },
         passwordValidation(value: string): boolean | string {
             if (!value) {
-                return "وارد کردن رمز عبور الزامی است.";
+                return this.$t("password is necessary");
             }
             return true;
         },

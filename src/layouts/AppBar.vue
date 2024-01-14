@@ -4,34 +4,34 @@
         <v-spacer></v-spacer>
         <v-menu>
             <template v-slot:activator="{ props }">
-                <v-btn variant="text" color="secondary" width="30px" height="100%" rounded="circle" v-bind="props"><span
-                        class="fi fi-ir flag px-0" /></v-btn>
+                <v-btn variant="text" color="secondary" width="30px" height="100%" rounded="circle" v-bind="props"><span class="fi flag px-0" :class="`fi-` + getCountryCode($vuetify.locale.current)" /></v-btn>
             </template>
             <v-list :elevation="3">
-                <v-list-item v-for="(language, i) in languages" :key="i" :value="language">
+                <v-list-item v-for="(language, i) in languages" :key="i" :value="language" @click="changeLanguage(language.value)">
                     <template v-slot:prepend>
-                        <span class="fi ml-2 rounded" :class="`fi-${language.value}`" />
+                        <span class="fi me-2 rounded" :class="`fi-${getCountryCode(language.value)}`" />
                     </template>
                     <v-list-item-title>{{ language.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-menu>
 
-        <v-menu v-if="notificationStore" width="300px">
+        <v-menu v-if="notificationStore" width="330px">
             <v-toolbar color="primary" class="px-2 fixed-bar">
-                <v-toolbar-title class="font-weight-bold">اعلانات</v-toolbar-title>
+                <v-toolbar-title class="font-weight-bold">{{ $t("notifications") }}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <template v-if="notificationStore.unreadCount">
-                    <span class="bg-light px-2 rounded-lg">{{ notificationStore.unreadCount }} اعلان جدید</span>
+                    <span class="bg-light px-2 rounded-lg">{{ notificationStore.unreadCount }} {{ $t("new notifications")
+                    }}</span>
                 </template>
             </v-toolbar>
 
             <template v-slot:activator="{ props }">
-                <div class="notifications">
+                <div class="notifications me-2">
                     <span class="notification-number" v-if="notificationStore.unreadCount">{{ notificationStore.unreadCount
                     }}</span>
                     <v-btn variant="text" color="secondary" width="65px" height="100%" icon="mdi-bell-outline px-0"
-                        class="ml-3 px-5" v-bind="props"></v-btn>
+                        class="px-5" v-bind="props"></v-btn>
                 </div>
             </template>
 
@@ -46,16 +46,19 @@
 
                     <template v-slot:append>
                         <v-list-item-action>
-                            <v-checkbox-btn :model-value="item.seen !== undefined" @click="$emit('messageSeen',item.id)"/>
+                            <v-checkbox-btn :model-value="item.seen !== undefined" @click="$emit('messageSeen', item.id)" />
                         </v-list-item-action>
                     </template>
                 </v-list-item>
-                <v-btn width="100%" height="80px" variant="text" prepend-icon="mdi-arrow-left-thin all-notifications-btn">
-                    نشان دادن همه ی اعلان ها</v-btn>
+                <v-btn width="100%" height="80px" variant="text" append-icon="mdi-arrow-left-thin all-notifications-btn">
+                    {{ $t("view all notifications") }}
+                </v-btn>
             </v-list>
-
         </v-menu>
         <v-menu class="user-info-menu">
+            <v-toolbar color="primary" class="fixed-bar">
+                <v-toolbar-title>{{ getUsername }} {{ $t("welcom") }}</v-toolbar-title>
+            </v-toolbar>
             <template v-slot:activator="{ props }">
                 <v-btn height="100%" class="pa-0" v-bind="props">
                     <div class="user-info-box">
@@ -63,15 +66,15 @@
                             <v-col :cols="4" class="pa-0">
                                 <v-img width="35px" class="rounded-pill" :src="getUserAvatar"></v-img>
                             </v-col>
-                            <v-col :cols="8" class="pr-0">
-                                <div class="text-right username">{{ getUsername }}</div>
+                            <v-col :cols="8" class="px-0">
+                                <div class="text-start username">{{ getUsername }}</div>
                             </v-col>
                         </v-row>
                     </div>
                 </v-btn>
             </template>
-            <v-list :items="items" item-value="value" item-title="title" v-list-subheader="`${getUsername} عزیز خوش آمدید`">
-            </v-list>
+
+            <v-list :items="items" item-value="value" item-title="title"></v-list>
         </v-menu>
     </v-app-bar>
 </template>
@@ -83,9 +86,10 @@ import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 export default defineComponent({
     setup() {
+        // const { locale } = useI18n({ useScope: 'global' });
         return {
             authStore: useAuthStore(),
-            notificationStore: useNotificationStore()
+            notificationStore: useNotificationStore(),
         };
     },
     data() {
@@ -94,19 +98,18 @@ export default defineComponent({
             wideNav: true,
             items: [
                 {
-                    title: "حساب کاربری", value: "acount", props: {
+                    title: this.$t("account"), value: "acount", props: {
                         prependIcon: "mdi-account-circle"
                     }
                 },
-                { title: "پیام ها", value: "messages", props: { prependIcon: "mdi-message-text-outline" } },
-                { title: "راهنما", value: "help", props: { prependIcon: "mdi-lifebuoy" } },
-                { title: "تنظیمات", value: "settings", props: { prependIcon: "mdi-cog" } },
-                { title: "خروج از حساب کاربری", value: "logout", props: { prependIcon: "mdi-logout", to: { name: "logout" } } },
+                { title: this.$t("messages"), value: "messages", props: { prependIcon: "mdi-message-text-outline" } },
+                { title: this.$t("help"), value: "help", props: { prependIcon: "mdi-lifebuoy" } },
+                { title: this.$t("settings"), value: "settings", props: { prependIcon: "mdi-cog" } },
+                { title: this.$t("logout"), value: "logout", props: { prependIcon: "mdi-logout", to: { name: "logout" } } },
             ],
             languages: [
-                { title: "انگلیسی", value: "us" },
-                { title: "فارسی", value: "ir" },
-                { title: "عربی", value: "sa" }
+                { title: this.$t("English"), value: "en_us" },
+                { title: this.$t("Farsi"), value: "fa_ir" },
             ]
         };
     },
@@ -114,8 +117,21 @@ export default defineComponent({
         onWideNav() {
             this.$emit("toggleDrawer");
             this.wideNav = !this.wideNav;
+        },
+        changeLanguage(newLang: string): void {
+            newLang = newLang.substring(0, 2);
+            this.$vuetify.locale.current = newLang;
+        },
+        getCountryCode(locale: string): string {
+            if (locale.length == 5) {
+                return locale.substring(3);
+            }
+            const language = this.languages.find((l) => l.value.substring(0, 2) == locale);
+            if (!language) {
+                throw new Error();
+            }
+            return this.getCountryCode(language.value);
         }
-
     },
     computed: {
         navIcon() {
@@ -136,13 +152,14 @@ export default defineComponent({
         },
         notifications() {
             return this.notificationStore.items.map((i) => renderNotificationItem(i));
-        }
+        },
     }
 });
 
 </script>
 <style lang="scss">
 $menu-content-elevation: 0;
+
 .appbar {
     padding: 0px auto;
 
@@ -158,6 +175,7 @@ $menu-content-elevation: 0;
             text-overflow: ellipsis;
         }
     }
+
     .notifications {
         position: relative;
         height: 100%;
@@ -174,7 +192,6 @@ $menu-content-elevation: 0;
             justify-content: center;
             border-radius: 50%;
         }
-
     }
 
     .flag {

@@ -11,7 +11,7 @@ export class MockAPI implements IAPI {
             meta: {
                 user: {
                     id: 41,
-                    name: "علی اصغر",
+                    name: "Ali",
                     avatar: "https://files.virgool.io/upload/users/2123818/avatar/WNZLo4.jpg?width=256"
                 }
             },
@@ -28,7 +28,7 @@ export class MockAPI implements IAPI {
             meta: {
                 user: {
                     id: 41,
-                    name: "علی اصغر",
+                    name: "Ali",
                     avatar: "https://files.virgool.io/upload/users/2123818/avatar/WNZLo4.jpg?width=256"
                 }
             },
@@ -67,7 +67,7 @@ export class MockAPI implements IAPI {
             meta: {
                 user: {
                     id: 42,
-                    name: "علی اصغر",
+                    name: "Ali",
                     avatar: "https://files.virgool.io/upload/users/2123818/avatar/WNZLo4.jpg?width=256"
                 }
             },
@@ -95,7 +95,7 @@ export class MockAPI implements IAPI {
             meta: {
                 user: {
                     id: 43,
-                    name: "علی اصغر",
+                    name: "Ali",
                     avatar: "https://files.virgool.io/upload/users/2123818/avatar/WNZLo4.jpg?width=256"
                 }
             },
@@ -128,7 +128,7 @@ export class MockAPI implements IAPI {
                 user: {
                     token: "ddd",
                     abilities: ["addProduct"],
-                    name: " الکس",
+                    name: " Alex",
                     avatar: "/pics/avatar.jpg"
                 },
                 notifications: this.getNotificationsItems(),
