@@ -1,7 +1,7 @@
 <template>
     <v-container class="register">
         <div class="text-primary title">{{ $t("new account") }}</div>
-        <div class="sub-title mt-2 text-secondary">{{ $t("creat your own acount") }}</div>
+        <div class="sub-title mt-2 text-secondary">{{ $t("create your own account") }}</div>
         <v-form @submit.prevent="onSubmit" v-model="valid" class="text-start">
             <div class="mt-6 mb-2">{{ $t("username(email or cell phone)") }}<span class="text-red"> *</span></div>
             <v-text-field variant="outlined" v-model="username" dir="ltr" :rules="[usernameValidation]" />
@@ -13,7 +13,7 @@
             <v-text-field variant="outlined" v-model="repeartPassword" dir="ltr" :rules="[repeatPasswordValidation]" />
 
             <div class="text-secondary mt-2">{{ $t("By registering you agree to the terms") }} <router-link
-                    :to="{ name: 'register' }" class="text-primary">{{ $t("terms and conditions") }}</router-link></div>
+                    :to="{ name: 'register', params: { lang: $vuetify.locale.current } }" class="text-primary">{{ $t("terms and conditions") }}</router-link></div>
 
             <v-btn class="mt-6 px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat"
                 :disabled="!valid" :loading="loading">
@@ -32,7 +32,7 @@
                 <v-btn icon="mdi-twitter" size="small" variant="flat" color="#299cdb" class="mx-1"></v-btn>
                 <div class="mt-8">
                     {{ $t("already have an account") }}
-                    <router-link :to="{ name: 'login' }" class="link text-primary">{{ $t("sign in") }}</router-link>
+                    <router-link :to="{ name: 'login', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }" class="link text-primary">{{ $t("sign in") }}</router-link>
                 </div>
             </div>
         </v-form>
@@ -80,7 +80,7 @@ export default defineComponent({
 
                 const authStore = useAuthStore();
                 authStore.setUser(response.user);
-                this.$router.push({ name: "dashboard" });
+                this.$router.push({ path:`/${this.$vuetify.locale.current}${this.$route.query.redirect || ''}` });
             }
             catch (e) {
                 if (e instanceof UserLoginError) {

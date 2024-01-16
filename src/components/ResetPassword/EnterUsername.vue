@@ -9,7 +9,7 @@
     </v-form>
     <div class="mt-8">
         {{ $t("remember my password") }}
-        <router-link :to="{ name: 'login' }" class="link text-primary">{{ $t("click here") }}</router-link>
+        <router-link :to="{ name: 'login', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }" class="link text-primary">{{ $t("click here") }}</router-link>
     </div>
 </template>
 <script lang="ts">

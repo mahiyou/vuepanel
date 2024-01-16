@@ -127,7 +127,7 @@ export class MockAPI implements IAPI {
             return {
                 user: {
                     token: "ddd",
-                    abilities: ["addProduct"],
+                    abilities: ["users-edit"],
                     name: " Alex",
                     avatar: "/pics/avatar.jpg"
                 },
@@ -144,7 +144,7 @@ export class MockAPI implements IAPI {
             return {
                 user: {
                     token: "ddd",
-                    abilities: ["addProduct"],
+                    abilities: ["users-edit"],
                     name: "الکس",
                     avatar: "/pics/avatar.jpg"
                 }
@@ -161,7 +161,7 @@ export class MockAPI implements IAPI {
                 return {
                     user: {
                         token: "ddd",
-                        abilities: ["addProduct"],
+                        abilities: ["users-edit"],
                         name: "الکس",
                         avatar: "/pics/avatar.jpg"
                     },

@@ -1,6 +1,6 @@
 <template>
     <v-container class="login">
-        <div class="text-primary title">{{ $t("welcom") }}</div>
+        <div class="text-primary title">{{ $t("welcome") }}</div>
         <div class="sub-title mt-2 text-secondary">{{ $t("signin to continue") }}</div>
         <v-form @submit.prevent="onSubmit" v-model="valid" class="text-start">
             <div class="mt-9 mb-2">{{ $t("username(email or cell phone)") }}</div>
@@ -10,7 +10,8 @@
                     <div class="mb-2">{{ $t("password") }}</div>
                 </v-col>
                 <v-col cols="6" class="">
-                    <router-link :to="{ name: 'resetPassword' }"
+                    <router-link
+                        :to="{ name: 'resetPassword', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }"
                         class="link text-secondary text-decoration-none float-end">{{ $t("forget password") }}</router-link>
                 </v-col>
             </v-row>
@@ -21,7 +22,7 @@
 
             <v-btn class="px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat" :loading="loading"
                 :disabled="!valid">
-                {{ $t('sign in')}}
+                {{ $t('sign in') }}
             </v-btn>
             <v-alert class="my-2" v-if="invalidInputError" :text="$t('wrong inputed information')" type="error"
                 variant="tonal"></v-alert>
@@ -35,7 +36,9 @@
                 <v-btn icon="mdi-twitter" size="small" variant="flat" color="#299cdb" class="mx-1"></v-btn>
                 <div class="mt-8">
                     {{ $t('dont have account') }}
-                    <router-link :to="{ name: 'register' }" class="link text-primary">{{ $t('sign up') }}</router-link>
+                    <router-link
+                        :to="{ name: 'register', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }"
+                        class="link text-primary">{{ $t('sign up') }}</router-link>
                 </div>
             </div>
         </v-form>
@@ -78,7 +81,9 @@ export default defineComponent({
                 const response = await useAPI().login({ username: this.username, password: this.password });
                 this.authStore.setUser(response.user);
                 this.notificationStore.set(response.notifications);
-                this.$router.push({name: "dashboard"});
+                console.log(this.$vuetify.locale.current)
+                this.$router.push({ path: `/${this.$vuetify.locale.current}${this.$route.query.redirect}` || '', params: { lang: this.$vuetify.locale.current } });
+
             } catch (e) {
                 if (e instanceof UserLoginError) {
                     this.invalidInputError = true;
@@ -135,5 +140,4 @@ export default defineComponent({
         }
     }
 
-}
-</style>
+}</style>

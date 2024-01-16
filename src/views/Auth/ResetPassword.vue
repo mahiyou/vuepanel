@@ -116,7 +116,7 @@ export default defineComponent({
             this.serverError = false;
             try {
                 await useAPI().changePassword({ password });
-                this.$router.push({ name: "dashboard" });
+                this.$router.push({ path: `/${this.$vuetify.locale.current}${this.$route.query.redirect}` || '' , params: { lang: this.$vuetify.locale.current }});
             }
             catch (e) {
                 if (e instanceof UserLoginError) {

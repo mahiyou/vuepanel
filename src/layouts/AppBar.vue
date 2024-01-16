@@ -4,12 +4,14 @@
         <v-spacer></v-spacer>
         <v-menu>
             <template v-slot:activator="{ props }">
-                <v-btn variant="text" color="secondary" width="30px" height="100%" rounded="circle" v-bind="props"><span class="fi flag px-0" :class="`fi-` + getCountryCode($vuetify.locale.current)" /></v-btn>
+                <v-btn variant="text" color="secondary" width="30px" height="100%" rounded="circle" v-bind="props"><span
+                        class="fi flag px-0" :class="`fi-` + getCountryCode(languages, $vuetify.locale.current)" /></v-btn>
             </template>
             <v-list :elevation="3">
-                <v-list-item v-for="(language, i) in languages" :key="i" :value="language" @click="changeLanguage(language.value)">
-                    <template v-slot:prepend>
-                        <span class="fi me-2 rounded" :class="`fi-${getCountryCode(language.value)}`" />
+                <v-list-item v-for="(language, i) in getOtherLanguages($vuetify.locale.current)" :key="i" :value="language"
+                    @click="changeLanguage(language.value)">
+                    <template v-slot:append>
+                        <span class="fi ms-2 rounded" :class="`fi-${getCountryCode(languages, language.value)}`" />
                     </template>
                     <v-list-item-title>{{ language.title }}</v-list-item-title>
                 </v-list-item>
@@ -57,7 +59,7 @@
         </v-menu>
         <v-menu class="user-info-menu">
             <v-toolbar color="primary" class="fixed-bar">
-                <v-toolbar-title>{{ getUsername }} {{ $t("welcom") }}</v-toolbar-title>
+                <v-toolbar-title>{{ getUsername }} {{ $t("welcome") }}</v-toolbar-title>
             </v-toolbar>
             <template v-slot:activator="{ props }">
                 <v-btn height="100%" class="pa-0" v-bind="props">
@@ -82,6 +84,7 @@
 import { defineComponent } from "vue";
 import { useAuthStore } from "@/store/auth";
 import { renderNotificationItem, useNotificationStore } from "@/store/notification";
+import { getCountryCode } from "@/utilities";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 export default defineComponent({
@@ -90,6 +93,7 @@ export default defineComponent({
         return {
             authStore: useAuthStore(),
             notificationStore: useNotificationStore(),
+            getCountryCode,
         };
     },
     data() {
@@ -98,7 +102,7 @@ export default defineComponent({
             wideNav: true,
             items: [
                 {
-                    title: this.$t("account"), value: "acount", props: {
+                    title: this.$t("account"), value: "account", props: {
                         prependIcon: "mdi-account-circle"
                     }
                 },
@@ -108,8 +112,8 @@ export default defineComponent({
                 { title: this.$t("logout"), value: "logout", props: { prependIcon: "mdi-logout", to: { name: "logout" } } },
             ],
             languages: [
-                { title: this.$t("English"), value: "en_us" },
-                { title: this.$t("Farsi"), value: "fa_ir" },
+                { title: "English", value: "en_us" },
+                { title: "فارسی", value: "fa_ir" },
             ]
         };
     },
@@ -120,17 +124,13 @@ export default defineComponent({
         },
         changeLanguage(newLang: string): void {
             newLang = newLang.substring(0, 2);
-            this.$vuetify.locale.current = newLang;
+            if (!this.$route.name) {
+                throw new Error("undefined route name");
+            }
+            this.$router.push({name: this.$route.name, params: { lang: newLang } });
         },
-        getCountryCode(locale: string): string {
-            if (locale.length == 5) {
-                return locale.substring(3);
-            }
-            const language = this.languages.find((l) => l.value.substring(0, 2) == locale);
-            if (!language) {
-                throw new Error();
-            }
-            return this.getCountryCode(language.value);
+        getOtherLanguages(language: string) {
+            return this.languages.filter((otherLanguage) => otherLanguage.value.substring(0, 2) !== language)
         }
     },
     computed: {

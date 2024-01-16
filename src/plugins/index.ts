@@ -1,10 +1,4 @@
-/**
- * plugins/index.ts
- *
- * Automatically included in `./src/main.ts`
- */
 
-// Plugins
 import { default as vuetify, i18n} from './vuetify'
 import pinia from '../store'
 import router from '../router'

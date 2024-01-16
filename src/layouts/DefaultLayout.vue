@@ -51,6 +51,6 @@ export default {
                 throw new Error;
             }
         },
-    }
+    },
 };
 </script>                                                                                                  
