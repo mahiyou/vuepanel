@@ -82,7 +82,7 @@ export default defineComponent({
                 this.authStore.setUser(response.user);
                 this.notificationStore.set(response.notifications);
                 console.log(this.$vuetify.locale.current)
-                this.$router.push({ path: `/${this.$vuetify.locale.current}${this.$route.query.redirect}` || '', params: { lang: this.$vuetify.locale.current } });
+                this.$router.push({ path: `/${this.$vuetify.locale.current}${this.$route.query.redirect || ''}` , params: { lang: this.$vuetify.locale.current } });
 
             } catch (e) {
                 if (e instanceof UserLoginError) {
