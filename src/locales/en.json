@@ -53,5 +53,7 @@
     "help":"Help",
     "notifications":"Notifications",
     "new notifications":"New",
-    "view all notifications":"View all notifications"
+    "view all notifications":"View all notifications",
+    "you have successfully logged out of your account":"You have successfully logged out of your account.",
+    "you will be redirected to the login page in a few seconds":"You will be redirected to the login page in a few seconds."
 }

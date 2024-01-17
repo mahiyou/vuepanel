@@ -1,13 +1,14 @@
 <template>
     <v-img width="100px" class="rounded-pill mx-auto my-4" :src="avatar"></v-img>
-    <h2 class="text-center font-weight-bold">{{ username }} عزیز</h2>
-    <div class="my-2"> با موفقیت از حساب کاربری خود خارج شدید.</div>
+    <h2 class="text-center font-weight-bold">{{ username }}</h2>
+    <div class="my-2">{{ $t("you have successfully logged out of your account") }}</div>
     <div class="my-2">
-        <span>تا </span>
-        <vue-countdown class=" bg-primary px-2 py-1 rounded" :time="20 * 1000" v-slot="{ seconds }">
-            {{ $vuetify.locale.isRtl ? persianNumber(seconds) : seconds }}
-        </vue-countdown>
-        <span> ثانیه دیگر به صفحه ی ورود منتقل می شوید.</span>
+        <div>
+            <vue-countdown class="text-primary" :time="20 * 1000" v-slot="{ seconds }">
+                <h2>{{ $vuetify.locale.isRtl ? persianNumber(seconds) : seconds }}</h2>
+            </vue-countdown>
+        </div>
+        <div>{{ $t("you will be redirected to the login page in a few seconds") }}</div>
     </div>
 </template>
 <script lang="ts">

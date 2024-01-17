@@ -53,5 +53,7 @@
     "help":"راهنما",
     "notifications":"اعلانات",
     "new notifications":"اعلان جدید",
-    "view all notifications":"نشان دادن همه ی اعلان ها"
+    "view all notifications":"نشان دادن همه ی اعلان ها",
+    "you have successfully logged out of your account":"شما با موفقیت از حساب کاربری خود خارج شدید.",
+    "you will be redirected to the login page in a few seconds":"تا چند ثانیه ی دیگر به صفحه ی ورود منتقل می شوید."
 }
