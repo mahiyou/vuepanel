@@ -14,10 +14,10 @@ import  vuetify from '../plugins/vuetify'
 
 const routes = [
     {
-        path: "/:lang/",
+        path: "/:lang",
         children: [
             {
-                path: "auth/",
+                path: "auth",
                 component: AuthLayout,
                 children: [
                     {
@@ -26,7 +26,6 @@ const routes = [
                         component: LoginView,
                         meta: {
                             authenticaion: false,
-                            lang: 'en'
                         }
                     },
                     {
@@ -68,6 +67,7 @@ const routes = [
                     },
 
                     {
+                        name: "dashboard",
                         path: "users/edit",
                         component: DashboardView,
                         meta: {
@@ -97,10 +97,11 @@ router.beforeEach((to) => {
 
     if (needsAuthentication) {
         if (!authStore.isUserLoggedIn) {
+            const redirect = to.fullPath != "/" ? to.fullPath : undefined;
             return {
                 name: "login",
                 params: { lang },
-                query: { redirect: to.fullPath },
+                query: { redirect },
             };
         }
         if (to.meta.ability && !authStore.hasAbility(to.meta.ability as string)) {

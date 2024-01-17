@@ -22,8 +22,8 @@
             <v-alert class="my-2" v-if="invalidInputError" :text="$t('wrong inputed information')" type="error"
                 variant="tonal"></v-alert>
             <v-alert class="my-2" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
-            <v-alert class="my-2" v-if="incorrectRepeatPass" :text="$t('password and confirm password')"
-                type="error" variant="tonal"></v-alert>
+            <v-alert class="my-2" v-if="incorrectRepeatPass" :text="$t('password and confirm password')" type="error"
+                variant="tonal"></v-alert>
             <div class="text-center mt-8">
                 <p class="mb-6">{{ $t("create account with") }}</p>
                 <v-btn icon="mdi-facebook" size="small" variant="flat" color="#405189" class="mx-1"></v-btn>
@@ -32,7 +32,9 @@
                 <v-btn icon="mdi-twitter" size="small" variant="flat" color="#299cdb" class="mx-1"></v-btn>
                 <div class="mt-8">
                     {{ $t("already have an account") }}
-                    <router-link :to="{ name: 'login', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }" class="link text-primary">{{ $t("sign in") }}</router-link>
+                    <router-link
+                        :to="{ name: 'login', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }"
+                        class="link text-primary">{{ $t("sign in") }}</router-link>
                 </div>
             </div>
         </v-form>
@@ -80,7 +82,12 @@ export default defineComponent({
 
                 const authStore = useAuthStore();
                 authStore.setUser(response.user);
-                this.$router.push({ path:`/${this.$vuetify.locale.current}${this.$route.query.redirect || ''}` });
+                const redirect = this.$route.query.redirect;
+                if (redirect && typeof redirect == "string") {
+                    this.$router.push({ path: redirect })
+                } else {
+                    this.$router.push({ name: "dashboard" })
+                }
             }
             catch (e) {
                 if (e instanceof UserLoginError) {
@@ -145,5 +152,4 @@ export default defineComponent({
         }
     }
 
-}
-</style>
+}</style>

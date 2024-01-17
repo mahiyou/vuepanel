@@ -5,7 +5,7 @@
     <div class="my-2">
         <span>تا </span>
         <vue-countdown class=" bg-primary px-2 py-1 rounded" :time="20 * 1000" v-slot="{ seconds }">
-            {{ persianNumber(seconds) }}
+            {{ $vuetify.locale.isRtl ? persianNumber(seconds) : seconds }}
         </vue-countdown>
         <span> ثانیه دیگر به صفحه ی ورود منتقل می شوید.</span>
     </div>

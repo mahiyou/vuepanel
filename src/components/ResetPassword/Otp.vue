@@ -5,7 +5,7 @@
             v-model="otp"></v-otp-input>
         <vue-countdown v-if="!sendCode && !loadingResend" class="countDown" :time="2 * 60 * 1000"
             v-slot="{ minutes, seconds }" @end="sendCode = true">
-            {{ persianNumber(minutes) }}:{{ persianNumber(seconds) }}
+            {{ $vuetify.locale.isRtl ? persianNumber(minutes) : minutes }}:{{ $vuetify.locale.isRtl ?  persianNumber(seconds) : seconds }}
         </vue-countdown>
         <v-btn :disabled="!sendCode" :loading="loadingResend" @click="sendCode = false; $emit('submit')"
             variant="text">{{ $t("resend code") }}</v-btn>

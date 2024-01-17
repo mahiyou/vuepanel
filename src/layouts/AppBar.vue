@@ -52,7 +52,7 @@
                         </v-list-item-action>
                     </template>
                 </v-list-item>
-                <v-btn width="100%" height="80px" variant="text" append-icon="mdi-arrow-left-thin all-notifications-btn">
+                <v-btn width="100%" height="80px" variant="text" :append-icon="$vuetify.locale.isRtl ? 'mdi-arrow-left-thin' : 'mdi-arrow-right-thin'">
                     {{ $t("view all notifications") }}
                 </v-btn>
             </v-list>
@@ -127,7 +127,7 @@ export default defineComponent({
             if (!this.$route.name) {
                 throw new Error("undefined route name");
             }
-            this.$router.push({name: this.$route.name, params: { lang: newLang } });
+            this.$router.push({ name: this.$route.name, query: this.$route.query, params: { lang: newLang } });
         },
         getOtherLanguages(language: string) {
             return this.languages.filter((otherLanguage) => otherLanguage.value.substring(0, 2) !== language)
@@ -135,7 +135,7 @@ export default defineComponent({
     },
     computed: {
         navIcon() {
-            return this.wideNav ? "mdi-menu" : "mdi-arrow-left";
+            return this.wideNav ? "mdi-menu" : this.$vuetify.locale.isRtl ? "mdi-arrow-left" : "mdi-arrow-right";
 
         },
         getUsername() {
