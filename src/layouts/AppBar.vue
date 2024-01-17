@@ -124,10 +124,7 @@ export default defineComponent({
         },
         changeLanguage(newLang: string): void {
             newLang = newLang.substring(0, 2);
-            if (!this.$route.name) {
-                throw new Error("undefined route name");
-            }
-            this.$router.push({ name: this.$route.name, query: this.$route.query, params: { lang: newLang } });
+            this.$router.push({ query: this.$route.query, params: { lang: newLang } });
         },
         getOtherLanguages(language: string) {
             return this.languages.filter((otherLanguage) => otherLanguage.value.substring(0, 2) !== language)
