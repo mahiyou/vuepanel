@@ -1,10 +1,20 @@
 import { INotification } from "./notification";
-
+export enum Status {
+    ACTIVE = 0,
+    SUSPENDED = 1
+}
+export enum Role {
+    admin = 0,
+    user = 1,
+}
 export interface IUser {
+    id: number,
     token: string;
     abilities: string[];
+    status: Status
     name?: string;
     avatar?: string;
+    role: Role
 }
 
 export interface ILoginRequest {
@@ -41,3 +51,5 @@ export interface IChangePasswordRequest {
 export interface IOTP {
     digits: number;
 }
+
+

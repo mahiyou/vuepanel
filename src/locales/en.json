@@ -55,5 +55,19 @@
     "new notifications":"New",
     "view all notifications":"View all notifications",
     "you have successfully logged out of your account":"You have successfully logged out of your account.",
-    "you will be redirected to the login page in a few seconds":"You will be redirected to the login page in a few seconds."
+    "you will be redirected to the login page in a few seconds":"You will be redirected to the login page in a few seconds.",
+    "users":"Users",
+    "actions":"Actions",
+    "show":"Show",
+    "edit":"Edit",
+    "delete":"Delete",
+    "avatar":"Avatar",
+    "name":"Name",
+    "status":"Status",
+    "role":"Role",
+    "id":"ID",
+    "active":"Active",
+    "suspended":"Suspended",
+    "admin":"Admin",
+    "user":"user"
 }

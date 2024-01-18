@@ -7,9 +7,11 @@ import ForbiddenView from "@/views/Forbidden.vue";
 import NotFoundView from "@/views/NotFound.vue";
 import ResetPasswordView from "@/views/Auth/ResetPassword.vue";
 import RegisterView from "@/views/Auth/register.vue";
+import UsersView from "@/views/Users/Users.vue";
 import Logout from "@/views/Auth/Logout.vue";
+import OneUserInformationView from "@/views/Users/OneUserInformation.vue"
 import { useAuthStore } from "@/store/auth";
-import  vuetify from '../plugins/vuetify'
+import vuetify from '../plugins/vuetify'
 
 
 const routes = [
@@ -70,12 +72,20 @@ const routes = [
                     },
 
                     {
-                        name: "dashboard",
-                        path: "users/edit",
-                        component: DashboardView,
+                        name: "users",
+                        path: "users",
+                        component: UsersView,
                         meta: {
                             ability: "users-edit"
-                        }
+                        },
+                    },
+                    {
+                        name: "oneUserInfo",
+                        path: "user/:id",
+                        component: OneUserInformationView,
+                        meta: {
+                            ability: "users-edit"
+                        },
                     }
                 ]
             },

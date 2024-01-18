@@ -32,32 +32,14 @@ export default defineComponent({
                         }
                     }],
                     props: {
-                        prependIcon: "mdi-view-dashboard"
+                        prependIcon: "mdi-view-dashboard",
                     }
                 }, {
-                    title: this.$t("Charts"),
-                    value: "Charts",
-                    items: [
-                        {
-                            title: this.$t("Apexcharts"), value: "apexcharts", props: {
-                                prependIcon: "mdi-square-medium"
-                            },
-                            items: [
-                                {
-                                    title: this.$t("Line"), value: "aine", props: {
-                                        prependIcon: "mdi-circle-medium"
-                                    },
-                                },
-                                {
-                                    title: this.$t("Area"), value: "aria", props: {
-                                        prependIcon: "mdi-circle-medium"
-                                    }
-                                }
-                            ]
-                        },
-                    ],
+                    title: this.$t("users"),
+                    value: "Users",
                     props: {
-                        prependIcon: "mdi-chart-bar"
+                        prependIcon: "mdi-account-multiple-check",
+                        to: { name: "users"}
                     },
                 },
                 {

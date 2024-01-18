@@ -1,8 +1,9 @@
 import { IAPI } from "@/api";
-import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse } from "@/api/authentication";
+import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse, IUser, Role, Status } from "./authentication";
 import UserLoginError from "@/api/errors/UserLoginError";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import ServerInternalError from "./errors/ServerInternalError";
+import { IGetUserResponse } from "./users";
 
 export class MockAPI implements IAPI {
     public getNotificationsItems(): INotification[] {
@@ -126,10 +127,13 @@ export class MockAPI implements IAPI {
             }
             return {
                 user: {
+                    id: 2,
                     token: "ddd",
                     abilities: ["users-edit"],
-                    name: " Alex",
-                    avatar: "/pics/avatar.jpg"
+                    name: "Alex",
+                    avatar: "/pics/avatar.jpg",
+                    status: Status.ACTIVE,
+                    role: Role.admin
                 },
                 notifications: this.getNotificationsItems(),
             };
@@ -143,10 +147,13 @@ export class MockAPI implements IAPI {
             }
             return {
                 user: {
+                    id: 2,
                     token: "ddd",
                     abilities: ["users-edit"],
                     name: "الکس",
-                    avatar: "/pics/avatar.jpg"
+                    avatar: "/pics/avatar.jpg",
+                    status: Status.ACTIVE,
+                    role: Role.admin
                 }
             };
         }, [request]);
@@ -160,10 +167,13 @@ export class MockAPI implements IAPI {
             if (request.otp) {
                 return {
                     user: {
+                        id: 2,
                         token: "ddd",
                         abilities: ["users-edit"],
                         name: "الکس",
-                        avatar: "/pics/avatar.jpg"
+                        avatar: "/pics/avatar.jpg",
+                        status: Status.ACTIVE,
+                        role: Role.admin
                     },
                     notifications: this.getNotificationsItems(),
                 };
@@ -209,6 +219,51 @@ export class MockAPI implements IAPI {
             };
 
         }, [request]);
+    }
+    public async getUsers(): Promise<IGetUserResponse> {
+        return this.call(() => {
+            if (Math.random() > 0.9) {
+                throw new ServerInternalError();
+            }
+            return {
+                users: [
+                    {
+                        avatar: "/pics/avatar.jpg",
+                        name: "Alex",
+                        id: 3,
+                        status: 0,
+                        role: Role.admin,
+                    },
+                    {
+                        avatar: "/pics/avatar2.jpg",
+                        name: "Ali",
+                        id: 13,
+                        status: 1,
+                        role: Role.user,
+                    },
+                    {
+                        name: "Maryam",
+                        id: 14,
+                        status: 0,
+                        role: Role.user,
+                    },
+                    {
+                        name: "Ehsan",
+                        id: 144,
+                        status: 0,
+                        role: Role.user,
+                    },
+                    {
+                        name: "Roya",
+                        id: 22,
+                        status: 1,
+                        role: Role.user,
+                    }
+                ]
+            }
+
+        }, [])
+
     }
 
 
