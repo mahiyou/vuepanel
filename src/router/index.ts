@@ -72,21 +72,26 @@ const routes = [
                     },
 
                     {
-                        name: "users",
                         path: "users",
-                        component: UsersView,
                         meta: {
                             ability: "users-edit"
                         },
+                        children: [
+                            {
+                                name: "users",
+                                path: "",
+                                component: UsersView,
+                            },
+                            {
+                                name: "oneUser",
+                                path:":id",
+                                component: OneUserInformationView
+                            }
+                        
+                        ]
+
                     },
-                    {
-                        name: "oneUserInfo",
-                        path: "user/:id",
-                        component: OneUserInformationView,
-                        meta: {
-                            ability: "users-edit"
-                        },
-                    }
+
                 ]
             },
             { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundView }

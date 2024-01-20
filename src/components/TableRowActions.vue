@@ -4,16 +4,25 @@
             <v-btn variant="text" color="primary" prepend-icon="mdi-dots-horizontal" class="table-edit-btn"
                 v-bind="props">{{ $t("actions") }}</v-btn>
         </template>
-        <v-list :items="tableRowAction" item-title="title"></v-list>
+        <v-list>
+        <v-list-item v-for="(item , index) in tableRowAction" :key="index" :value="item.value" :title="item.title" :base-color="item.color" :prepend-icon="item.prependIcon" @click="$emit('action',{action:item.value,user: user })"></v-list-item>
+        </v-list>
     </v-menu>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
 
+export interface ITableRowAction{
+    title: string,
+    value: string,
+    prependIcon: string,
+    color: string,
+}
 export default defineComponent({
     props: {
-        tableRowAction: Array
-    }
+        tableRowAction: [] as ITableRowAction[] | any,
+        user: Number
+    },
 })
 </script>
 <style lang="scss">
