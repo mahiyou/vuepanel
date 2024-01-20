@@ -133,7 +133,7 @@ export class MockAPI implements IAPI {
                     name: "Alex",
                     avatar: "/pics/avatar.jpg",
                     status: Status.ACTIVE,
-                    role: Role.admin
+                    role: Role.ADMIN
                 },
                 notifications: this.getNotificationsItems(),
             };
@@ -153,7 +153,7 @@ export class MockAPI implements IAPI {
                     name: "الکس",
                     avatar: "/pics/avatar.jpg",
                     status: Status.ACTIVE,
-                    role: Role.admin
+                    role: Role.ADMIN
                 }
             };
         }, [request]);
@@ -173,7 +173,7 @@ export class MockAPI implements IAPI {
                         name: "الکس",
                         avatar: "/pics/avatar.jpg",
                         status: Status.ACTIVE,
-                        role: Role.admin
+                        role: Role.ADMIN
                     },
                     notifications: this.getNotificationsItems(),
                 };
@@ -232,98 +232,98 @@ export class MockAPI implements IAPI {
                         name: "Alex",
                         id: 1,
                         status: 0,
-                        role: Role.admin,
+                        role: Role.ADMIN,
                     },
                     {
                         avatar: "/pics/avatar2.jpg",
                         name: "Ali",
                         id: 2,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Maryam",
                         id: 3,
                         status: 0,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Ehsan",
                         id: 4,
                         status: 0,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 5,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 6,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 7,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 8,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 9,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 10,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 11,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 12,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 13,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 14,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 15,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 16,
                         status: 1,
-                        role: Role.user,
+                        role: Role.USER,
                     }
                 ]
             }
