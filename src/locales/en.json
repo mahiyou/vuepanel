@@ -69,5 +69,9 @@
     "active":"Active",
     "suspended":"Suspended",
     "admin":"Admin",
-    "user":"user"
+    "user":"user",
+    "items per page":"Items per page",
+    "search":"Search",
+    "add":"Add",
+    "no data":"No data found"
 }

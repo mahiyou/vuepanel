@@ -3,7 +3,8 @@ import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest
 import UserLoginError from "@/api/errors/UserLoginError";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import ServerInternalError from "./errors/ServerInternalError";
-import { IGetUserResponse } from "./users";
+import { IGetUserResponse, ISearchUserRequest } from "./users";
+import NotFoundError from "./errors/NotFoundError";
 
 export class MockAPI implements IAPI {
     public getNotificationsItems(): INotification[] {
@@ -231,107 +232,139 @@ export class MockAPI implements IAPI {
                         avatar: "/pics/avatar.jpg",
                         name: "Alex",
                         id: 1,
-                        status: 0,
+                        status: Status.ACTIVE,
                         role: Role.ADMIN,
                     },
                     {
                         avatar: "/pics/avatar2.jpg",
                         name: "Ali",
                         id: 2,
-                        status: 1,
+                        status: Status.SUSPENDED,
                         role: Role.USER,
                     },
                     {
                         name: "Maryam",
                         id: 3,
-                        status: 0,
+                        status: Status.ACTIVE,
                         role: Role.USER,
                     },
                     {
                         name: "Ehsan",
                         id: 4,
-                        status: 0,
+                        status: Status.ACTIVE,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 5,
-                        status: 1,
+                        status: Status.ACTIVE,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 6,
-                        status: 1,
+                        status: Status.ACTIVE,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 7,
-                        status: 1,
+                        status: Status.SUSPENDED,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 8,
-                        status: 1,
+                        status: Status.ACTIVE,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 9,
-                        status: 1,
+                        status: Status.SUSPENDED,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 10,
-                        status: 1,
+                        status: Status.ACTIVE,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 11,
-                        status: 1,
+                        status: Status.SUSPENDED,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 12,
-                        status: 1,
+                        status: Status.SUSPENDED,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 13,
-                        status: 1,
+                        status: Status.SUSPENDED,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 14,
-                        status: 1,
+                        status: Status.ACTIVE,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 15,
-                        status: 1,
+                        status: Status.SUSPENDED,
                         role: Role.USER,
                     },
                     {
                         name: "Roya",
                         id: 16,
-                        status: 1,
+                        status: Status.ACTIVE,
                         role: Role.USER,
                     }
                 ]
             }
 
         }, [])
-
     }
-
+    public async searchUsers(request: ISearchUserRequest): Promise<IGetUserResponse>{
+        return this.call((request: ISearchUserRequest) =>{
+            if (Math.random() > 0.9) {
+                throw new ServerInternalError();
+            }
+            if (Math.random() <= 0.9 && Math.random() > 0.6){
+                throw new NotFoundError();
+            }
+            return{
+                users:[
+                    {
+                        avatar: "/pics/avatar.jpg",
+                        name: "Alex",
+                        id: 1,
+                        status: Status.ACTIVE,
+                        role: Role.ADMIN,
+                    },
+                    {
+                        avatar: "/pics/avatar2.jpg",
+                        name: "Ali",
+                        id: 2,
+                        status: Status.ACTIVE,
+                        role: Role.USER,
+                    },
+                    {
+                        name: "Maryam",
+                        id: 3,
+                        status: Status.ACTIVE,
+                        role: Role.USER,
+                    },
+                ]
+            }
+        }, [request])
+    }
 
     private call<T extends Function>(fn: T, args: Parameters<any>): Promise<ReturnType<any>> {
         return new Promise((resolve, reject) => {

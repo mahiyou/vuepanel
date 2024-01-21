@@ -1,15 +1,24 @@
 <template>
     <v-container>
-        <v-card flat title="Users" v-if="!loading && !serverError">
+        <v-card class="pa-3" flat v-if="!loading && !serverError">
+            <v-toolbar color="white">
+                <v-toolbar-title class="text-h5">
+                    {{ $t('users') }}
+                </v-toolbar-title>
+                <template v-slot:append>
+                    <SearchUser @searchUser="searchUser"/>
+                    <!-- <v-btn class="ms-3" variant="flat" color="green" prependIcon="mdi-account-plus-outline">{{ $t('add') }}</v-btn> -->
+                </template>
+            </v-toolbar>
             <v-data-table :headers="headers" :items="users" :items-per-page-options="[
                 { value: 5, title: '5' },
                 { value: 10, title: '10' },
                 { value: 20, title: '20' },
                 { value: -1, title: 'All' }
-            ]" items-per-page-text="items per page" pageText="" show-current-page>
+            ]" :items-per-page-text="$t('items per page')" pageText="" show-current-page :no-data-text="$t('no data')">
                 <template v-slot:item.status="{ value }">
                     <v-chip :color="backgroundOfStatus(value)">
-                        {{ getStatusTitle(value) }}
+                        {{ value }}
                     </v-chip>
                 </template>
                 <template v-slot:item.avatar="{ value }">
@@ -17,7 +26,7 @@
                         height="45px"></v-img>
                 </template>
                 <template v-slot:item.role="{ value }">
-                    {{ getRoleTitle(value) }}
+                    {{ value }}
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <TableRowActions :tableRowAction="tableRowAction(item)" :user="item.id" @action="action" />
@@ -32,11 +41,15 @@
 <script lang="ts">
 import { useAPI } from "@/api"
 import TableRowActions from "@/components/TableRowActions.vue"
+import SearchUser from "@/components/SerchUser.vue"
 import { IUser, Role, Status } from "@/api/authentication"
 import { persianNumber } from "@/utilities"
+import { ISearchUserRequest } from "@/api/users"
+import NotFoundError from "@/api/errors/NotFoundError"
 export default {
     components: {
-        TableRowActions
+        TableRowActions,
+        SearchUser
     },
     setup() {
         return {
@@ -45,21 +58,9 @@ export default {
     },
     data() {
         return {
-            users: [] as IUser[],
+            users: [] as IUser[] | undefined,
             serverError: false,
             loading: true,
-            headers: [
-                {
-                    key: 'id',
-                    sortable: false,
-                    title: this.$t("id")
-                },
-                { key: 'avatar', sortable: false, title: this.$t("avatar") },
-                { key: 'name', sortable: false, title: this.$t("name") },
-                { key: 'status', sortable: false, title: this.$t("status") },
-                { key: 'role', sortable: false, title: this.$t("role") },
-                { key: 'actions', sortable: false },
-            ],
         }
     },
     methods: {
@@ -68,20 +69,6 @@ export default {
                 return "green"
             } else if (status == Status.SUSPENDED) {
                 return "red"
-            }
-        },
-        getStatusTitle(status: Status) {
-            if (status === Status.ACTIVE) {
-                return this.$t("active")
-            } else {
-                return this.$t("suspended")
-            }
-        },
-        getRoleTitle(role: Role) {
-            if (role === Role.ADMIN) {
-                return this.$t("admin")
-            } else {
-                return this.$t("user")
             }
         },
         action(action: any) {
@@ -101,25 +88,47 @@ export default {
                 {
                     title: this.$t("edit"),
                     value: "edit",
-                    props:{
+                    props: {
                         prependIcon: "mdi-note-edit-outline",
                         color: "blue",
                         to: { name: `oneUser`, params: { id: user.id } },
                     }
-                    
+
                 },
                 {
                     title: this.$t("delete"),
                     value: "delete",
-                    props:{
+                    props: {
                         prependIcon: "mdi-close-thick",
-                        color: "red",  
+                        color: "red",
                         to: { name: `oneUser`, params: { id: user.id } },
                     }
-                    
+
                 }
             ]
         },
+        async searchUser(user: ISearchUserRequest) {
+            this.loading = true;
+            try {
+                const response = await useAPI().searchUsers({
+                    id: user.id || undefined,
+                    status: user.status || undefined,
+                    name: user.status || undefined,
+                    role: user.role || undefined
+                });
+                this.users = response.users;
+            }
+            catch(e) {
+                if (e instanceof NotFoundError) {
+                    this.users = undefined;
+                } else {
+                    this.serverError = true;
+                }
+            }
+            finally {
+                this.loading = false;
+            }
+        }
     },
     async mounted() {
         try {
@@ -133,5 +142,21 @@ export default {
             this.loading = false;
         }
     },
+    computed: {
+        headers() {
+            return [
+                {
+                    key: 'id',
+                    sortable: false,
+                    title: this.$t("id")
+                },
+                { key: 'avatar', sortable: false, title: this.$t("avatar") },
+                { key: 'name', sortable: false, title: this.$t("name") },
+                { key: 'status', sortable: false, title: this.$t("status") },
+                { key: 'role', sortable: false, title: this.$t("role") },
+                { key: 'actions', sortable: false },
+            ]
+        }
+    }
 }
 </script>
