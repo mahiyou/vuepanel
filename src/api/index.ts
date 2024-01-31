@@ -10,7 +10,6 @@ export interface IAPI {
     changePassword(request: IChangePasswordRequest): Promise<void>;
     getNotifications(request: IGetNotificationsRequest): Promise<IGetNotificationsResponse>;
     markNotificationsAsRead(request: IMarkNotificationsAsReadRequest): Promise<IGetNotificationsResponse>;
-    getUsers(): Promise<IGetUserResponse>;
     searchUsers(request: ISearchUserRequest): Promise<IGetUserResponse>;
 }
 

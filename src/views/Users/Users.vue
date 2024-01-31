@@ -6,7 +6,7 @@
                     {{ $t('users') }}
                 </v-toolbar-title>
                 <template v-slot:append>
-                    <SearchUser @searchUser="searchUser"/>
+                    <SearchUser @searchUser="searchUser" />
                     <!-- <v-btn class="ms-3" variant="flat" color="green" prependIcon="mdi-account-plus-outline">{{ $t('add') }}</v-btn> -->
                 </template>
             </v-toolbar>
@@ -112,14 +112,31 @@ export default {
             try {
                 const response = await useAPI().searchUsers({
                     id: user.id || undefined,
+                    name: user.name || undefined,
                     status: user.status || undefined,
-                    name: user.status || undefined,
                     role: user.role || undefined
                 });
                 this.users = response.users;
+                this.$router.push({
+                    name: this.$route.name as string, query: {
+                        id: user.id || "",
+                        name: user.name || "",
+                        status: user.status || "",
+                        role: user.role || ""
+                    }
+                });
             }
-            catch(e) {
+
+            catch (e) {
                 if (e instanceof NotFoundError) {
+                    this.$router.push({
+                        name: this.$route.name as string, query: {
+                            id: user.id || "",
+                            name: user.name || "",
+                            status: user.status || "",
+                            role: user.role || ""
+                        }
+                    });
                     this.users = undefined;
                 } else {
                     this.serverError = true;
@@ -131,16 +148,21 @@ export default {
         }
     },
     async mounted() {
-        try {
-            const response = await useAPI().getUsers();
-            this.users = response.users;
-        }
-        catch {
-            this.serverError = true;
-        }
-        finally {
-            this.loading = false;
-        }
+        this.searchUser({ 
+            id: this.$route.query.id ? parseInt(this.$route.query.id.toString()) : undefined,
+            name: this.$route.query.name ? this.$route.query.name.toString() : undefined,
+            status: this.$route.query.status ? this.$route.query.status.toString() : undefined,
+            role: this.$route.query.role ? this.$route.query.role.toString() : undefined, })
+        // try {
+        //     const response = await useAPI().getUsers();
+        //     this.users = response.users;
+        // }
+        // catch {
+        //     this.serverError = true;
+        // }
+        // finally {
+        //     this.loading = false;
+        // }
     },
     computed: {
         headers() {

@@ -221,10 +221,40 @@ export class MockAPI implements IAPI {
 
         }, [request]);
     }
-    public async getUsers(): Promise<IGetUserResponse> {
-        return this.call(() => {
+    public async searchUsers(request: ISearchUserRequest): Promise<IGetUserResponse> {
+        return this.call((request: ISearchUserRequest) => {
+
             if (Math.random() > 0.9) {
                 throw new ServerInternalError();
+            }
+            if (Math.random() <= 0.9 && Math.random() > 0.6) {
+                throw new NotFoundError();
+            }
+            if (request.id || request.name || request.role || request.status) {
+                return {
+                    users: [
+                        {
+                            avatar: "/pics/avatar.jpg",
+                            name: "Alex",
+                            id: 1,
+                            status: Status.ACTIVE,
+                            role: Role.ADMIN,
+                        },
+                        {
+                            avatar: "/pics/avatar2.jpg",
+                            name: "Ali",
+                            id: 2,
+                            status: Status.ACTIVE,
+                            role: Role.USER,
+                        },
+                        {
+                            name: "Maryam",
+                            id: 3,
+                            status: Status.ACTIVE,
+                            role: Role.USER,
+                        },
+                    ]
+                }
             }
             return {
                 users: [
@@ -326,41 +356,6 @@ export class MockAPI implements IAPI {
                         status: Status.ACTIVE,
                         role: Role.USER,
                     }
-                ]
-            }
-
-        }, [])
-    }
-    public async searchUsers(request: ISearchUserRequest): Promise<IGetUserResponse>{
-        return this.call((request: ISearchUserRequest) =>{
-            if (Math.random() > 0.9) {
-                throw new ServerInternalError();
-            }
-            if (Math.random() <= 0.9 && Math.random() > 0.6){
-                throw new NotFoundError();
-            }
-            return{
-                users:[
-                    {
-                        avatar: "/pics/avatar.jpg",
-                        name: "Alex",
-                        id: 1,
-                        status: Status.ACTIVE,
-                        role: Role.ADMIN,
-                    },
-                    {
-                        avatar: "/pics/avatar2.jpg",
-                        name: "Ali",
-                        id: 2,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Maryam",
-                        id: 3,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
                 ]
             }
         }, [request])
