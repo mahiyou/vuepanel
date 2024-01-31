@@ -360,6 +360,24 @@ export class MockAPI implements IAPI {
             }
         }, [request])
     }
+    public async getUser(request: number): Promise<IRegisterResponse> {
+        return this.call((request: number) => {
+            if (Math.random() > 0.5) {
+                throw new ServerInternalError();
+            }
+            return {
+                user: {
+                    id: 2,
+                    token: "ddd",
+                    abilities: ["users-edit"],
+                    name: "الکس",
+                    avatar: "/pics/avatar.jpg",
+                    status: Status.ACTIVE,
+                    role: Role.ADMIN
+                }
+            }
+        }, [request])
+    }
 
     private call<T extends Function>(fn: T, args: Parameters<any>): Promise<ReturnType<any>> {
         return new Promise((resolve, reject) => {

@@ -11,6 +11,7 @@ export interface IAPI {
     getNotifications(request: IGetNotificationsRequest): Promise<IGetNotificationsResponse>;
     markNotificationsAsRead(request: IMarkNotificationsAsReadRequest): Promise<IGetNotificationsResponse>;
     searchUsers(request: ISearchUserRequest): Promise<IGetUserResponse>;
+    getUser(request: number): Promise<IRegisterResponse>;
 }
 
 export function useAPI(): IAPI {

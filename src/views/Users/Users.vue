@@ -153,16 +153,6 @@ export default {
             name: this.$route.query.name ? this.$route.query.name.toString() : undefined,
             status: this.$route.query.status ? this.$route.query.status.toString() : undefined,
             role: this.$route.query.role ? this.$route.query.role.toString() : undefined, })
-        // try {
-        //     const response = await useAPI().getUsers();
-        //     this.users = response.users;
-        // }
-        // catch {
-        //     this.serverError = true;
-        // }
-        // finally {
-        //     this.loading = false;
-        // }
     },
     computed: {
         headers() {

@@ -44,7 +44,8 @@ export default createVuetify({
                     secondary: "#8c8f9d",
                     customGreen: "#0ab39c",
                     light: "#ffffff",
-                    lightBlue: "#a1afdf"
+                    lightBlue: "#a1afdf",
+                    textColor: "#495057"
                 },
             },
         },
