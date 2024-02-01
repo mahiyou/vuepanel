@@ -362,7 +362,7 @@ export class MockAPI implements IAPI {
     }
     public async getUser(request: number): Promise<IRegisterResponse> {
         return this.call((request: number) => {
-            if (Math.random() > 0.5) {
+            if (Math.random() > 0.9) {
                 throw new ServerInternalError();
             }
             return {
@@ -370,10 +370,16 @@ export class MockAPI implements IAPI {
                     id: 2,
                     token: "ddd",
                     abilities: ["users-edit"],
-                    name: "الکس",
+                    name: "Alex",
                     avatar: "/pics/avatar.jpg",
                     status: Status.ACTIVE,
-                    role: Role.ADMIN
+                    role: Role.ADMIN,
+                    phoneNumber: "09123456789",
+                    email: "alex@gmail.com",
+                    city: "Toronto",
+                    country: "Canada",
+                    zipCode: "343",
+                    joiningDate: "1400-11-2"
                 }
             }
         }, [request])

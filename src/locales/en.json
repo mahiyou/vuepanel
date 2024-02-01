@@ -28,7 +28,7 @@
     "already have an account":"Already have an account ?",
     "password confirmation is necessary":"password confirmation is necessary",
     "forgot your password?":"Forgot your password?",
-    "change your password":"Reset your password",
+    "reset your password":"Reset your password",
     "reset password":"reset password",
     "remember my password":"Wait, I remember my password...",
     "click here":"Click here",
@@ -73,5 +73,16 @@
     "items per page":"Items per page",
     "search":"Search",
     "add":"Add",
-    "no data":"No data found"
+    "no data":"No data found",
+    "personal details":"Personal Details",
+    "change password":"Change Password",
+    "email address":"Email Address",
+    "phone number":"Phone Number",
+    "joining date":"Joining Date",
+    "city":"City",
+    "country":"Country",
+    "zip code":"Zip Code",
+    "updates":"Updates",
+    "old password":"Old Password",
+    "new password":"New Password"
 }

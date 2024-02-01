@@ -14,7 +14,13 @@ export interface IUser {
     status: Status
     name?: string;
     avatar?: string;
-    role: Role
+    role: Role,
+    phoneNumber?: string,
+    email?: string,
+    city?: string,
+    country?: string,
+    zipCode?: string,
+    joiningDate?: string
 }
 
 export interface ILoginRequest {

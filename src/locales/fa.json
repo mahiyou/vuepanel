@@ -27,7 +27,7 @@
     "already have an account":"قبلا ثبت نام کرده اید؟",
     "password confirmation is necessary":"وارد کردن تکرار رمز عبور الزامی است.",
     "forgot your password?":"رمز عبور خود را فراموش کرده اید؟",
-    "change your password":"رمز خود را تغییر دهید",
+    "reset your password":"رمز خود را تغییر دهید",
     "reset password":" تنظیم مجدد رمز عبور",
     "remember my password":"رمز عبور خود را به یاد اوردید؟",
     "click here":"اینجا کلیک کنید",
@@ -73,5 +73,16 @@
     "items per page":"تعداد آیتم های هر صفحه",
     "search": "جستجو",
     "add": "افزودن",
-    "no data":"نتیجه ای پیدا نشد"
+    "no data":"نتیجه ای پیدا نشد",
+    "personal details":"اطلاعات شخصی",
+    "change password":"تغییر رمز عبور",
+    "email address":"آدرس ایمیل",
+    "phone number":"شماره موبایل",
+    "joining date":"تاریخ ثبت نام",
+    "city":"شهر",
+    "country":"کشور",
+    "zip code":"زیپ کد",
+    "updates":"به روز رسانی",
+    "old password":"رمز عبور قبلی",
+    "new password":"رمز عبور جدید"
 }
