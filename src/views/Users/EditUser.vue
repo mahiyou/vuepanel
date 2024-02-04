@@ -3,11 +3,20 @@
         <div class="banner">
             <div class="bg-overlay"></div>
         </div>
-        <v-container class="pb-15">
-            <div class="img-card pb-15">
+        <v-container>
+            <div class="mt-1 ms-1">
+                <v-file-input prepend-icon="mdi-image-edit-outline"></v-file-input>
+            </div><br /><br />
+            <div class="img-card">
                 <v-card class="pa-4 text-center" elevation="1">
-                    <v-img :src="user.avatar || '/pics/default-avatar.jpg'" class="rounded-circle my-2 mx-auto user-avatar"
-                        width="120px" height="120px"></v-img>
+                    <div class="avatar-div mx-auto">
+                        <v-img :src="user.avatar || '/pics/default-avatar.jpg'" class="rounded-circle my-2 user-avatar"
+                            width="120px" height="120px">
+                        </v-img>
+                        <div class="camera-btn">
+                            <v-file-input prepend-icon="mdi-camera"></v-file-input>
+                        </div>
+                    </div>
                     <h2 class="text-textColor">{{ user.name }}</h2>
                     <div class="text-secondary">{{ user.role }}</div>
                 </v-card>
@@ -285,6 +294,7 @@ export default defineComponent({
         padding: 0px;
         margin: 0px;
         z-index: 0;
+
     }
 
     .bg-overlay {
@@ -294,12 +304,40 @@ export default defineComponent({
     }
 
     .img-card {
+        top: 120px;
         position: relative;
-        top: 180px;
+    }
+
+    .avatar-div {
+        width: fit-content;
+        position: relative;
+
+        .v-input__prepend {
+            font-size: 10px;
+            background-color: #e8e9eb;
+            border-radius: 20px;
+            padding: 8px;
+        }
+
+        .camera-btn {
+            position: absolute;
+            top: 80px;
+            right: -50px;
+        }
+
+
+    }
+
+    .v-input__prepend>.v-icon {
+        opacity: 1;
     }
 
     .user-avatar {
         border: 5px solid rgb(var(--v-theme-secondary), 0.2);
+    }
+
+    .v-input__control {
+        display: none;
     }
 }
 </style>
