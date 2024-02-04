@@ -3,8 +3,9 @@ import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest
 import UserLoginError from "@/api/errors/UserLoginError";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import ServerInternalError from "./errors/ServerInternalError";
-import { IGetUserResponse, ISearchUserRequest } from "./users";
+import { IChangeUserPasswoerRequest, IGetUserResponse, ISearchUserRequest } from "./users";
 import NotFoundError from "./errors/NotFoundError";
+import InputValidationError from "./errors/InputValidationError";
 
 export class MockAPI implements IAPI {
     public getNotificationsItems(): INotification[] {
@@ -381,6 +382,31 @@ export class MockAPI implements IAPI {
                     zipCode: "343",
                     joiningDate: "1400-11-2"
                 }
+            }
+        }, [request])
+    }
+    public async editUser(request: IUser): Promise<void>{
+        return this.call((request: number) => {
+            if (Math.random() > 0.9) {
+                throw new InputValidationError();
+            }
+            if (Math.random() > 0.8) {
+                throw new ServerInternalError();
+            }
+            console.log(request)
+        },[request])
+    }
+    public async changeUserPassword(request: IChangeUserPasswoerRequest): Promise<void>{
+        return this.call((request: IChangeUserPasswoerRequest) =>{
+            if (Math.random() > 0.9){
+                throw new ServerInternalError();
+            }
+        },[request])
+    }
+    public async deleteUser(request: number): Promise<void> {
+        return this.call((request: number) => {
+            if (Math.random() > 0.9) {
+                throw new ServerInternalError();
             }
         }, [request])
     }

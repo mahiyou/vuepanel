@@ -84,5 +84,12 @@
     "zip code":"Zip Code",
     "updates":"Updates",
     "old password":"Old Password",
-    "new password":"New Password"
+    "new password":"New Password",
+    "inputed phone number is invalid": "inputed phone number is invalid",
+    "inputed email is invalid":"inputed email is invalid",
+    "succesful update":"succesful update",
+    "delete user":"Delete User",
+    "cancel":"Cancel",
+    "user deleted successfully":"User deleted successfully",
+    "go to the user list page":"Go to the user list page"
 }

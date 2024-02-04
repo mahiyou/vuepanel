@@ -14,19 +14,10 @@ export default defineComponent({
     props: {
         tableRowAction: Array,
     },
+    data(){
+        return{
+            openModal : false,
+        }
+    }
 })
 </script>
-<style lang="scss">
-
-// .v-list-item-title {
-//     font-size: 13px;
-// }
-
-// .v-list-item__overlay {
-//     --v-theme-overlay-multiplier: 0;
-// }
-
-// .v-list-item__prepend {
-//     width: 25px;
-// }
-</style>

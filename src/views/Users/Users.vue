@@ -41,7 +41,7 @@
 <script lang="ts">
 import { useAPI } from "@/api"
 import TableRowActions from "@/components/TableRowActions.vue"
-import SearchUser from "@/components/SerchUser.vue"
+import SearchUser from "@/components/SearchUser.vue"
 import { IUser, Role, Status } from "@/api/authentication"
 import { persianNumber } from "@/utilities"
 import { ISearchUserRequest } from "@/api/users"
@@ -82,7 +82,7 @@ export default {
                     props: {
                         prependIcon: "mdi-file-document-multiple-outline",
                         color: "green",
-                        to: { name: `oneUser`, params: { id: user.id } },
+                        to: { name: `editUser`, params: { id: user.id } },
                     }
                 },
                 {
@@ -91,7 +91,7 @@ export default {
                     props: {
                         prependIcon: "mdi-note-edit-outline",
                         color: "blue",
-                        to: { name: `oneUser`, params: { id: user.id } },
+                        to: { name: `editUser`, params: { id: user.id } },
                     }
 
                 },
@@ -101,13 +101,16 @@ export default {
                     props: {
                         prependIcon: "mdi-close-thick",
                         color: "red",
-                        to: { name: `oneUser`, params: { id: user.id } },
+
+                        to: { name: `deleteUser`, params: { id: user.id } },
                     }
 
                 }
             ]
         },
-        async searchUser(user: ISearchUserRequest) {
+        log() {
+            console.log("dooo")
+        }, async searchUser(user: ISearchUserRequest) {
             this.loading = true;
             try {
                 const response = await useAPI().searchUsers({
@@ -148,11 +151,12 @@ export default {
         }
     },
     async mounted() {
-        this.searchUser({ 
+        this.searchUser({
             id: this.$route.query.id ? parseInt(this.$route.query.id.toString()) : undefined,
             name: this.$route.query.name ? this.$route.query.name.toString() : undefined,
             status: this.$route.query.status ? this.$route.query.status.toString() : undefined,
-            role: this.$route.query.role ? this.$route.query.role.toString() : undefined, })
+            role: this.$route.query.role ? this.$route.query.role.toString() : undefined,
+        })
     },
     computed: {
         headers() {

@@ -9,3 +9,7 @@ export interface ISearchUserRequest {
     name?: string;
     role?: Role
 }
+export interface IChangeUserPasswoerRequest{
+    id: number,
+    password: string
+}

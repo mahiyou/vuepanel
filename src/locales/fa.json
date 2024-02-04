@@ -84,5 +84,12 @@
     "zip code":"زیپ کد",
     "updates":"به روز رسانی",
     "old password":"رمز عبور قبلی",
-    "new password":"رمز عبور جدید"
+    "new password":"رمز عبور جدید",
+    "inputed phone number is invalid": "شماره موبایل وارد شده معتبر نیست",
+    "inputed email is invalid":"ایمیل وارد شده معتبر نیست",
+    "succesful update":"به روز رسانی با موفقیت انجام شد.",
+    "delete user":"حذف کاربر",
+    "cancel":"انصراف",
+    "user deleted successfully":"کاربر با موفقیت حذف شد.",
+    "go to the user list page":"رفتن به صغحه لیست کاربران"
 }
