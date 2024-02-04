@@ -28,7 +28,7 @@
                                             <div>{{ $t("status") }}</div>
                                             <v-select v-model="status" clearable variant="outlined"
                                                 :items="[Status.ACTIVE, Status.SUSPENDED]" @update:model-value="dataChanged"
-                                                class="mb-2"></v-select>
+                                                class="mb-2" :placeholder="$t('select status')"></v-select>
 
                                             <div>{{ $t("email address") }}</div>
                                             <v-text-field variant="outlined" v-model="email" dir="ltr"
@@ -45,7 +45,7 @@
                                             <div>{{ $t("role") }}</div>
                                             <v-select v-model="role" clearable variant="outlined"
                                                 :items="[Role.ADMIN, Role.USER]" @update:model-value="dataChanged"
-                                                class="mb-2"></v-select>
+                                                class="mb-2" :placeholder="$t('select role')"></v-select>
 
                                             <div>{{ $t("joining date") }}</div>
                                             <v-text-field variant="outlined" v-model="joiningDate" dir="ltr"

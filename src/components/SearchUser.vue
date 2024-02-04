@@ -27,7 +27,7 @@
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="status" clearable variant="outlined"
-                                    :items="[Status.ACTIVE, Status.SUSPENDED]" placeholder="select status"></v-select>
+                                    :items="[Status.ACTIVE, Status.SUSPENDED]" :placeholder="$t('select status')"></v-select>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -36,7 +36,7 @@
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="role" clearable variant="outlined" :items="[Role.ADMIN, Role.USER]"
-                                    placeholder="select role"></v-select>
+                                    :placeholder="$t('select role')"></v-select>
                             </v-col>
                         </v-row>
                     </v-card-text>

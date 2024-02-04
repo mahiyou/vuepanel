@@ -93,5 +93,7 @@
     "user deleted successfully":"User deleted successfully",
     "go to the user list page":"Go to the user list page",
     "close dialog":"Close Dialog",
-    "fill in at least one field":"Fill in at least one field"
+    "fill in at least one field":"Fill in at least one field",
+    "select status":"Select status",
+    "select role":"Select role"
 }

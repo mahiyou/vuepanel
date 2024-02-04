@@ -7,7 +7,6 @@
                 </v-toolbar-title>
                 <template v-slot:append>
                     <SearchUser @searchUser="searchUser" />
-                    <!-- <v-btn class="ms-3" variant="flat" color="green" prependIcon="mdi-account-plus-outline">{{ $t('add') }}</v-btn> -->
                 </template>
             </v-toolbar>
             <v-data-table :headers="headers" :items="users" :items-per-page-options="[
