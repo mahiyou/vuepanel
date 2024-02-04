@@ -91,5 +91,7 @@
     "delete user":"حذف کاربر",
     "cancel":"انصراف",
     "user deleted successfully":"کاربر با موفقیت حذف شد.",
-    "go to the user list page":"رفتن به صغحه لیست کاربران"
+    "go to the user list page":"رفتن به صغحه لیست کاربران",
+    "close dialog":"بستن پنجره",
+    "fill in at least one field":"حداقل یک گزینه را وارد کنید"
 }

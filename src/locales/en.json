@@ -91,5 +91,7 @@
     "delete user":"Delete User",
     "cancel":"Cancel",
     "user deleted successfully":"User deleted successfully",
-    "go to the user list page":"Go to the user list page"
+    "go to the user list page":"Go to the user list page",
+    "close dialog":"Close Dialog",
+    "fill in at least one field":"Fill in at least one field"
 }

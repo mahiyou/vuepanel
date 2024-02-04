@@ -10,20 +10,20 @@
                     <v-card-text>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <div>ID</div>
+                                <div>{{ $t("id") }}</div>
                             </v-col>
                             <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="id" dir="ltr" /></v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <span>Name</span>
+                                <span>{{ $t("name") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="name"
                                     dir="ltr" /></v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <span>status</span>
+                                <span>{{ $t("status") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="status" clearable variant="outlined"
@@ -32,7 +32,7 @@
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <span>role</span>
+                                <span>{{ $t("role") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="role" clearable variant="outlined" :items="[Role.ADMIN, Role.USER]"
@@ -42,12 +42,12 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn class="px-2" type="submit" color="customGreen" variant="flat" @click="isActive.value = false">
-                            Search
+                        <v-btn class="px-3" type="submit" color="customGreen" variant="flat" @click="isActive.value = false">
+                            {{ $t("search") }}
                         </v-btn>
-                        <v-btn variant="flat" color="secondary" @click="isActive.value = false">Close Dialog</v-btn>
+                        <v-btn class="px-3" variant="flat" color="secondary" @click="isActive.value = false">{{ $t("close dialog") }}</v-btn>
                     </v-card-actions>
-                    <v-alert class="my-2" v-if="errorNoData" text="Fill in at least one field" type="error"
+                    <v-alert class="my-2" v-if="errorNoData" :text="$t('fill in at least one field')" type="error"
                         variant="tonal"></v-alert>
                 </v-form>
             </v-card>
