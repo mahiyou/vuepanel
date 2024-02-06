@@ -1,5 +1,5 @@
 import { IAPI } from "@/api";
-import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse, IUser, Role, Status } from "./authentication";
+import { IChangePasswordRequest, IEditUserResponse, IInputUserForEdit, ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse, IUser, Role, Status } from "./authentication";
 import UserLoginError from "@/api/errors/UserLoginError";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import ServerInternalError from "./errors/ServerInternalError";
@@ -373,6 +373,7 @@ export class MockAPI implements IAPI {
                     abilities: ["users-edit"],
                     name: "Alex",
                     avatar: "/pics/avatar.jpg",
+                    banner: "/pics/defaultBanner.jpg",
                     status: Status.ACTIVE,
                     role: Role.ADMIN,
                     phoneNumber: "09123456789",
@@ -385,23 +386,42 @@ export class MockAPI implements IAPI {
             }
         }, [request])
     }
-    public async editUser(request: IUser): Promise<void>{
+    public async editUser(request: IInputUserForEdit): Promise<IEditUserResponse> {
         return this.call((request: number) => {
+            console.log(request)
             if (Math.random() > 0.9) {
                 throw new InputValidationError();
             }
             if (Math.random() > 0.8) {
                 throw new ServerInternalError();
             }
-            console.log(request)
-        },[request])
+            return {
+                user: {
+                    id: 2,
+                    token: "ddd",
+                    abilities: ["users-edit"],
+                    name: "Alex2",
+                    avatar: "/pics/avatar2.jpg",
+                    banner: "/pics/defaultBanner.jpg",
+                    status: Status.ACTIVE,
+                    role: Role.ADMIN,
+                    phoneNumber: "09123456789",
+                    email: "alex@gmail.com",
+                    city: "Toronto",
+                    country: "Canada",
+                    zipCode: "343",
+                    joiningDate: "1400-11-2"
+                }
+            }
+        }, [request])
     }
-    public async changeUserPassword(request: IChangeUserPasswoerRequest): Promise<void>{
-        return this.call((request: IChangeUserPasswoerRequest) =>{
-            if (Math.random() > 0.9){
+    public async changeUserPassword(request: IChangeUserPasswoerRequest): Promise<void> {
+        return this.call((request: IChangeUserPasswoerRequest) => {
+            console.log(request)
+            if (Math.random() > 0.9) {
                 throw new ServerInternalError();
             }
-        },[request])
+        }, [request])
     }
     public async deleteUser(request: number): Promise<void> {
         return this.call((request: number) => {

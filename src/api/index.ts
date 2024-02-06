@@ -1,5 +1,5 @@
 import { MockAPI } from "@/api/mock";
-import { ILoginRequest, ILoginResponse, IResetPasswordRequest, IResetPasswordResponse, IRegisterRequest, IRegisterResponse, IChangePasswordRequest, IUser } from "./authentication";
+import { ILoginRequest, ILoginResponse, IResetPasswordRequest, IResetPasswordResponse, IRegisterRequest, IRegisterResponse, IChangePasswordRequest, IUser, IInputUserForEdit, IEditUserResponse } from "./authentication";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest } from "./notification";
 import { IChangeUserPasswoerRequest, IGetUserResponse, ISearchUserRequest } from "./users";
 
@@ -12,7 +12,7 @@ export interface IAPI {
     markNotificationsAsRead(request: IMarkNotificationsAsReadRequest): Promise<IGetNotificationsResponse>;
     searchUsers(request: ISearchUserRequest): Promise<IGetUserResponse>;
     getUser(request: number): Promise<IRegisterResponse>;
-    editUser(request: IUser): Promise<void>;
+    editUser(request: IInputUserForEdit): Promise<IEditUserResponse>;
     changeUserPassword(request: IChangeUserPasswoerRequest): Promise<void>;
     deleteUser(request: number): Promise<void>;
 }

@@ -1,20 +1,24 @@
 <template>
     <div class="edit-user" v-if="!loading && !serverError">
         <div class="banner">
-            <div class="bg-overlay"></div>
+            <v-img :src="bannerUrl || user.banner || '/pics/defaultBanner.jpg'">
+                <div class="bg-overlay"></div>
+            </v-img>
         </div>
         <v-container>
-            <div class="mt-1 ms-1">
-                <v-file-input prepend-icon="mdi-image-edit-outline"></v-file-input>
+            <div class="mt-1 ms-1 file-input">
+                <v-file-input prepend-icon="mdi-image-edit-outline" v-model="newBanner"
+                    @change="onBannerChange"></v-file-input>
             </div><br /><br />
             <div class="img-card">
                 <v-card class="pa-4 text-center" elevation="1">
                     <div class="avatar-div mx-auto">
-                        <v-img :src="user.avatar || '/pics/default-avatar.jpg'" class="rounded-circle my-2 user-avatar"
-                            width="120px" height="120px">
+                        <v-img :src="avatarUrl || user.avatar || '/pics/default-avatar.jpg'"
+                            class="rounded-circle my-2 user-avatar" width="120px" height="120px">
                         </v-img>
-                        <div class="camera-btn">
-                            <v-file-input prepend-icon="mdi-camera"></v-file-input>
+                        <div class="camera-btn file-input">
+                            <v-file-input prepend-icon="mdi-camera" v-model="newAvatar"
+                                @change="onAvatarChange"></v-file-input>
                         </div>
                     </div>
                     <h2 class="text-textColor">{{ user.name }}</h2>
@@ -28,54 +32,54 @@
                     <v-window v-model="tab" class="mb-15">
                         <v-window-item :value="1">
                             <v-container>
-                                <v-form @submit.prevent="onSubmit" class="my-6" v-model="valid">
+                                <v-form @submit.prevent="onSubmit" @change="dataChanged" class="my-6" v-model="valid">
                                     <v-row>
                                         <v-col cols="6">
                                             <div>{{ $t("name") }}</div>
-                                            <v-text-field variant="outlined" v-model="name" dir="ltr"
-                                                @update:model-value="dataChanged" class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.name" dir="ltr"
+                                                class="mb-2" />
                                             <div>{{ $t("status") }}</div>
-                                            <v-select v-model="status" clearable variant="outlined"
-                                                :items="[Status.ACTIVE, Status.SUSPENDED]" @update:model-value="dataChanged"
-                                                class="mb-2" :placeholder="$t('select status')"></v-select>
+                                            <v-select v-model="newUser.status" clearable variant="outlined"
+                                                :items="[Status.ACTIVE, Status.SUSPENDED]" class="mb-2"
+                                                :placeholder="$t('select status')"
+                                                @update:model-value="dataChanged"></v-select>
 
                                             <div>{{ $t("email address") }}</div>
-                                            <v-text-field variant="outlined" v-model="email" dir="ltr"
-                                                @update:model-value="dataChanged" class="mb-2" :rules="[emailValidation]" />
+                                            <v-text-field variant="outlined" v-model="newUser.email" dir="ltr" class="mb-2"
+                                                :rules="[emailValidation]" />
 
                                         </v-col>
                                         <v-col cols="6">
-
                                             <div>{{ $t("phone number") }}</div>
-                                            <v-text-field variant="outlined" v-model="phoneNumber" dir="ltr"
-                                                @update:model-value="dataChanged" :rules="[phoneNumberValidation]"
-                                                class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.phoneNumber" dir="ltr"
+                                                :rules="[phoneNumberValidation]" class="mb-2" />
 
                                             <div>{{ $t("role") }}</div>
-                                            <v-select v-model="role" clearable variant="outlined"
-                                                :items="[Role.ADMIN, Role.USER]" @update:model-value="dataChanged"
-                                                class="mb-2" :placeholder="$t('select role')"></v-select>
+                                            <v-select v-model="newUser.role" clearable variant="outlined"
+                                                :items="[Role.ADMIN, Role.USER]" class="mb-2"
+                                                :placeholder="$t('select role')"
+                                                @update:model-value="dataChanged"></v-select>
 
                                             <div>{{ $t("joining date") }}</div>
-                                            <v-text-field variant="outlined" v-model="joiningDate" dir="ltr"
-                                                @update:model-value="dataChanged" class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.joiningDate" dir="ltr"
+                                                class="mb-2" />
                                         </v-col>
                                     </v-row>
                                     <v-row>
                                         <v-col>
                                             <div>{{ $t("city") }}</div>
-                                            <v-text-field variant="outlined" v-model="city" dir="ltr"
-                                                @update:model-value="dataChanged" class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.city" dir="ltr"
+                                                class="mb-2" />
                                         </v-col>
                                         <v-col>
                                             <div>{{ $t("country") }}</div>
-                                            <v-text-field variant="outlined" v-model="country" dir="ltr"
-                                                @update:model-value="dataChanged" class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.country" dir="ltr"
+                                                class="mb-2" />
                                         </v-col>
                                         <v-col>
                                             <div>{{ $t("zip code") }}</div>
-                                            <v-text-field variant="outlined" v-model="zipCode" dir="ltr"
-                                                @update:model-value="dataChanged" class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.zipCode" dir="ltr"
+                                                class="mb-2" />
                                         </v-col>
                                     </v-row>
                                     <v-btn type="submit" class="px-5 float-end" color="primary" variant="flat"
@@ -155,16 +159,22 @@ export default defineComponent({
             changPassLoading: false,
             validChangPasswordForm: false,
             valid: false,
+            newBanner: undefined as File[] | undefined,
+            newAvatar: undefined as File[] | undefined,
+            avatarUrl: "",
+            bannerUrl: "",
 
-            name: "",
-            phoneNumber: "",
-            role: undefined as unknown as Role,
-            status: undefined as unknown as Status,
-            email: "",
-            city: "",
-            country: "",
-            zipCode: "",
-            joiningDate: "",
+            newUser: {
+                name: "",
+                phoneNumber: "",
+                role: undefined as unknown as Role,
+                status: undefined as unknown as Status,
+                email: "",
+                city: "",
+                country: "",
+                zipCode: "",
+                joiningDate: "",
+            },
 
             newPass: "",
             confirmPass: "",
@@ -201,19 +211,35 @@ export default defineComponent({
             this.serverErrorForUpdate = false;
             this.successfulUpdate = false;
             try {
-                await useAPI().editUser({
-                    id: this.user.id,
-                    token: this.user.token,
+                const response = await useAPI().editUser({
                     abilities: this.user.abilities,
-                    name: this.name,
-                    role: this.role,
-                    status: this.status,
-                    email: this.email,
-                    phoneNumber: this.phoneNumber,
-                    city: this.city,
-                    country: this.country,
-                    zipCode: this.zipCode
+                    name: this.newUser.name,
+                    role: this.newUser.role,
+                    status: this.newUser.status,
+                    email: this.newUser.email,
+                    phoneNumber: this.newUser.phoneNumber,
+                    city: this.newUser.city,
+                    country: this.newUser.country,
+                    zipCode: this.newUser.zipCode,
+                    avatar: this.newAvatar ? this.newAvatar[0] : undefined,
+                    banner: this.newBanner ? this.newBanner[0] : undefined,
                 })
+                this.user = response.user;
+
+
+                this.newUser.name = this.user.name || "";
+                this.newUser.phoneNumber = this.user.phoneNumber || "";
+                this.newUser.role = this.user.role || "";
+                this.newUser.status = this.user.status || "";
+                this.newUser.email = this.user.email || "";
+                this.newUser.city = this.user.city || "";
+                this.newUser.country = this.user.country || "";
+                this.newUser.zipCode = this.user.zipCode || "";
+                this.newUser.joiningDate = this.user.joiningDate || "";
+                this.avatarUrl = this.user.avatar || "/pics/default-avatar.jpg";
+                this.bannerUrl = this.user.banner || "/pics/defaultBanner.jpg";
+
+
                 this.successfulUpdate = true;
                 this.confirmBtn = true;
             }
@@ -254,21 +280,35 @@ export default defineComponent({
         },
         dataChanged() {
             this.confirmBtn = false;
+        },
+        onAvatarChange() {
+            this.confirmBtn = false;
+            if (!this.newAvatar || this.newAvatar.length == 0) {
+                return;
+            }
+            this.avatarUrl = URL.createObjectURL(this.newAvatar[0]);
+        },
+        onBannerChange() {
+            this.confirmBtn = false;
+            if (!this.newBanner || this.newBanner.length == 0) {
+                return;
+            }
+            this.bannerUrl = URL.createObjectURL(this.newBanner[0]);
         }
     },
     async mounted() {
         try {
             const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
             this.user = response.user;
-            this.name = this.user.name || "";
-            this.phoneNumber = this.user.phoneNumber || "";
-            this.role = this.user.role || "";
-            this.status = this.user.status || "";
-            this.email = this.user.email || "";
-            this.city = this.user.city || "";
-            this.country = this.user.country || "";
-            this.zipCode = this.user.zipCode || "";
-            this.joiningDate = this.user.joiningDate || "";
+            this.newUser.name = this.user.name || "";
+            this.newUser.phoneNumber = this.user.phoneNumber || "";
+            this.newUser.role = this.user.role || "";
+            this.newUser.status = this.user.status || "";
+            this.newUser.email = this.user.email || "";
+            this.newUser.city = this.user.city || "";
+            this.newUser.country = this.user.country || "";
+            this.newUser.zipCode = this.user.zipCode || "";
+            this.newUser.joiningDate = this.user.joiningDate || "";
         }
         catch {
             this.serverError = true;
@@ -282,19 +322,14 @@ export default defineComponent({
 <style lang="scss">
 .edit-user {
     .banner {
-        background-image: url("@/assets/pics/defaultBanner.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
         height: 320px;
-        background-position: top;
+        width: 100%;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         padding: 0px;
         margin: 0px;
-        z-index: 0;
-
     }
 
     .bg-overlay {
@@ -303,8 +338,9 @@ export default defineComponent({
         height: 320px;
     }
 
+
     .img-card {
-        top: 120px;
+        top: 70px;
         position: relative;
     }
 
@@ -324,8 +360,6 @@ export default defineComponent({
             top: 80px;
             right: -50px;
         }
-
-
     }
 
     .v-input__prepend>.v-icon {
@@ -336,8 +370,9 @@ export default defineComponent({
         border: 5px solid rgb(var(--v-theme-secondary), 0.2);
     }
 
-    .v-input__control {
-        display: none;
+    .file-input {
+        .v-input__control {
+            display: none;
+        }
     }
-}
-</style>
+}</style>

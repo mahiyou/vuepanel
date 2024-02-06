@@ -20,7 +20,22 @@ export interface IUser {
     city?: string,
     country?: string,
     zipCode?: string,
-    joiningDate?: string
+    joiningDate?: string,
+    banner?:string,
+}
+export interface IInputUserForEdit {
+    abilities?: string[];
+    status?: Status
+    name?: string;
+    avatar?: File;
+    role?: Role,
+    phoneNumber?: string,
+    email?: string,
+    city?: string,
+    country?: string,
+    zipCode?: string,
+    joiningDate?: string,
+    banner?: File,
 }
 
 export interface ILoginRequest {
@@ -56,6 +71,10 @@ export interface IChangePasswordRequest {
 
 export interface IOTP {
     digits: number;
+}
+
+export interface IEditUserResponse{
+    user: IUser;
 }
 
 
