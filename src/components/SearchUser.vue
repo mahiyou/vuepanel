@@ -27,7 +27,8 @@
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="status" clearable variant="outlined"
-                                    :items="[Status.ACTIVE, Status.SUSPENDED]" :placeholder="$t('select status')"></v-select>
+                                    :items="[Status.ACTIVE, Status.SUSPENDED]"
+                                    :placeholder="$t('select status')"></v-select>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -42,13 +43,12 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn class="px-3" type="submit" color="customGreen" variant="flat" @click="isActive.value = false">
+                        <v-btn class="px-3" type="submit" color="customGreen" variant="flat">
                             {{ $t("search") }}
                         </v-btn>
                         <v-btn class="px-3" variant="flat" color="secondary" @click="isActive.value = false">{{ $t("close dialog") }}</v-btn>
                     </v-card-actions>
-                    <v-alert class="my-2" v-if="errorNoData" :text="$t('fill in at least one field')" type="error"
-                        variant="tonal"></v-alert>
+                    <ErrorAlert v-if="error" :error="error" />
                 </v-form>
             </v-card>
         </template>
@@ -57,11 +57,14 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Role, Status } from "@/api/authentication";
-
+import ErrorAlert from "@/components/ErrorAlert.vue"
+import { IErrorInComponent } from "@/utilities/error";
 
 export default defineComponent({
-    emits: ['update:title','searchUser'],
-
+    emits: ['update:title', 'searchUser'],
+    components: {
+        ErrorAlert
+    },
     setup() {
         return { Status, Role }
     },
@@ -72,18 +75,20 @@ export default defineComponent({
             name: undefined,
             status: undefined,
             role: undefined,
-            errorNoData: false
+            error: undefined as undefined | IErrorInComponent,
         }
     },
     methods: {
         onSubmit() {
             if (this.id || this.name || this.status || this.role) {
-                this.errorNoData = false;
+                this.error = undefined;
+                this.$emit("searchUser", { id: this.id, name: this.name, status: this.status, role: this.role })
             } else {
-                this.errorNoData = true;
+                this.error = {
+                    message: this.$t('fill in at least one field')
+                };
                 return;
             }
-            this.$emit("searchUser", { id: this.id, name: this.name, status: this.status, role: this.role })
         },
     },
 })

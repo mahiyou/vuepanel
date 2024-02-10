@@ -9,16 +9,15 @@
                 <div v-if="!userDeleted">
                     <v-btn variant="flat" color="red" width="130px" class="mb-3" :loading="loadingDelete"
                         @click="deleteUser(user.id)">{{ $t("delete user") }}</v-btn>
-                    <v-btn variant="flat" color="secondary" class="ms-3 mb-3" width="130px"
-                        :to="{ name: 'users' }">{{ $t("cancel") }}</v-btn>
+                    <v-btn variant="flat" color="secondary" class="ms-3 mb-3" width="130px" :to="{ name: 'users' }">{{
+                        $t("cancel") }}</v-btn>
                 </div>
                 <div v-if="userDeleted">
                     <h3 class="text-red my-4">{{ $t("user deleted successfully") }}</h3>
-                    <v-btn variant="flat" color="secondary" class="ms-3 mb-3" width="220px"
-                        :to="{ name: 'users' }">{{ $t("go to the user list page") }}</v-btn>
+                    <v-btn variant="flat" color="secondary" class="ms-3 mb-3" width="220px" :to="{ name: 'users' }">{{
+                        $t("go to the user list page") }}</v-btn>
                 </div>
-
-                <v-alert class="mx-4" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
+                <ErrorAlert v-if="serverError" :error="serverError" />
             </v-card>
         </v-container>
     </div>
@@ -29,12 +28,18 @@
 import { useAPI } from '@/api';
 import { IUser } from '@/api/authentication';
 import { defineComponent } from 'vue';
+import BaseError from "@/api/errors/BaseError";
+import ErrorAlert from "@/components/ErrorAlert.vue"
+import { IErrorInComponent } from '@/utilities/error';
 
 export default defineComponent({
+    components: {
+        ErrorAlert
+    },
     data() {
         return {
             user: {} as IUser,
-            serverError: false,
+            serverError: undefined as undefined | IErrorInComponent,
             loading: true,
             loadingDelete: false,
             userDeleted: false,
@@ -43,13 +48,19 @@ export default defineComponent({
     methods: {
         async deleteUser(id: number) {
             this.loadingDelete = true;
-            this.serverError = false;
+            this.serverError = undefined;
             try {
                 await useAPI().deleteUser(id);
                 this.userDeleted = true;
             }
-            catch {
-                this.serverError = true;
+            catch (e) {
+                if (e instanceof BaseError) {
+                    this.serverError = e.toComponentError();
+                } else {
+                    this.serverError = {
+                        message: this.$t('server error')
+                    };
+                }
             }
             finally {
                 this.loadingDelete = false;
@@ -61,8 +72,14 @@ export default defineComponent({
             const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
             this.user = response.user;
         }
-        catch {
-            this.serverError = true;
+        catch(e) {
+            if (e instanceof BaseError) {
+                this.serverError = e.toComponentError();
+            } else {
+                this.serverError = {
+                    message: this.$t('server error')
+                };
+            }
         }
         finally {
             this.loading = false;

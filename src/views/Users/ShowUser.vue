@@ -62,18 +62,20 @@
     </div>
     <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
     </div>
-    <v-alert class="mx-4" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
+    <ErrorAlert class="mx-4" v-if="serverError" :error="serverError" />
 </template>
 <script lang="ts">
 import { useAPI } from '@/api';
 import { IUser, Status } from '@/api/authentication';
+import BaseError from '@/api/errors/BaseError';
+import { IErrorInComponent } from '@/utilities/error';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
     data() {
         return {
             user: {} as IUser,
-            serverError: false,
+            serverError: undefined as undefined | IErrorInComponent,
             loading: true,
             userDatas: ["phoneNumber", "email", "joiningDate", "city", "country", "role", "status"]
         }
@@ -97,8 +99,14 @@ export default defineComponent({
             const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
             this.user = response.user;
         }
-        catch {
-            this.serverError = true;
+        catch (e) {
+            if (e instanceof BaseError) {
+                this.serverError = e.toComponentError();
+            } else {
+                this.serverError = {
+                    message: this.$t('server error')
+                };
+            }
         }
         finally {
             this.loading = false;

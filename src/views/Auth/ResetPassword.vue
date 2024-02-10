@@ -3,9 +3,8 @@
         <div class="text-primary title">{{ $t("forgot your password?") }}</div>
         <div class="sub-title mt-2 text-secondary">{{ $t("reset your password") }}</div>
         <v-img width="180px" src="../../assets/pics/letter.svg" class="mx-auto"></v-img>
-        <v-alert class="my-4 text-start" v-if="invalidInputError" :text="$t('wrong inputed information')" type="error"
-            variant="tonal"></v-alert>
-        <v-alert class="my-4 text-start" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
+        <ErrorAlert class="text-start" v-if="invalidInputError" :error="invalidInputError" />
+        <ErrorAlert v-if="serverError" :error="serverError" />
         <EnterUsername v-if="resetPassStep === 'enterUsername'" @submit="onSubmit" :loading="loading" />
         <Otp v-if="resetPassStep === 'otp'" @submitOtp="onSubmitOtp" @submit="onSubmit" :otpDigits="otpDigits"
             :loadingResend="loadingResend" :loadingConfirmOtp="loadingConfirmOtp"
@@ -24,12 +23,16 @@ import EnterUsername from "@/components/ResetPassword/EnterUsername.vue";
 import Otp from "@/components/ResetPassword/Otp.vue";
 import ChangePassword from "@/components/ResetPassword/ChangePassword.vue";
 import { useAuthStore } from "@/store/auth";
+import ErrorAlert from "@/components/ErrorAlert.vue";
+import { IErrorInComponent } from "@/utilities/error";
+import BaseError from "@/api/errors/BaseError";
 
 export default defineComponent({
     components: {
         EnterUsername,
         Otp,
         ChangePassword,
+        ErrorAlert
     },
     data() {
         return {
@@ -40,8 +43,8 @@ export default defineComponent({
             otp: "",
             username: "",
             resetPassStep: "enterUsername",
-            invalidInputError: false,
-            serverError: false,
+            invalidInputError: undefined as undefined | IErrorInComponent,
+            serverError: undefined as undefined | IErrorInComponent,
             sendCode: false,
             loadingConfirmOtp: false,
             changePassLoading: false,
@@ -55,8 +58,8 @@ export default defineComponent({
             if (this.loading || this.loadingResend) return;
             this.loading = true;
             this.loadingResend = true;
-            this.invalidInputError = false;
-            this.serverError = false;
+            this.invalidInputError = undefined;
+            this.serverError = undefined;
             try {
                 const response = await useAPI().resetPassword({ username: username ? username : this.username });
                 this.otpDigits = response.otp.digits;
@@ -64,9 +67,21 @@ export default defineComponent({
             }
             catch (e) {
                 if (e instanceof UserLoginError) {
-                    this.invalidInputError = true;
+                    if (e instanceof BaseError) {
+                        this.invalidInputError = e.toComponentError();
+                    } else {
+                        this.invalidInputError = {
+                            message: this.$t('wrong inputed information')
+                        };
+                    }
                 } else {
-                    this.serverError = true;
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
                 }
             }
             finally {
@@ -88,8 +103,8 @@ export default defineComponent({
                 return;
             }
             this.loadingConfirmOtp = true;
-            this.invalidInputError = false;
-            this.serverError = false;
+            this.invalidInputError = undefined;
+            this.serverError = undefined;
             try {
                 const response = await useAPI().resetPassword({ username: this.username, otp });
                 this.resetPassStep = "changePass";
@@ -98,9 +113,21 @@ export default defineComponent({
             }
             catch (e) {
                 if (e instanceof UserLoginError) {
-                    this.invalidInputError = true;
+                    if (e instanceof BaseError) {
+                        this.invalidInputError = e.toComponentError();
+                    } else {
+                        this.invalidInputError = {
+                            message: this.$t('wrong inputed information')
+                        };
+                    }
                 } else {
-                    this.serverError = true;
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
                 }
             }
             finally {
@@ -112,25 +139,37 @@ export default defineComponent({
                 return;
             }
             this.changePassLoading = true;
-            this.invalidInputError = false;
-            this.serverError = false;
+            this.invalidInputError = undefined;
+            this.serverError = undefined;
             try {
                 await useAPI().changePassword({ password });
                 const redirect = this.$route.query.redirect;
-                if(redirect && typeof redirect == "string"){
-                    this.$router.push({ path:redirect })
-                }else{
+                if (redirect && typeof redirect == "string") {
+                    this.$router.push({ path: redirect })
+                } else {
                     this.$router.push({ name: "dashboard" })
                 }
             }
             catch (e) {
                 if (e instanceof UserLoginError) {
-                    this.invalidInputError = true;
+                    if (e instanceof BaseError) {
+                        this.invalidInputError = e.toComponentError();
+                    } else {
+                        this.invalidInputError = {
+                            message: this.$t('wrong inputed information')
+                        };
+                    }
                 } else {
-                    this.serverError = true;
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
                 }
             }
-            finally{
+            finally {
                 this.changePassLoading = false;
             }
         }

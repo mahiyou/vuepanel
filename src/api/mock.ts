@@ -124,8 +124,11 @@ export class MockAPI implements IAPI {
     }
     public async login(request: ILoginRequest): Promise<ILoginResponse> {
         return this.call((request: ILoginRequest): ILoginResponse => {
-            if (Math.random() > 1) {
+            if (Math.random() > 0.9) {
                 throw new UserLoginError();
+            }
+            if (Math.random() > 0.8) {
+                throw new ServerInternalError();
             }
             return {
                 user: {

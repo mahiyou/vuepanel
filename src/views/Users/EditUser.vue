@@ -36,8 +36,8 @@
                                     <v-row>
                                         <v-col cols="6">
                                             <div>{{ $t("name") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.name" :dir="$vuetify.locale.current"
-                                                class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.name"
+                                                :dir="$vuetify.locale.current" class="mb-2" />
                                             <div>{{ $t("status") }}</div>
                                             <v-select v-model="newUser.status" clearable variant="outlined"
                                                 :items="[Status.ACTIVE, Status.SUSPENDED]" class="mb-2"
@@ -68,13 +68,13 @@
                                     <v-row>
                                         <v-col>
                                             <div>{{ $t("city") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.city" :dir="$vuetify.locale.current"
-                                                class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.city"
+                                                :dir="$vuetify.locale.current" class="mb-2" />
                                         </v-col>
                                         <v-col>
                                             <div>{{ $t("country") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.country" :dir="$vuetify.locale.current"
-                                                class="mb-2" />
+                                            <v-text-field variant="outlined" v-model="newUser.country"
+                                                :dir="$vuetify.locale.current" class="mb-2" />
                                         </v-col>
                                         <v-col>
                                             <div>{{ $t("zip code") }}</div>
@@ -88,12 +88,11 @@
                                 </v-form>
 
                             </v-container>
-                            <v-alert closable class="mt-4 mx-4" v-if="invalidInputError"
-                                :text="$t('wrong inputed information')" type="error" variant="tonal"></v-alert>
+
+                            <ErrorAlert class="mt-4 mx-4" v-if="invalidInputError" :error="invalidInputError" />
+                            <ErrorAlert class="mt-4 mx-4" v-if="serverErrorForUpdate" :error="serverErrorForUpdate" />
                             <v-alert closable class="mt-4 mx-4" v-if="successfulUpdate" :text="$t('succesful update')"
                                 type="success" variant="tonal"></v-alert>
-                            <v-alert closable class="mt-4 mx-4" v-if="serverErrorForUpdate" :text="$t('server error')"
-                                type="error" variant="tonal"></v-alert>
                         </v-window-item>
                         <v-window-item :value="2">
                             <v-container>
@@ -116,12 +115,15 @@
                                             $t("reset password") }}</v-btn>
                                 </v-form>
                             </v-container>
-                            <v-alert closable class="mt-4 mx-4" v-if="incorrectRepeatPass"
-                                :text="$t('password and confirm password')" type="error" variant="tonal"></v-alert>
+
+                            <ErrorAlert class="mt-4 mx-4" v-if="incorrectRepeatPass" :error="incorrectRepeatPass" />
+
                             <v-alert closable class="mt-4 mx-4" v-if="successfulChangePass" :text="$t('succesful update')"
                                 type="success" variant="tonal"></v-alert>
-                            <v-alert closable class="mt-4 mx-4" v-if="serverErrorForPassChange" :text="$t('server error')"
-                                type="error" variant="tonal"></v-alert>
+
+                            <ErrorAlert class="mt-4 mx-4" v-if="serverErrorForPassChange"
+                                :error="serverErrorForPassChange" />
+
                         </v-window-item>
                     </v-window>
                 </v-card>
@@ -130,29 +132,35 @@
     </div>
     <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
     </div>
-    <v-alert class="mx-4" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
+    <ErrorAlert v-if="serverError" :error="serverError" />
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAPI } from "@/api"
 import { IUser, Role, Status } from '@/api/authentication';
 import InputValidationError from '@/api/errors/InputValidationError';
+import { IErrorInComponent } from '@/utilities/error';
+import ErrorAlert from "@/components/ErrorAlert.vue"
+import BaseError from '@/api/errors/BaseError';
 
 export default defineComponent({
+    components: {
+        ErrorAlert
+    },
     setup() {
         return { Status, Role }
     },
     data() {
         return {
             user: {} as IUser,
-            serverError: false,
+            serverError: undefined as undefined | IErrorInComponent,
             loading: true,
             tab: 1,
-            invalidInputError: false,
+            invalidInputError: undefined as undefined | IErrorInComponent,
             updateLoading: false,
-            serverErrorForUpdate: false,
-            serverErrorForPassChange: false,
-            incorrectRepeatPass: false,
+            serverErrorForUpdate: undefined as undefined | IErrorInComponent,
+            serverErrorForPassChange: undefined as undefined | IErrorInComponent,
+            incorrectRepeatPass: undefined as undefined | IErrorInComponent,
             successfulUpdate: false,
             successfulChangePass: false,
             confirmBtn: true,
@@ -207,8 +215,8 @@ export default defineComponent({
         },
         async onSubmit() {
             this.updateLoading = true;
-            this.invalidInputError = false;
-            this.serverErrorForUpdate = false;
+            this.invalidInputError = undefined;
+            this.serverErrorForUpdate = undefined;
             this.successfulUpdate = false;
             try {
                 const response = await useAPI().editUser({
@@ -245,9 +253,21 @@ export default defineComponent({
             }
             catch (e) {
                 if (e instanceof InputValidationError) {
-                    this.invalidInputError = true;
+                    if (e instanceof BaseError) {
+                        this.invalidInputError = e.toComponentError();
+                    } else {
+                        this.invalidInputError = {
+                            message: this.$t('wrong inputed information')
+                        };
+                    }
                 } else {
-                    this.serverErrorForUpdate = true;
+                    if (e instanceof BaseError) {
+                        this.serverErrorForUpdate = e.toComponentError();
+                    } else {
+                        this.serverErrorForUpdate = {
+                            message: this.$t('server error')
+                        };
+                    }
                 }
             }
             finally {
@@ -256,22 +276,30 @@ export default defineComponent({
 
         },
         async onSubmitChangPassword() {
-            this.serverErrorForPassChange = false;
+            this.serverErrorForPassChange = undefined;
             this.successfulChangePass = false;
-            this.incorrectRepeatPass = false;
+            this.incorrectRepeatPass = undefined;
             if (this.newPass !== this.confirmPass) {
-                this.incorrectRepeatPass = true;
+                this.incorrectRepeatPass = {
+                    message: this.$t('password and confirm password')
+                };
                 return;
             } else {
-                this.incorrectRepeatPass = false;
+                this.incorrectRepeatPass = undefined;
             }
             this.changPassLoading = true;
             try {
                 await useAPI().changeUserPassword({ id: parseInt(this.$route.params.id.toString()), password: this.newPass })
                 this.successfulChangePass = true;
             }
-            catch {
-                this.serverErrorForPassChange = true;
+            catch (e) {
+                if (e instanceof BaseError) {
+                    this.serverErrorForPassChange = e.toComponentError();
+                } else {
+                    this.serverErrorForPassChange = {
+                        message: this.$t('server error')
+                    };
+                }
             }
             finally {
                 this.changPassLoading = false;
@@ -310,8 +338,14 @@ export default defineComponent({
             this.newUser.zipCode = this.user.zipCode || "";
             this.newUser.joiningDate = this.user.joiningDate || "";
         }
-        catch {
-            this.serverError = true;
+        catch (e) {
+            if (e instanceof BaseError) {
+                this.serverError = e.toComponentError();
+            } else {
+                this.serverError = {
+                    message: this.$t('server error')
+                };
+            }
         }
         finally {
             this.loading = false;
@@ -374,4 +408,5 @@ export default defineComponent({
             display: none;
         }
     }
-}</style>
+}
+</style>

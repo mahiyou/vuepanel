@@ -24,9 +24,9 @@
                 :disabled="!valid">
                 {{ $t('sign in') }}
             </v-btn>
-            <v-alert class="my-2" v-if="invalidInputError" :text="$t('wrong inputed information')" type="error"
-                variant="tonal"></v-alert>
-            <v-alert class="my-2" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
+
+            <ErrorAlert v-if="invalidInputError" :error="invalidInputError" />
+            <ErrorAlert v-if="serverError" :error="serverError" />
 
             <div class="text-center mt-8">
                 <p class="mb-6">{{ $t('sign in with') }}</p>
@@ -50,8 +50,14 @@ import { useAuthStore } from "@/store/auth";
 import { useNotificationStore } from "@/store/notification";
 import { useAPI } from "@/api";
 import UserLoginError from "@/api/errors/UserLoginError";
+import { IErrorInComponent } from "@/utilities/error";
+import ErrorAlert from "@/components/ErrorAlert.vue"
+import BaseError from "@/api/errors/BaseError";
 
 export default defineComponent({
+    components: {
+        ErrorAlert
+    },
     setup() {
         return {
             authStore: useAuthStore(),
@@ -65,8 +71,8 @@ export default defineComponent({
             password: "",
             checkbox: false,
             loading: false,
-            invalidInputError: false,
-            serverError: false,
+            invalidInputError: undefined as undefined | IErrorInComponent,
+            serverError: undefined as undefined | IErrorInComponent,
         };
     },
     methods: {
@@ -75,8 +81,8 @@ export default defineComponent({
                 return;
             }
             this.loading = true;
-            this.serverError = false;
-            this.invalidInputError = false;
+            this.serverError = undefined;
+            this.invalidInputError = undefined;
             try {
                 const response = await useAPI().login({ username: this.username, password: this.password });
                 this.authStore.setUser(response.user);
@@ -90,9 +96,21 @@ export default defineComponent({
                 }
             } catch (e) {
                 if (e instanceof UserLoginError) {
-                    this.invalidInputError = true;
+                    if (e instanceof BaseError) {
+                        this.invalidInputError = e.toComponentError();
+                    } else {
+                        this.invalidInputError = {
+                            message: this.$t('wrong inputed information')
+                        };
+                    }
                 } else {
-                    this.serverError = true;
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
                 }
             } finally {
                 this.loading = false;
@@ -144,4 +162,5 @@ export default defineComponent({
         }
     }
 
-}</style>
+}
+</style>

@@ -33,7 +33,7 @@
             </v-data-table>
         </v-card>
         <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular></div>
-        <error-alert v-if="error" :error="error" />
+        <ErrorAlert v-if="error" :error="error" />
     </v-container>
 </template>
 <script lang="ts">

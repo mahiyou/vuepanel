@@ -10,14 +10,18 @@
             :loading="loading">
             {{ $t("reset password") }}
         </v-btn>
-        <v-alert class="my-2" v-if="incorrectRepeatPass" :text="$t('password and confirm password')" type="error"
-            variant="tonal"></v-alert>
+        <ErrorAlert v-if="error" :error="error" />
     </v-form>
 </template>
 <script lang="ts">
+import { IErrorInComponent } from "@/utilities/error";
 import { defineComponent } from "vue";
+import ErrorAlert from "@/components/ErrorAlert.vue";
 
 export default defineComponent({
+    components: {
+        ErrorAlert
+    },
     props: {
         loading: Boolean,
     },
@@ -26,7 +30,7 @@ export default defineComponent({
             valid: false,
             password: "",
             repeartPassword: "",
-            incorrectRepeatPass: false,
+            error: undefined as undefined | IErrorInComponent,
         };
     },
     methods: {
@@ -44,12 +48,14 @@ export default defineComponent({
         },
         onSubmit() {
             if (this.password !== this.repeartPassword) {
-                this.incorrectRepeatPass = true;
+                this.error = {
+                    message: this.$t('password and confirm password')
+                };
                 return;
-            }else{
-                this.incorrectRepeatPass = false;
+            } else {
+                this.error = undefined;
             }
-            this.$emit("changePass",this.password);
+            this.$emit("changePass", this.password);
 
         }
     }

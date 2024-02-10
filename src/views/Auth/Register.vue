@@ -19,11 +19,11 @@
                 :disabled="!valid" :loading="loading">
                 {{ $t("sign up") }}
             </v-btn>
-            <v-alert class="my-2" v-if="invalidInputError" :text="$t('wrong inputed information')" type="error"
-                variant="tonal"></v-alert>
-            <v-alert class="my-2" v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
-            <v-alert class="my-2" v-if="incorrectRepeatPass" :text="$t('password and confirm password')" type="error"
-                variant="tonal"></v-alert>
+
+            <ErrorAlert v-if="invalidInputError" :error="invalidInputError" />
+            <ErrorAlert v-if="serverError" :error="serverError" />
+            <ErrorAlert v-if="incorrectRepeatPass" :error="incorrectRepeatPass" />
+
             <div class="text-center mt-8">
                 <p class="mb-6">{{ $t("create account with") }}</p>
                 <v-btn icon="mdi-facebook" size="small" variant="flat" color="#405189" class="mx-1"></v-btn>
@@ -45,8 +45,14 @@ import { defineComponent } from "vue";
 import { useAuthStore } from "@/store/auth";
 import { useAPI } from "@/api";
 import UserLoginError from "@/api/errors/UserLoginError";
+import ErrorAlert from "@/components/ErrorAlert.vue"
+import { IErrorInComponent } from "@/utilities/error";
+import BaseError from "@/api/errors/BaseError";
 
 export default defineComponent({
+    components: {
+        ErrorAlert
+    },
     data() {
         return {
             valid: false,
@@ -55,21 +61,23 @@ export default defineComponent({
             username: "",
             repeartPassword: "",
             loading: false,
-            serverError: false,
-            invalidInputError: false,
-            incorrectRepeatPass: false,
+            serverError: undefined as undefined | IErrorInComponent,
+            invalidInputError: undefined as undefined | IErrorInComponent,
+            incorrectRepeatPass: undefined as undefined | IErrorInComponent,
         };
     },
     methods: {
         async onSubmit() {
             if (this.password !== this.repeartPassword) {
-                this.incorrectRepeatPass = true;
+                this.incorrectRepeatPass = {
+                    message: this.$t('password and confirm password')
+                };
                 return;
             } else {
-                this.incorrectRepeatPass = false;
+                this.incorrectRepeatPass = undefined;
             }
-            this.serverError = false;
-            this.invalidInputError = false;
+            this.serverError = undefined;
+            this.invalidInputError = undefined;
             if (this.loading) {
                 return;
             }
@@ -91,9 +99,21 @@ export default defineComponent({
             }
             catch (e) {
                 if (e instanceof UserLoginError) {
-                    this.invalidInputError = true;
+                    if (e instanceof BaseError) {
+                        this.invalidInputError = e.toComponentError();
+                    } else {
+                        this.invalidInputError = {
+                            message: this.$t('wrong inputed information')
+                        };
+                    }
                 } else {
-                    this.serverError = true;
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
                 }
             }
             finally {
@@ -152,4 +172,5 @@ export default defineComponent({
         }
     }
 
-}</style>
+}
+</style>
