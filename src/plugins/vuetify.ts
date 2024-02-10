@@ -43,6 +43,7 @@ export default createVuetify({
                     primary: "#405189",
                     secondary: "#8c8f9d",
                     customGreen: "#0ab39c",
+                    customRed: "#f06548",
                     light: "#ffffff",
                     lightBlue: "#a1afdf",
                     textColor: "#495057"

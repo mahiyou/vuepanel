@@ -181,7 +181,7 @@ $menu-content-elevation: 0;
             position: absolute;
             top: 10px;
             right: 6px;
-            background-color: #f06548;
+            background-color: rgb(var(--v-theme-customRed));
             color: white;
             padding: 0px 7px;
             font-size: 10px;

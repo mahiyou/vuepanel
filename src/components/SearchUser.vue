@@ -19,7 +19,7 @@
                                 <span>{{ $t("name") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="name"
-                                    dir="ltr" /></v-col>
+                                    :dir="$vuetify.locale.current" /></v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">

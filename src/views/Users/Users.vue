@@ -1,19 +1,19 @@
 <template>
     <v-container>
-        <v-card class="pa-3" flat v-if="!loading && !serverError">
+        <v-card class="pa-3" flat v-if="!loading && !error">
             <v-toolbar color="white">
                 <v-toolbar-title class="text-h5">
                     {{ $t('users') }}
                 </v-toolbar-title>
                 <template v-slot:append>
-                    <SearchUser @searchUser="searchUser" />
+                    <SearchUser @searchUser="onSearchUser" />
                 </template>
             </v-toolbar>
             <v-data-table :headers="headers" :items="users" :items-per-page-options="[
                 { value: 5, title: '5' },
                 { value: 10, title: '10' },
                 { value: 20, title: '20' },
-                { value: -1, title: 'All' }
+                { value: -1, title: $t('all') }
             ]" :items-per-page-text="$t('items per page')" pageText="" show-current-page :no-data-text="$t('no data')">
                 <template v-slot:item.status="{ value }">
                     <v-chip :color="backgroundOfStatus(value)">
@@ -28,13 +28,12 @@
                     {{ value }}
                 </template>
                 <template v-slot:item.actions="{ item }">
-                    <TableRowActions :tableRowAction="tableRowAction(item)" :user="item.id" @action="action" />
+                    <TableRowActions :tableRowAction="tableRowAction(item)" :user="item.id"/>
                 </template>
             </v-data-table>
         </v-card>
-        <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate
-                color="primary"></v-progress-circular></div>
-        <v-alert v-if="serverError" :text="$t('server error')" type="error" variant="tonal"></v-alert>
+        <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular></div>
+        <error-alert v-if="error" :error="error" />
     </v-container>
 </template>
 <script lang="ts">
@@ -45,10 +44,15 @@ import { IUser, Role, Status } from "@/api/authentication"
 import { persianNumber } from "@/utilities"
 import { ISearchUserRequest } from "@/api/users"
 import NotFoundError from "@/api/errors/NotFoundError"
+import { IErrorInComponent } from "@/utilities/error";
+import BaseError from "@/api/errors/BaseError"
+import ErrorAlert from "@/components/ErrorAlert.vue"
+
 export default {
     components: {
         TableRowActions,
-        SearchUser
+        SearchUser,
+        ErrorAlert
     },
     setup() {
         return {
@@ -58,7 +62,7 @@ export default {
     data() {
         return {
             users: [] as IUser[] | undefined,
-            serverError: false,
+            error: undefined as undefined | IErrorInComponent,
             loading: true,
         }
     },
@@ -70,9 +74,6 @@ export default {
                 return "red"
             }
         },
-        action(action: any) {
-            console.log(action.action + action.user)
-        },
         tableRowAction(user: IUser) {
             return [
                 {
@@ -81,7 +82,7 @@ export default {
                     props: {
                         prependIcon: "mdi-file-document-multiple-outline",
                         color: "green",
-                        to: { name: `editUser`, params: { id: user.id } },
+                        to: { name: `showUser`, params: { id: user.id } },
                     }
                 },
                 {
@@ -107,10 +108,19 @@ export default {
                 }
             ]
         },
-        log() {
-            console.log("dooo")
-        }, async searchUser(user: ISearchUserRequest) {
+        onSearchUser(request: ISearchUserRequest) {
+            this.$router.push({
+                name: this.$route.name as string, query: {
+                    id: request.id,
+                    name: request.name,
+                    status: request.status,
+                    role: request.role,
+                }
+            });
+        },
+        async searchUser(user: ISearchUserRequest) {
             this.loading = true;
+            this.users = [];
             try {
                 const response = await useAPI().searchUsers({
                     id: user.id || undefined,
@@ -119,52 +129,38 @@ export default {
                     role: user.role || undefined
                 });
                 this.users = response.users;
-                this.$router.push({
-                    name: this.$route.name as string, query: {
-                        id: user.id || "",
-                        name: user.name || "",
-                        status: user.status || "",
-                        role: user.role || ""
-                    }
-                });
-            }
-
-            catch (e) {
-                if (e instanceof NotFoundError) {
-                    this.$router.push({
-                        name: this.$route.name as string, query: {
-                            id: user.id || "",
-                            name: user.name || "",
-                            status: user.status || "",
-                            role: user.role || ""
-                        }
-                    });
-                    this.users = undefined;
+                
+            } catch (e) {
+                if (e instanceof BaseError) {
+                    this.error = e.toComponentError();
                 } else {
-                    this.serverError = true;
+                    this.error = {
+                        message: this.$t('server error')
+                    };
                 }
-            }
-            finally {
+            } finally {
                 this.loading = false;
             }
         }
     },
-    async mounted() {
-        this.searchUser({
-            id: this.$route.query.id ? parseInt(this.$route.query.id.toString()) : undefined,
-            name: this.$route.query.name ? this.$route.query.name.toString() : undefined,
-            status: this.$route.query.status ? this.$route.query.status.toString() : undefined,
-            role: this.$route.query.role ? this.$route.query.role.toString() : undefined,
-        })
+    created() {
+        this.$watch(
+            () => this.$route.query,
+            () => {
+                this.searchUser({
+                    id: this.$route.query.id ? parseInt(this.$route.query.id.toString()) : undefined,
+                    name: this.$route.query.name ? this.$route.query.name.toString() : undefined,
+                    status: this.$route.query.status ? this.$route.query.status.toString() : undefined,
+                    role: this.$route.query.role ? this.$route.query.role.toString() : undefined,
+                })
+            },
+            { immediate: true }
+        )
     },
     computed: {
         headers() {
             return [
-                {
-                    key: 'id',
-                    sortable: false,
-                    title: this.$t("id")
-                },
+                {key: 'id', sortable: false, title: this.$t("id")},
                 { key: 'avatar', sortable: false, title: this.$t("avatar") },
                 { key: 'name', sortable: false, title: this.$t("name") },
                 { key: 'status', sortable: false, title: this.$t("status") },

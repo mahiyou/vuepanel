@@ -96,5 +96,6 @@
     "fill in at least one field":"حداقل یک گزینه را وارد کنید",
     "select status":"وضعیت کاربر را انتخاب کنید",
     "select role":"نقش کاربر را انتخاب کنید",
-    "change cover":"تغییر کاور"
+    "change cover":"تغییر کاور",
+    "all":"همه"
 }

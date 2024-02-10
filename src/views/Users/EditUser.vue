@@ -10,7 +10,7 @@
                 <v-file-input prepend-icon="mdi-image-edit-outline" v-model="newBanner"
                     @change="onBannerChange"></v-file-input>
             </div><br /><br />
-            <div class="img-card">
+            <div class="cards">
                 <v-card class="pa-4 text-center" elevation="1">
                     <div class="avatar-div mx-auto">
                         <v-img :src="avatarUrl || user.avatar || '/pics/default-avatar.jpg'"
@@ -36,7 +36,7 @@
                                     <v-row>
                                         <v-col cols="6">
                                             <div>{{ $t("name") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.name" dir="ltr"
+                                            <v-text-field variant="outlined" v-model="newUser.name" :dir="$vuetify.locale.current"
                                                 class="mb-2" />
                                             <div>{{ $t("status") }}</div>
                                             <v-select v-model="newUser.status" clearable variant="outlined"
@@ -68,12 +68,12 @@
                                     <v-row>
                                         <v-col>
                                             <div>{{ $t("city") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.city" dir="ltr"
+                                            <v-text-field variant="outlined" v-model="newUser.city" :dir="$vuetify.locale.current"
                                                 class="mb-2" />
                                         </v-col>
                                         <v-col>
                                             <div>{{ $t("country") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.country" dir="ltr"
+                                            <v-text-field variant="outlined" v-model="newUser.country" :dir="$vuetify.locale.current"
                                                 class="mb-2" />
                                         </v-col>
                                         <v-col>
@@ -339,7 +339,7 @@ export default defineComponent({
     }
 
 
-    .img-card {
+    .cards {
         top: 70px;
         position: relative;
     }
@@ -358,7 +358,6 @@ export default defineComponent({
         .camera-btn {
             position: absolute;
             top: 80px;
-            right: -50px;
         }
     }
 
