@@ -41,7 +41,7 @@
                                         <td class="text-secondary">
                                             <div v-if="data != 'status' && data != 'joiningDate'">{{ user[data] }}</div>
                                             <v-chip v-if="data == 'status'" :color="backgroundOfStatus(user.status)">
-                                                {{ user[data] }}
+                                                {{ $t('users.status.'+ user[data]) }}
                                             </v-chip>
                                             <v-tooltip v-if="data == 'joiningDate'" :text="user.joiningDate" location="top">
                                                 <template v-slot:activator="{ props }">
@@ -70,8 +70,12 @@ import { IUser, Status } from '@/api/authentication';
 import BaseError from '@/api/errors/BaseError';
 import { IErrorInComponent } from '@/utilities/error';
 import { defineComponent } from 'vue';
+import ErrorAlert from '@/components/ErrorAlert.vue';
 
 export default defineComponent({
+    components:{
+        ErrorAlert
+    },
     data() {
         return {
             user: {} as IUser,

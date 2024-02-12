@@ -1,7 +1,7 @@
 import { INotification } from "./notification";
 export enum Status {
-    ACTIVE = "Active",
-    SUSPENDED = "Suspended"
+    ACTIVE = "ACTIVE",
+    SUSPENDED = "SUSPENDED"
 }
 export enum Role {
     ADMIN = "Admin",

@@ -26,9 +26,8 @@
                                 <span>{{ $t("status") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1">
-                                <v-select v-model="status" clearable variant="outlined"
-                                    :items="[Status.ACTIVE, Status.SUSPENDED]"
-                                    :placeholder="$t('select status')"></v-select>
+                                <v-select v-model="status" clearable variant="outlined" :items="statusItems"
+                                    item-title="title" item-value="value" :placeholder="$t('select status')"></v-select>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -76,6 +75,7 @@ export default defineComponent({
             status: undefined,
             role: undefined,
             error: undefined as undefined | IErrorInComponent,
+            statusItems: [{ title: this.$t('users.status.ACTIVE'), value: Status.ACTIVE }, { title: this.$t('users.status.SUSPENDED'), value: Status.SUSPENDED }]
         }
     },
     methods: {

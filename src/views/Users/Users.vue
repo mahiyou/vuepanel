@@ -17,7 +17,7 @@
             ]" :items-per-page-text="$t('items per page')" pageText="" show-current-page :no-data-text="$t('no data')">
                 <template v-slot:item.status="{ value }">
                     <v-chip :color="backgroundOfStatus(value)">
-                        {{ value }}
+                        {{ $t('users.status.' + value) }}
                     </v-chip>
                 </template>
                 <template v-slot:item.avatar="{ value }">
@@ -28,11 +28,12 @@
                     {{ value }}
                 </template>
                 <template v-slot:item.actions="{ item }">
-                    <TableRowActions :tableRowAction="tableRowAction(item)" :user="item.id"/>
+                    <TableRowActions :tableRowAction="tableRowAction(item)" :user="item.id" />
                 </template>
             </v-data-table>
         </v-card>
-        <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular></div>
+        <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate
+                color="primary"></v-progress-circular></div>
         <ErrorAlert v-if="error" :error="error" />
     </v-container>
 </template>
@@ -120,6 +121,7 @@ export default {
         },
         async searchUser(user: ISearchUserRequest) {
             this.loading = true;
+            this.error = undefined;
             this.users = [];
             try {
                 const response = await useAPI().searchUsers({
@@ -129,7 +131,7 @@ export default {
                     role: user.role || undefined
                 });
                 this.users = response.users;
-                
+
             } catch (e) {
                 if (e instanceof BaseError) {
                     this.error = e.toComponentError();
@@ -160,7 +162,7 @@ export default {
     computed: {
         headers() {
             return [
-                {key: 'id', sortable: false, title: this.$t("id")},
+                { key: 'id', sortable: false, title: this.$t("id") },
                 { key: 'avatar', sortable: false, title: this.$t("avatar") },
                 { key: 'name', sortable: false, title: this.$t("name") },
                 { key: 'status', sortable: false, title: this.$t("status") },

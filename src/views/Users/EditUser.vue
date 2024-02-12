@@ -40,7 +40,7 @@
                                                 :dir="$vuetify.locale.current" class="mb-2" />
                                             <div>{{ $t("status") }}</div>
                                             <v-select v-model="newUser.status" clearable variant="outlined"
-                                                :items="[Status.ACTIVE, Status.SUSPENDED]" class="mb-2"
+                                                :items="statusItems" item-title="title" item-value="value" class="mb-2"
                                                 :placeholder="$t('select status')"
                                                 @update:model-value="dataChanged"></v-select>
 
@@ -322,6 +322,14 @@ export default defineComponent({
                 return;
             }
             this.bannerUrl = URL.createObjectURL(this.newBanner[0]);
+        }
+    },
+    computed: {
+        statusItems() {
+            return [
+                { title: this.$t('users.status.ACTIVE'), value: Status.ACTIVE },
+                { title: this.$t('users.status.SUSPENDED'), value: Status.SUSPENDED }
+            ]
         }
     },
     async mounted() {

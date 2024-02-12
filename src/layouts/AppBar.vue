@@ -9,7 +9,7 @@
             </template>
             <v-list :elevation="3">
                 <v-list-item v-for="(language, i) in getOtherLanguages($vuetify.locale.current)" :key="i" :value="language"
-                    @click="changeLanguage(language.value)">
+                    :to="{ query: $route.query, params: { lang: language.value.substring(0, 2) } }">
                     <template v-slot:append>
                         <span class="fi ms-2 rounded" :class="`fi-${getCountryCode(languages, language.value)}`" />
                     </template>
@@ -52,7 +52,8 @@
                         </v-list-item-action>
                     </template>
                 </v-list-item>
-                <v-btn width="100%" height="80px" variant="text" :append-icon="$vuetify.locale.isRtl ? 'mdi-arrow-left-thin' : 'mdi-arrow-right-thin'">
+                <v-btn width="100%" height="80px" variant="text"
+                    :append-icon="$vuetify.locale.isRtl ? 'mdi-arrow-left-thin' : 'mdi-arrow-right-thin'">
                     {{ $t("view all notifications") }}
                 </v-btn>
             </v-list>
@@ -121,10 +122,6 @@ export default defineComponent({
         onWideNav() {
             this.$emit("toggleDrawer");
             this.wideNav = !this.wideNav;
-        },
-        changeLanguage(newLang: string): void {
-            newLang = newLang.substring(0, 2);
-            this.$router.push({ query: this.$route.query, params: { lang: newLang } });
         },
         getOtherLanguages(language: string) {
             return this.languages.filter((otherLanguage) => otherLanguage.value.substring(0, 2) !== language)
