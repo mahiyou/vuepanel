@@ -1,7 +1,7 @@
 <template>
     <v-container class="reset-password">
-        <div class="text-primary title">{{ $t("forgot your password?") }}</div>
-        <div class="sub-title mt-2 text-secondary">{{ $t("reset your password") }}</div>
+        <div class="text-primary title">{{ $t("user.forgot-password") }}</div>
+        <div class="sub-title mt-2 text-secondary">{{ $t("user.reset-password") }}</div>
         <v-img width="180px" src="../../assets/pics/letter.svg" class="mx-auto"></v-img>
         <ErrorAlert class="text-start" v-if="invalidInputError" :error="invalidInputError" />
         <ErrorAlert v-if="serverError" :error="serverError" />

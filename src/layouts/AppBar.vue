@@ -20,10 +20,10 @@
 
         <v-menu v-if="notificationStore" width="330px">
             <v-toolbar color="primary" class="px-2 fixed-bar">
-                <v-toolbar-title class="font-weight-bold">{{ $t("notifications") }}</v-toolbar-title>
+                <v-toolbar-title class="font-weight-bold">{{ $t("user.notifications") }}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <template v-if="notificationStore.unreadCount">
-                    <span class="bg-light px-2 rounded-lg">{{ notificationStore.unreadCount }} {{ $t("new notifications")
+                    <span class="bg-light px-2 rounded-lg">{{ notificationStore.unreadCount }} {{ $t("user.notifications.new")
                     }}</span>
                 </template>
             </v-toolbar>
@@ -54,7 +54,7 @@
                 </v-list-item>
                 <v-btn width="100%" height="80px" variant="text"
                     :append-icon="$vuetify.locale.isRtl ? 'mdi-arrow-left-thin' : 'mdi-arrow-right-thin'">
-                    {{ $t("view all notifications") }}
+                    {{ $t("user.notifications.view-all") }}
                 </v-btn>
             </v-list>
         </v-menu>
@@ -103,14 +103,14 @@ export default defineComponent({
             wideNav: true,
             items: [
                 {
-                    title: this.$t("account"), value: "account", props: {
+                    title: this.$t("user.account"), value: "account", props: {
                         prependIcon: "mdi-account-circle"
                     }
                 },
-                { title: this.$t("messages"), value: "messages", props: { prependIcon: "mdi-message-text-outline" } },
+                { title: this.$t("user.messages"), value: "messages", props: { prependIcon: "mdi-message-text-outline" } },
                 { title: this.$t("help"), value: "help", props: { prependIcon: "mdi-lifebuoy" } },
                 { title: this.$t("settings"), value: "settings", props: { prependIcon: "mdi-cog" } },
-                { title: this.$t("logout"), value: "logout", props: { prependIcon: "mdi-logout", to: { name: "logout" } } },
+                { title: this.$t("user.logout"), value: "logout", props: { prependIcon: "mdi-logout", to: { name: "logout" } } },
             ],
             languages: [
                 { title: "English", value: "en_us" },

@@ -6,7 +6,7 @@
             <div class="mt-6 mb-2">{{ $t("username(email or cell phone)") }}<span class="text-red"> *</span></div>
             <v-text-field variant="outlined" v-model="username" dir="ltr" :rules="[usernameValidation]" />
 
-            <div class="mt-2 mb-2">{{ $t("password") }}<span class="text-red"> *</span></div>
+            <div class="mt-2 mb-2">{{ $t("user.password") }}<span class="text-red"> *</span></div>
             <v-text-field variant="outlined" v-model="password" dir="ltr" :rules="[passwordValidation]" />
 
             <div class="mt-2 mb-2">{{ $t("confirm password") }}<span class="text-red"> *</span></div>
@@ -17,7 +17,7 @@
 
             <v-btn class="mt-6 px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat"
                 :disabled="!valid" :loading="loading">
-                {{ $t("sign up") }}
+                {{ $t("user.sign-up") }}
             </v-btn>
 
             <ErrorAlert v-if="invalidInputError" :error="invalidInputError" />
@@ -25,16 +25,16 @@
             <ErrorAlert v-if="incorrectRepeatPass" :error="incorrectRepeatPass" />
 
             <div class="text-center mt-8">
-                <p class="mb-6">{{ $t("create account with") }}</p>
+                <p class="mb-6">{{ $t("create-account.sso") }}</p>
                 <v-btn icon="mdi-facebook" size="small" variant="flat" color="#405189" class="mx-1"></v-btn>
                 <v-btn icon="mdi-google" size="small" variant="flat" color="#f06548" class="mx-1"></v-btn>
                 <v-btn icon="mdi-github" size="small" variant="flat" color="#212529" class="mx-1"></v-btn>
                 <v-btn icon="mdi-twitter" size="small" variant="flat" color="#299cdb" class="mx-1"></v-btn>
                 <div class="mt-8">
-                    {{ $t("already have an account") }}
+                    {{ $t("user.have-account") }}
                     <router-link
                         :to="{ name: 'login', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }"
-                        class="link text-primary">{{ $t("sign in") }}</router-link>
+                        class="link text-primary">{{ $t("user.sign-in") }}</router-link>
                 </div>
             </div>
         </v-form>
@@ -70,7 +70,7 @@ export default defineComponent({
         async onSubmit() {
             if (this.password !== this.repeartPassword) {
                 this.incorrectRepeatPass = {
-                    message: this.$t('password and confirm password')
+                    message: this.$t('password.confirm-password.not-matching')
                 };
                 return;
             } else {
@@ -137,7 +137,7 @@ export default defineComponent({
         },
         repeatPasswordValidation(value: string): boolean | string {
             if (!value) {
-                return this.$t("password confirmation is necessary");
+                return this.$t("user.password-confirmation.required");
             }
             return true;
         },

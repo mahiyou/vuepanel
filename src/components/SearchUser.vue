@@ -10,42 +10,42 @@
                     <v-card-text>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <div>{{ $t("id") }}</div>
+                                <div>{{ $t("user.id") }}</div>
                             </v-col>
                             <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="id" dir="ltr" /></v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <span>{{ $t("name") }}</span>
+                                <span>{{ $t("user.name") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="name"
                                     :dir="$vuetify.locale.current" /></v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <span>{{ $t("status") }}</span>
+                                <span>{{ $t("user.status") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="status" clearable variant="outlined" :items="statusItems"
-                                    item-title="title" item-value="value" :placeholder="$t('select status')"></v-select>
+                                    item-title="title" item-value="value" :placeholder="$t('user.status.select')"></v-select>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <span>{{ $t("role") }}</span>
+                                <span>{{ $t("user.role") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="role" clearable variant="outlined" :items="[Role.ADMIN, Role.USER]"
-                                    :placeholder="$t('select role')"></v-select>
+                                    :placeholder="$t('user.role.select')"></v-select>
                             </v-col>
                         </v-row>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn class="px-3" type="submit" color="customGreen" variant="flat">
-                            {{ $t("search") }}
+                            {{ $t("users.search") }}
                         </v-btn>
-                        <v-btn class="px-3" variant="flat" color="secondary" @click="isActive.value = false">{{ $t("close dialog") }}</v-btn>
+                        <v-btn class="px-3" variant="flat" color="secondary" @click="isActive.value = false">{{ $t("dialog.close") }}</v-btn>
                     </v-card-actions>
                     <ErrorAlert v-if="error" :error="error" />
                 </v-form>
@@ -75,7 +75,7 @@ export default defineComponent({
             status: undefined,
             role: undefined,
             error: undefined as undefined | IErrorInComponent,
-            statusItems: [{ title: this.$t('users.status.ACTIVE'), value: Status.ACTIVE }, { title: this.$t('users.status.SUSPENDED'), value: Status.SUSPENDED }]
+            statusItems: [{ title: this.$t('user.status.ACTIVE'), value: Status.ACTIVE }, { title: this.$t('user.status.SUSPENDED'), value: Status.SUSPENDED }]
         }
     },
     methods: {
@@ -85,7 +85,7 @@ export default defineComponent({
                 this.$emit("searchUser", { id: this.id, name: this.name, status: this.status, role: this.role })
             } else {
                 this.error = {
-                    message: this.$t('fill in at least one field')
+                    message: this.$t('field.fill.minimum-number')
                 };
                 return;
             }

@@ -1,5 +1,5 @@
 <template>
-    <div>{{ $t("enter the sent code") }}</div>
+    <div>{{ $t("enter.otp") }}</div>
     <v-form @submit.prevent="$emit('submitOtp', otp)" v-model="validOtp">
         <v-otp-input dir="ltr" :length="otpDigits" autofocus height="57px" width="390px" base-color="primary"
             v-model="otp"></v-otp-input>
@@ -8,7 +8,7 @@
             {{ $vuetify.locale.isRtl ? persianNumber(minutes) : minutes }}:{{ $vuetify.locale.isRtl ?  persianNumber(seconds) : seconds }}
         </vue-countdown>
         <v-btn :disabled="!sendCode" :loading="loadingResend" @click="sendCode = false; $emit('submit')"
-            variant="text">{{ $t("resend code") }}</v-btn>
+            variant="text">{{ $t("resend.otp") }}</v-btn>
 
         <div class="mt-12 mb-4">
             <v-btn class="px-0 edit-btn mx-3" width="150px" color="secondary" variant="flat"
@@ -17,7 +17,7 @@
             </v-btn>
             <v-btn type="submit" class="px-2 btn mx-3" width="150px" color="primary" variant="flat"
                 :disabled="otp.length != otpDigits" :loading="loadingConfirmOtp">
-                {{ $t("confirm") }}
+                {{ $t("confirm.go-next-step") }}
             </v-btn>
         </div>
     </v-form>

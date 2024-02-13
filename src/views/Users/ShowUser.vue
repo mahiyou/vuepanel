@@ -41,7 +41,7 @@
                                         <td class="text-secondary">
                                             <div v-if="data != 'status' && data != 'joiningDate'">{{ user[data] }}</div>
                                             <v-chip v-if="data == 'status'" :color="backgroundOfStatus(user.status)">
-                                                {{ $t('users.status.'+ user[data]) }}
+                                                {{ $t('user.status.'+ user[data]) }}
                                             </v-chip>
                                             <v-tooltip v-if="data == 'joiningDate'" :text="user.joiningDate" location="top">
                                                 <template v-slot:activator="{ props }">

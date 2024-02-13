@@ -2,7 +2,7 @@
     <v-menu>
         <template v-slot:activator="{ props }">
             <v-btn variant="text" color="primary" prepend-icon="mdi-dots-horizontal" class="table-edit-btn"
-                v-bind="props">{{ $t("actions") }}</v-btn>
+                v-bind="props">{{ $t("user.table.actions") }}</v-btn>
         </template>
         <v-list :items="tableRowAction"></v-list>
     </v-menu>

@@ -1,44 +1,44 @@
 <template>
     <v-container class="login">
         <div class="text-primary title">{{ $t("welcome") }}</div>
-        <div class="sub-title mt-2 text-secondary">{{ $t("signin to continue") }}</div>
+        <div class="sub-title mt-2 text-secondary">{{ $t("user.signin.signin to continue") }}</div>
         <v-form @submit.prevent="onSubmit" v-model="valid" class="text-start">
             <div class="mt-9 mb-2">{{ $t("username(email or cell phone)") }}</div>
             <v-text-field variant="outlined" v-model="username" dir="ltr" :rules="[usernameValidation]" />
             <v-row class="mt-2">
                 <v-col cols="6">
-                    <div class="mb-2">{{ $t("password") }}</div>
+                    <div class="mb-2">{{ $t("user.password") }}</div>
                 </v-col>
                 <v-col cols="6" class="">
                     <router-link
                         :to="{ name: 'resetPassword', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }"
-                        class="link text-secondary text-decoration-none float-end">{{ $t("forget password") }}</router-link>
+                        class="link text-secondary text-decoration-none float-end">{{ $t("user.login.forget password") }}</router-link>
                 </v-col>
             </v-row>
 
             <v-text-field variant="outlined" v-model="password" dir="ltr" :rules="[passwordValidation]" />
 
-            <v-checkbox color="primary" v-model="checkbox" :label="$t('remember me')" class="checkbox"></v-checkbox>
+            <v-checkbox color="primary" v-model="checkbox" :label="$t('user.login.remember me')" class="checkbox"></v-checkbox>
 
             <v-btn class="px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat" :loading="loading"
                 :disabled="!valid">
-                {{ $t('sign in') }}
+                {{ $t('user.sign-in') }}
             </v-btn>
 
             <ErrorAlert v-if="invalidInputError" :error="invalidInputError" />
             <ErrorAlert v-if="serverError" :error="serverError" />
 
             <div class="text-center mt-8">
-                <p class="mb-6">{{ $t('sign in with') }}</p>
+                <p class="mb-6">{{ $t('sign-in.sso') }}</p>
                 <v-btn icon="mdi-facebook" size="small" variant="flat" color="#405189" class="mx-1"></v-btn>
                 <v-btn icon="mdi-google" size="small" variant="flat" color="#f06548" class="mx-1"></v-btn>
                 <v-btn icon="mdi-github" size="small" variant="flat" color="#212529" class="mx-1"></v-btn>
                 <v-btn icon="mdi-twitter" size="small" variant="flat" color="#299cdb" class="mx-1"></v-btn>
                 <div class="mt-8">
-                    {{ $t('dont have account') }}
+                    {{ $t('user.no-account') }}
                     <router-link
                         :to="{ name: 'register', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }"
-                        class="link text-primary">{{ $t('sign up') }}</router-link>
+                        class="link text-primary">{{ $t('user.sign-up') }}</router-link>
                 </div>
             </div>
         </v-form>

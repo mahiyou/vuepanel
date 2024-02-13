@@ -14,10 +14,10 @@
                 { value: 10, title: '10' },
                 { value: 20, title: '20' },
                 { value: -1, title: $t('all') }
-            ]" :items-per-page-text="$t('items per page')" pageText="" show-current-page :no-data-text="$t('no data')">
+            ]" :items-per-page-text="$t('items per page')" pageText="" show-current-page :no-data-text="$t('users.search.no-data')">
                 <template v-slot:item.status="{ value }">
                     <v-chip :color="backgroundOfStatus(value)">
-                        {{ $t('users.status.' + value) }}
+                        {{ $t('user.status.' + value) }}
                     </v-chip>
                 </template>
                 <template v-slot:item.avatar="{ value }">
@@ -78,7 +78,7 @@ export default {
         tableRowAction(user: IUser) {
             return [
                 {
-                    title: this.$t("show"),
+                    title: this.$t("user.show"),
                     value: "show",
                     props: {
                         prependIcon: "mdi-file-document-multiple-outline",
@@ -87,7 +87,7 @@ export default {
                     }
                 },
                 {
-                    title: this.$t("edit"),
+                    title: this.$t("user.edit"),
                     value: "edit",
                     props: {
                         prependIcon: "mdi-note-edit-outline",
@@ -97,7 +97,7 @@ export default {
 
                 },
                 {
-                    title: this.$t("delete"),
+                    title: this.$t("user.delete"),
                     value: "delete",
                     props: {
                         prependIcon: "mdi-close-thick",
@@ -162,11 +162,11 @@ export default {
     computed: {
         headers() {
             return [
-                { key: 'id', sortable: false, title: this.$t("id") },
-                { key: 'avatar', sortable: false, title: this.$t("avatar") },
-                { key: 'name', sortable: false, title: this.$t("name") },
-                { key: 'status', sortable: false, title: this.$t("status") },
-                { key: 'role', sortable: false, title: this.$t("role") },
+                { key: 'id', sortable: false, title: this.$t("user.id") },
+                { key: 'avatar', sortable: false, title: this.$t("user.avatar") },
+                { key: 'name', sortable: false, title: this.$t("user.name") },
+                { key: 'status', sortable: false, title: this.$t("user.status") },
+                { key: 'role', sortable: false, title: this.$t("user.role") },
                 { key: 'actions', sortable: false },
             ]
         }

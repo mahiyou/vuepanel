@@ -26,8 +26,8 @@
                 </v-card>
                 <v-card class="pa-3 my-4" elevation="1">
                     <v-tabs v-model="tab" color="primary" align-tabs="start">
-                        <v-tab :value="1">{{ $t("personal details") }}</v-tab>
-                        <v-tab :value="2">{{ $t("change password") }}</v-tab>
+                        <v-tab :value="1">{{ $t("user.personal-details") }}</v-tab>
+                        <v-tab :value="2">{{ $t("user.change-password") }}</v-tab>
                     </v-tabs>
                     <v-window v-model="tab" class="mb-15">
                         <v-window-item :value="1">
@@ -35,55 +35,55 @@
                                 <v-form @submit.prevent="onSubmit" @change="dataChanged" class="my-6" v-model="valid">
                                     <v-row>
                                         <v-col cols="6">
-                                            <div>{{ $t("name") }}</div>
+                                            <div>{{ $t("user.name") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.name"
                                                 :dir="$vuetify.locale.current" class="mb-2" />
-                                            <div>{{ $t("status") }}</div>
+                                            <div>{{ $t("user.status") }}</div>
                                             <v-select v-model="newUser.status" clearable variant="outlined"
                                                 :items="statusItems" item-title="title" item-value="value" class="mb-2"
-                                                :placeholder="$t('select status')"
+                                                :placeholder="$t('user.status.select')"
                                                 @update:model-value="dataChanged"></v-select>
 
-                                            <div>{{ $t("email address") }}</div>
+                                            <div>{{ $t("user.email-address") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.email" dir="ltr" class="mb-2"
                                                 :rules="[emailValidation]" />
 
                                         </v-col>
                                         <v-col cols="6">
-                                            <div>{{ $t("phone number") }}</div>
+                                            <div>{{ $t("user.phone-number") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.phoneNumber" dir="ltr"
                                                 :rules="[phoneNumberValidation]" class="mb-2" />
 
-                                            <div>{{ $t("role") }}</div>
+                                            <div>{{ $t("user.role") }}</div>
                                             <v-select v-model="newUser.role" clearable variant="outlined"
                                                 :items="[Role.ADMIN, Role.USER]" class="mb-2"
-                                                :placeholder="$t('select role')"
+                                                :placeholder="$t('user.role.select')"
                                                 @update:model-value="dataChanged"></v-select>
 
-                                            <div>{{ $t("joining date") }}</div>
+                                            <div>{{ $t("user.joining-date") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.joiningDate" dir="ltr"
                                                 class="mb-2" />
                                         </v-col>
                                     </v-row>
                                     <v-row>
                                         <v-col>
-                                            <div>{{ $t("city") }}</div>
+                                            <div>{{ $t("user.city") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.city"
                                                 :dir="$vuetify.locale.current" class="mb-2" />
                                         </v-col>
                                         <v-col>
-                                            <div>{{ $t("country") }}</div>
+                                            <div>{{ $t("user.country") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.country"
                                                 :dir="$vuetify.locale.current" class="mb-2" />
                                         </v-col>
                                         <v-col>
-                                            <div>{{ $t("zip code") }}</div>
+                                            <div>{{ $t("user.zip-code") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.zipCode" dir="ltr"
                                                 class="mb-2" />
                                         </v-col>
                                     </v-row>
                                     <v-btn type="submit" class="px-5 float-end" color="primary" variant="flat"
-                                        :disabled="confirmBtn || !valid" :loading="updateLoading">{{ $t("updates")
+                                        :disabled="confirmBtn || !valid" :loading="updateLoading">{{ $t("edit.user.updates")
                                         }}</v-btn>
                                 </v-form>
 
@@ -91,7 +91,7 @@
 
                             <ErrorAlert class="mt-4 mx-4" v-if="invalidInputError" :error="invalidInputError" />
                             <ErrorAlert class="mt-4 mx-4" v-if="serverErrorForUpdate" :error="serverErrorForUpdate" />
-                            <v-alert closable class="mt-4 mx-4" v-if="successfulUpdate" :text="$t('succesful update')"
+                            <v-alert closable class="mt-4 mx-4" v-if="successfulUpdate" :text="$t('user.update.succesful')"
                                 type="success" variant="tonal"></v-alert>
                         </v-window-item>
                         <v-window-item :value="2">
@@ -100,7 +100,7 @@
                                     class="my-6">
                                     <v-row>
                                         <v-col>
-                                            <div>{{ $t("new password") }}*</div>
+                                            <div>{{ $t("user.new-password") }}*</div>
                                             <v-text-field variant="outlined" v-model="newPass" dir="ltr"
                                                 :rules="[passwordValidation]" />
                                         </v-col>
@@ -112,13 +112,13 @@
                                     </v-row>
                                     <v-btn type="submit" class="px-5 mt-2 float-end" color="customGreen" variant="flat"
                                         :loading="changPassLoading" :disabled="!validChangPasswordForm">{{
-                                            $t("reset password") }}</v-btn>
+                                            $t("reset-password") }}</v-btn>
                                 </v-form>
                             </v-container>
 
                             <ErrorAlert class="mt-4 mx-4" v-if="incorrectRepeatPass" :error="incorrectRepeatPass" />
 
-                            <v-alert closable class="mt-4 mx-4" v-if="successfulChangePass" :text="$t('succesful update')"
+                            <v-alert closable class="mt-4 mx-4" v-if="successfulChangePass" :text="$t('user.update.succesful')"
                                 type="success" variant="tonal"></v-alert>
 
                             <ErrorAlert class="mt-4 mx-4" v-if="serverErrorForPassChange"
@@ -197,19 +197,19 @@ export default defineComponent({
         },
         phoneNumberValidation(value: string): boolean | string {
             if (!/^0\d{10}$/.test(value)) {
-                return this.$t("inputed phone number is invalid");
+                return this.$t("invalid.user.phone-number");
             }
             return true;
         },
         emailValidation(value: string): boolean | string {
             if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value)) {
-                return this.$t("inputed email is invalid");
+                return this.$t("invalid.email");
             }
             return true;
         },
         repeatPasswordValidation(value: string): boolean | string {
             if (!value) {
-                return this.$t("password confirmation is necessary");
+                return this.$t("user.password-confirmation.required");
             }
             return true;
         },
@@ -281,7 +281,7 @@ export default defineComponent({
             this.incorrectRepeatPass = undefined;
             if (this.newPass !== this.confirmPass) {
                 this.incorrectRepeatPass = {
-                    message: this.$t('password and confirm password')
+                    message: this.$t('password.confirm-password.not-matching')
                 };
                 return;
             } else {
@@ -327,8 +327,8 @@ export default defineComponent({
     computed: {
         statusItems() {
             return [
-                { title: this.$t('users.status.ACTIVE'), value: Status.ACTIVE },
-                { title: this.$t('users.status.SUSPENDED'), value: Status.SUSPENDED }
+                { title: this.$t('user.status.ACTIVE'), value: Status.ACTIVE },
+                { title: this.$t('user.status.SUSPENDED'), value: Status.SUSPENDED }
             ]
         }
     },

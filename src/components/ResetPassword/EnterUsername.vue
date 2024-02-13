@@ -4,12 +4,12 @@
         <v-text-field variant="outlined" v-model="username" dir="ltr" :rules="[usernameValidation]" />
         <v-btn class="mt-2 px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat" :disabled="!valid"
             :loading="loading">
-           {{ $t("reset password") }}
+           {{ $t("reset-password") }}
         </v-btn>
     </v-form>
     <div class="mt-8">
-        {{ $t("remember my password") }}
-        <router-link :to="{ name: 'login', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }" class="link text-primary">{{ $t("click here") }}</router-link>
+        {{ $t("user.remember-password") }}
+        <router-link :to="{ name: 'login', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }" class="link text-primary">{{ $t("button.click") }}</router-link>
     </div>
 </template>
 <script lang="ts">

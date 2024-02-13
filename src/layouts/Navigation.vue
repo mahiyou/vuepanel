@@ -19,7 +19,7 @@ export default defineComponent({
         items() {
             return [
                 {
-                    title: this.$t("Dashboard"),
+                    title: this.$t("user.Dashboard"),
                     value: "Dashboard",
                     items: [{
                         title: this.$t("Analytics"), value: "Analytics", props: {

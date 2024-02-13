@@ -1,7 +1,7 @@
 <template>
     <v-img width="100px" class="rounded-pill mx-auto my-4" :src="avatar"></v-img>
     <h2 class="text-center font-weight-bold">{{ username }}</h2>
-    <div class="my-2">{{ $t("you have successfully logged out of your account") }}</div>
+    <div class="my-2">{{ $t("user.logout-successful") }}</div>
     <div class="my-2">
         <div>
             <vue-countdown class="text-primary" :time="20 * 1000" v-slot="{ seconds }">

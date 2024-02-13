@@ -1,14 +1,14 @@
 <template>
     <v-form @submit.prevent="onSubmit" v-model="valid" class="text-start">
         <div class="my-1">{{ $t("enter your new password") }}</div>
-        <div class="mt-2 mb-2">{{ $t("password") }}<span class="text-red"> *</span></div>
+        <div class="mt-2 mb-2">{{ $t("user.password") }}<span class="text-red"> *</span></div>
         <v-text-field variant="outlined" v-model="password" dir="ltr" :rules="[passwordValidation]" />
 
         <div class="mt-2 mb-2">{{ $t("confirm password") }}<span class="text-red"> *</span></div>
         <v-text-field variant="outlined" v-model="repeartPassword" dir="ltr" :rules="[repeatPasswordValidation]" />
         <v-btn class="mt-6 px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat" :disabled="!valid"
             :loading="loading">
-            {{ $t("reset password") }}
+            {{ $t("reset-password") }}
         </v-btn>
         <ErrorAlert v-if="error" :error="error" />
     </v-form>
@@ -42,14 +42,14 @@ export default defineComponent({
         },
         repeatPasswordValidation(value: string): boolean | string {
             if (!value) {
-                return this.$t("password confirmation is necessary");
+                return this.$t("user.password-confirmation.required");
             }
             return true;
         },
         onSubmit() {
             if (this.password !== this.repeartPassword) {
                 this.error = {
-                    message: this.$t('password and confirm password')
+                    message: this.$t('password.confirm-password.not-matching')
                 };
                 return;
             } else {

@@ -8,14 +8,14 @@
                 <div class="text-secondary mb-5">{{ user.role }}</div>
                 <div v-if="!userDeleted">
                     <v-btn variant="flat" color="red" width="130px" class="mb-3" :loading="loadingDelete"
-                        @click="deleteUser(user.id)">{{ $t("delete user") }}</v-btn>
+                        @click="deleteUser(user.id)">{{ $t("user.delete") }}</v-btn>
                     <v-btn variant="flat" color="secondary" class="ms-3 mb-3" width="130px" :to="{ name: 'users' }">{{
                         $t("cancel") }}</v-btn>
                 </div>
                 <div v-if="userDeleted">
-                    <h3 class="text-red my-4">{{ $t("user deleted successfully") }}</h3>
+                    <h3 class="text-red my-4">{{ $t("user.delete.successful") }}</h3>
                     <v-btn variant="flat" color="secondary" class="ms-3 mb-3" width="220px" :to="{ name: 'users' }">{{
-                        $t("go to the user list page") }}</v-btn>
+                        $t("users.list.page") }}</v-btn>
                 </div>
                 <ErrorAlert v-if="serverError" :error="serverError" />
             </v-card>
