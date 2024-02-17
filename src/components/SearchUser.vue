@@ -1,7 +1,7 @@
 <template class="search-user">
     <v-dialog width="500">
         <template v-slot:activator="{ props }">
-            <v-btn variant="flat" color="secondary" v-bind="props" prependIcon="mdi-magnify">{{ $t('search') }}</v-btn>
+            <v-btn variant="flat" color="secondary" v-bind="props" prependIcon="mdi-magnify">{{ $t("user.search") }}</v-btn>
         </template>
 
         <template v-slot:default="{ isActive }">
@@ -43,7 +43,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn class="px-3" type="submit" color="customGreen" variant="flat">
-                            {{ $t("users.search") }}
+                            {{ $t("user.search") }}
                         </v-btn>
                         <v-btn class="px-3" variant="flat" color="secondary" @click="isActive.value = false">{{ $t("dialog.close") }}</v-btn>
                     </v-card-actions>

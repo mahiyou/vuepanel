@@ -14,7 +14,7 @@
                 { value: 10, title: '10' },
                 { value: 20, title: '20' },
                 { value: -1, title: $t('all') }
-            ]" :items-per-page-text="$t('items per page')" pageText="" show-current-page :no-data-text="$t('users.search.no-data')">
+            ]" :items-per-page-text="$t('items per page')" pageText="" show-current-page :no-data-text="$t('search.no-data')">
                 <template v-slot:item.status="{ value }">
                     <v-chip :color="backgroundOfStatus(value)">
                         {{ $t('user.status.' + value) }}
