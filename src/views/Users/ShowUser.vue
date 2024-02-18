@@ -132,12 +132,15 @@
                                     <div class="activities-content">
                                         <v-card class="overflow-y-auto" max-height="200">
                                             <v-row v-for="(data, key) in activitiesContent" :key="key"
-                                                class="mx-1 ms-5 dashed-border">
-                                                <v-col cols="1" class="col-position">
+                                                class="mx-1 ms-5" :class="$vuetify.locale.isRtl ? 'dashed-border-rtl' : 'dashed-border-ltr'">
+                                                <v-col cols="1"
+                                                    :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'">
                                                     <span class="pa-1 rounded-pill bg-grey-lighten-3"><v-icon
                                                             :icon="data.icon" :color="data.color"></v-icon></span>
                                                 </v-col>
-                                                <v-col class="col-position" cols="7">{{ data.content }}</v-col>
+                                                <v-col
+                                                    :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'"
+                                                    cols="7">{{ data.content }}</v-col>
                                                 <v-col cols="4" class="text-secondary"
                                                     :align="$vuetify.locale.isRtl ? 'left' : 'right'">{{ data.date
                                                     }}</v-col>
@@ -315,15 +318,25 @@ export default defineComponent({
 
     }
 
-    .dashed-border {
+    .dashed-border-ltr {
         border-left: 1px dashed rgb(var(--v-theme-secondary));
         z-index: 0;
     }
 
-    .col-position {
+    .dashed-border-rtl {
+        border-right: 1px dashed rgb(var(--v-theme-secondary));
+        z-index: 0;
+    }
+
+    .col-position-ltr {
         position: relative;
         left: -26px;
         z-index: 2;
     }
-}
-</style>
+
+    .col-position-rtl {
+        position: relative;
+        right: -26px;
+        z-index: 2;
+    }
+}</style>
