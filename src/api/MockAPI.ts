@@ -7,7 +7,11 @@ import { IChangeUserPasswoerRequest, IGetUserResponse, ISearchUserRequest } from
 import NotFoundError from "./errors/NotFoundError";
 import InputValidationError from "./errors/InputValidationError";
 
-export class MockAPI implements IAPI {
+export default class MockAPI implements IAPI {
+    private myVar = 5;
+    protected ourVar = 4;
+    public anybodyVar = 2;
+    
     public getNotificationsItems(): INotification[] {
         return [{
             id: 1,
@@ -225,144 +229,7 @@ export class MockAPI implements IAPI {
 
         }, [request]);
     }
-    public async searchUsers(request: ISearchUserRequest): Promise<IGetUserResponse> {
-        return this.call((request: ISearchUserRequest) => {
-
-            if (Math.random() > 0.9) {
-                throw new ServerInternalError();
-            }
-            if (Math.random() <= 0.9 && Math.random() > 0.6) {
-                throw new NotFoundError();
-            }
-            if (request.id || request.name || request.role || request.status) {
-                return {
-                    users: [
-                        {
-                            avatar: "/pics/avatar.jpg",
-                            name: "Alex",
-                            id: 1,
-                            status: Status.ACTIVE,
-                            role: Role.ADMIN,
-                        },
-                        {
-                            avatar: "/pics/avatar2.jpg",
-                            name: "Ali",
-                            id: 2,
-                            status: Status.ACTIVE,
-                            role: Role.USER,
-                        },
-                        {
-                            name: "Maryam",
-                            id: 3,
-                            status: Status.ACTIVE,
-                            role: Role.USER,
-                        },
-                    ]
-                }
-            }
-            return {
-                users: [
-                    {
-                        avatar: "/pics/avatar.jpg",
-                        name: "Alex",
-                        id: 1,
-                        status: Status.ACTIVE,
-                        role: Role.ADMIN,
-                    },
-                    {
-                        avatar: "/pics/avatar2.jpg",
-                        name: "Ali",
-                        id: 2,
-                        status: Status.SUSPENDED,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Maryam",
-                        id: 3,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Ehsan",
-                        id: 4,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 5,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 6,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 7,
-                        status: Status.SUSPENDED,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 8,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 9,
-                        status: Status.SUSPENDED,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 10,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 11,
-                        status: Status.SUSPENDED,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 12,
-                        status: Status.SUSPENDED,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 13,
-                        status: Status.SUSPENDED,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 14,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 15,
-                        status: Status.SUSPENDED,
-                        role: Role.USER,
-                    },
-                    {
-                        name: "Roya",
-                        id: 16,
-                        status: Status.ACTIVE,
-                        role: Role.USER,
-                    }
-                ]
-            }
-        }, [request])
+    public async searchUsers(request: ISearchUserRequest): Promise<any> {
     }
     public async getUser(request: number): Promise<IRegisterResponse> {
         return this.call((request: number) => {

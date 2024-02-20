@@ -4,10 +4,12 @@ export interface IGetUserResponse {
     users: IUser[]
 }
 export interface ISearchUserRequest {
-    id?: number,
+    id?: number;
     status?: Status
     name?: string;
-    role?: Role
+    role?: Role;
+    page?: number;
+    ipp?: number;
 }
 export interface IChangeUserPasswoerRequest{
     id: number,

@@ -9,12 +9,15 @@
                     <SearchUser @searchUser="onSearchUser" />
                 </template>
             </v-toolbar>
-            <v-data-table :headers="headers" :items="users" :items-per-page-options="[
-                { value: 5, title: '5' },
-                { value: 10, title: '10' },
-                { value: 20, title: '20' },
-                { value: -1, title: $t('all') }
-            ]" :items-per-page-text="$t('items per page')" pageText="" show-current-page :no-data-text="$t('search.no-data')">
+            <v-data-table @update:options="onLoadTableItems" :headers="headers" :items="users"
+                :items-per-page-options="[
+                    { value: 5, title: '5' },
+                    { value: 10, title: '10' },
+                    { value: 20, title: '20' },
+                    { value: -1, title: $t('all') }
+                ]" v-model:items-per-page="ipp" :items-per-page-text="$t('items per page')" pageText="" show-current-page
+                :no-data-text="$t('search.no-data')">
+
                 <template v-slot:item.status="{ value }">
                     <v-chip :color="backgroundOfStatus(value)">
                         {{ $t('user.status.' + value) }}
@@ -32,8 +35,9 @@
                 </template>
             </v-data-table>
         </v-card>
-        <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate
-                color="primary"></v-progress-circular></div>
+        <div class="text-center my-10">
+            <v-progress-circular v-if="loading" indeterminate color="primary" />
+        </div>
         <ErrorAlert v-if="error" :error="error" />
     </v-container>
 </template>
@@ -65,6 +69,7 @@ export default {
             users: [] as IUser[] | undefined,
             error: undefined as undefined | IErrorInComponent,
             loading: true,
+            ipp: 5
         }
     },
     methods: {
@@ -119,18 +124,15 @@ export default {
                 }
             });
         },
-        async searchUser(user: ISearchUserRequest) {
+        async searchUser(request: ISearchUserRequest) {
             this.loading = true;
             this.error = undefined;
             this.users = [];
             try {
-                const response = await useAPI().searchUsers({
-                    id: user.id || undefined,
-                    name: user.name || undefined,
-                    status: user.status || undefined,
-                    role: user.role || undefined
-                });
-                this.users = response.users;
+                const response = await useAPI().searchUsers(request);
+                const data = await response.json()
+                console.log(data)
+                this.users = data.data;
 
             } catch (e) {
                 if (e instanceof BaseError) {
@@ -143,6 +145,12 @@ export default {
             } finally {
                 this.loading = false;
             }
+        },
+        onLoadTableItems(options: { page: number, itemsPerPage: number, sortBy: string }) {
+            this.$router.push({
+                name: this.$route.name as string,
+                query: Object.assign({}, this.$route.query, {ipp: options.itemsPerPage, page: options.page})
+            });
         }
     },
     created() {
@@ -154,6 +162,7 @@ export default {
                     name: this.$route.query.name ? this.$route.query.name.toString() : undefined,
                     status: this.$route.query.status ? this.$route.query.status.toString() : undefined,
                     role: this.$route.query.role ? this.$route.query.role.toString() : undefined,
+                    ipp: this.$route.query.ipp ? parseInt(this.$route.query.ipp as string) : undefined,
                 })
             },
             { immediate: true }

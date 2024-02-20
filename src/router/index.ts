@@ -117,7 +117,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-    console.log("lang change")
     const needsAuthentication = (to.meta.authenticaion === undefined || to.meta.authenticaion === true);
     const authStore = useAuthStore();
     const lang = (to.params.lang as string) || "en";
