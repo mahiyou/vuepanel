@@ -15,6 +15,7 @@ export interface IUser {
     name?: string;
     avatar?: string;
     role: Role,
+    type_id:number,
     phoneNumber?: string,
     email?: string,
     city?: string,
@@ -22,6 +23,17 @@ export interface IUser {
     zipCode?: string,
     joiningDate?: string,
     banner?:string,
+}
+export interface IUserType {
+    id: number,
+    abilities: string[],
+    children: number[],
+    created_at: string | null,
+    updated_at: string | null
+}
+export interface ILocalizedUserType extends IUserType {
+    locale: string,
+    title: string,
 }
 export interface IInputUserForEdit {
     abilities?: string[];

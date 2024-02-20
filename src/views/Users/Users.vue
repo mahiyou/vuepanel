@@ -9,13 +9,12 @@
                     <SearchUser @searchUser="onSearchUser" />
                 </template>
             </v-toolbar>
-            <v-data-table @update:options="onLoadTableItems" :headers="headers" :items="users"
-                :items-per-page-options="[
-                    { value: 5, title: '5' },
-                    { value: 10, title: '10' },
-                    { value: 20, title: '20' },
-                    { value: -1, title: $t('all') }
-                ]" v-model:items-per-page="ipp" :items-per-page-text="$t('items per page')" pageText="" show-current-page
+            <v-data-table @update:options="onLoadTableItems" :headers="headers" :items="response?.data" :items-per-page-options="[
+                { value: 5, title: '5' },
+                { value: 10, title: '10' },
+                { value: 20, title: '20' },
+                { value: -1, title: $t('all') }
+            ]" v-model:items-per-page="ipp" :items-per-page-text="$t('items per page')" pageText="" show-current-page
                 :no-data-text="$t('search.no-data')">
 
                 <template v-slot:item.status="{ value }">
@@ -27,8 +26,8 @@
                     <v-img :src="value || '/pics/default-avatar.jpg'" class="rounded-circle my-2" width="45px"
                         height="45px"></v-img>
                 </template>
-                <template v-slot:item.role="{ value }">
-                    {{ value }}
+                <template v-slot:item.type_id="{ value }">
+                    {{ getType(value)?.title || "-" }}
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <TableRowActions :tableRowAction="tableRowAction(item)" :user="item.id" />
@@ -45,9 +44,9 @@
 import { useAPI } from "@/api"
 import TableRowActions from "@/components/TableRowActions.vue"
 import SearchUser from "@/components/SearchUser.vue"
-import { IUser, Role, Status } from "@/api/authentication"
+import { ILocalizedUserType, IUser, IUserType, Role, Status } from "@/api/authentication"
 import { persianNumber } from "@/utilities"
-import { ISearchUserRequest } from "@/api/users"
+import { ISearchUserRequest, ISearchUserResponse } from "@/api/users"
 import NotFoundError from "@/api/errors/NotFoundError"
 import { IErrorInComponent } from "@/utilities/error";
 import BaseError from "@/api/errors/BaseError"
@@ -66,7 +65,7 @@ export default {
     },
     data() {
         return {
-            users: [] as IUser[] | undefined,
+            response: undefined as ISearchUserResponse | undefined,
             error: undefined as undefined | IErrorInComponent,
             loading: true,
             ipp: 5
@@ -127,13 +126,9 @@ export default {
         async searchUser(request: ISearchUserRequest) {
             this.loading = true;
             this.error = undefined;
-            this.users = [];
+            this.response = undefined;
             try {
-                const response = await useAPI().searchUsers(request);
-                const data = await response.json()
-                console.log(data)
-                this.users = data.data;
-
+                this.response = await useAPI().searchUsers(request);
             } catch (e) {
                 if (e instanceof BaseError) {
                     this.error = e.toComponentError();
@@ -149,8 +144,11 @@ export default {
         onLoadTableItems(options: { page: number, itemsPerPage: number, sortBy: string }) {
             this.$router.push({
                 name: this.$route.name as string,
-                query: Object.assign({}, this.$route.query, {ipp: options.itemsPerPage, page: options.page})
+                query: Object.assign({}, this.$route.query, { ipp: options.itemsPerPage, page: options.page })
             });
+        },
+        getType(typeId: number): ILocalizedUserType|undefined {
+            return this.response?.types.find((type) => type.id === typeId);
         }
     },
     created() {
@@ -158,10 +156,10 @@ export default {
             () => this.$route.query,
             () => {
                 this.searchUser({
-                    id: this.$route.query.id ? parseInt(this.$route.query.id.toString()) : undefined,
-                    name: this.$route.query.name ? this.$route.query.name.toString() : undefined,
-                    status: this.$route.query.status ? this.$route.query.status.toString() : undefined,
-                    role: this.$route.query.role ? this.$route.query.role.toString() : undefined,
+                    id: this.$route.query.id ? parseInt(this.$route.query.id as string) : undefined,
+                    name: this.$route.query.name ? this.$route.query.name as string : undefined,
+                    status: this.$route.query.status ? this.$route.query.status as string : undefined,
+                    role: this.$route.query.role ? this.$route.query.role as string : undefined,
                     ipp: this.$route.query.ipp ? parseInt(this.$route.query.ipp as string) : undefined,
                 })
             },
@@ -175,7 +173,7 @@ export default {
                 { key: 'avatar', sortable: false, title: this.$t("user.avatar") },
                 { key: 'name', sortable: false, title: this.$t("user.name") },
                 { key: 'status', sortable: false, title: this.$t("user.status") },
-                { key: 'role', sortable: false, title: this.$t("user.role") },
+                { key: 'type_id', sortable: false, title: this.$t("user.role") },
                 { key: 'actions', sortable: false },
             ]
         }
