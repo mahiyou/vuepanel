@@ -102,5 +102,6 @@
     "tooltip.activities.30":"Up to 30 activities",
     "tooltip.activities.40":"Up to 40 activities",
     "tooltip.activities.50":"Up to 50 activities",
-    "user.profile.activities.this-year":"activities in this year"
+    "user.profile.activities.this-year":"activities in this year",
+    "user.activities.number.per-day":"Activities in"
 }

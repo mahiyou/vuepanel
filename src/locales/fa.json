@@ -100,5 +100,6 @@
     "tooltip.activities.30": "حداکثر ۳۰ فعالیت",
     "tooltip.activities.40": "حداکثر ۴۰ فعالیت",
     "tooltip.activities.50": "حداکثر ۵۰ فعالیت",
-    "user.profile.activities.this-year":"فعالیت در سال جاری"
+    "user.profile.activities.this-year":"فعالیت در سال جاری",
+    "user.activities.number.per-day":"فعالیت در"
 }

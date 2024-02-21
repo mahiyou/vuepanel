@@ -73,27 +73,27 @@
                                             <span class="activity-boxes mx-5">
                                                 <v-tooltip :text="$t('tooltip.activities.zero')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box box1"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary-lighten-4"></div>
                                                     </template>
                                                 </v-tooltip>
                                                 <v-tooltip :text="$t('tooltip.activities.20')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box box2"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary-lighten-3"></div>
                                                     </template>
                                                 </v-tooltip>
                                                 <v-tooltip :text="$t('tooltip.activities.30')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box box3"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary-lighten-2"></div>
                                                     </template>
                                                 </v-tooltip>
                                                 <v-tooltip :text="$t('tooltip.activities.40')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box box4"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary-lighten-1"></div>
                                                     </template>
                                                 </v-tooltip>
                                                 <v-tooltip :text="$t('tooltip.activities.50')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box box5"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary"></div>
                                                     </template>
                                                 </v-tooltip>
                                             </span>
@@ -106,33 +106,13 @@
                                     </v-row>
                                     <v-divider class="mt-2" :thickness="1" />
                                     <v-table class="activities-table">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Feb</th>
-                                                <th v-for="index in 14" :key="index"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>monday</td>
-                                                <td v-for="index in 14" :key="index"></td>
-                                            </tr>
-                                            <tr></tr>
-                                            <tr>
-                                                <td>wednesday</td>
-                                            </tr>
-                                            <tr></tr>
-                                            <tr>
-                                                <td>Friday</td>
-                                            </tr>
-                                        </tbody>
+                                        <ActivitiesTable :activitiesPerDate="activitiesPerDate" :first-day-of-week="0"/>
                                     </v-table>
                                     <v-divider class="mb-6 mt-3"></v-divider>
                                     <div class="activities-content">
                                         <v-card class="overflow-y-auto" max-height="200">
-                                            <v-row v-for="(data, key) in activitiesContent" :key="key"
-                                                class="mx-1 ms-5" :class="$vuetify.locale.isRtl ? 'dashed-border-rtl' : 'dashed-border-ltr'">
+                                            <v-row v-for="(data, key) in activitiesContent" :key="key" class="mx-1 ms-5"
+                                                :class="$vuetify.locale.isRtl ? 'dashed-border-rtl' : 'dashed-border-ltr'">
                                                 <v-col cols="1"
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'">
                                                     <span class="pa-1 rounded-pill bg-grey-lighten-3"><v-icon
@@ -167,10 +147,12 @@ import { IErrorInComponent } from '@/utilities/error';
 import { defineComponent } from 'vue';
 import ErrorAlert from '@/components/ErrorAlert.vue';
 import { title } from 'node:process';
+import ActivitiesTable from '@/components/ActivitiesTable.vue';
 
 export default defineComponent({
     components: {
-        ErrorAlert
+        ErrorAlert,
+        ActivitiesTable
     },
     data() {
         return {
@@ -192,7 +174,8 @@ export default defineComponent({
                 { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
                 { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
                 { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" }
-            ]
+            ],
+            activitiesPerDate:{} as Record<string, number>
         }
     },
     methods: {
@@ -211,9 +194,11 @@ export default defineComponent({
         }
     },
     async mounted() {
+        
         try {
             const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
             this.user = response.user;
+            this.activitiesPerDate = useAPI().getActivities(this.user.id)
         }
         catch (e) {
             if (e instanceof BaseError) {
@@ -268,9 +253,6 @@ export default defineComponent({
         line-height: 10px;
     }
 
-    .v-table--density-default>.v-table__wrapper>table>tbody>tr>td {
-        height: calc(var(--v-table-row-height, 45px) + 0px);
-    }
 
     .activities-tabs {
         .v-btn--size-default {
@@ -283,39 +265,22 @@ export default defineComponent({
         .activity-box {
             width: 10px;
             height: 10px;
-            background-color: red;
             display: inline-block;
             margin-right: 1.5px;
         }
-
-        .box1 {
-            background-color: #ededed;
-        }
-
-        .box2 {
-            background-color: #acd5f2;
-        }
-
-        .box3 {
-            background-color: #7fa8c9;
-        }
-
-        .box4 {
-            background-color: #527ba0;
-        }
-
-        .box5 {
-            background-color: #254e77;
-        }
     }
 
-    .activities-table.v-table {
-        font-size: 12px;
+    .activities-table.v-table.v-table--density-default>.v-table__wrapper>table>tbody>tr>td {
+        height: 11px;
+        width: 11px;
+        padding: 0px;
+        font-size: 10.7px;
     }
 
-    .activities-content {
-        // overflow-x: scroll;
-
+    .v-table>.v-table__wrapper>table {
+        border-spacing: 1.2px;
+        margin: 20px auto;
+        width: fit-content;
     }
 
     .dashed-border-ltr {
@@ -339,4 +304,5 @@ export default defineComponent({
         right: -26px;
         z-index: 2;
     }
-}</style>
+}
+</style>

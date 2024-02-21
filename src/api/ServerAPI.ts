@@ -31,7 +31,7 @@ export default class ServerAPI extends MockAPI implements IAPI {
         const response = await fetch(`${this.baseURL}/aaa/v1/users?${params.toString()}`, {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer 7|QISB8ogOVW16PYBEkunFNobBeCaZrzydAyfmaVmH"
+                Authorization: "Bearer 8|7GwCe9yXS5GDbimEbZheck9KnTS6Fwg7ujcJ6YbB"
             },
         });
         const body: ISearchUserResponse = await response.json();

@@ -11,7 +11,7 @@ export default class MockAPI implements IAPI {
     private myVar = 5;
     protected ourVar = 4;
     public anybodyVar = 2;
-    
+
     public getNotificationsItems(): INotification[] {
         return [{
             id: 1,
@@ -299,6 +299,29 @@ export default class MockAPI implements IAPI {
                 throw new ServerInternalError();
             }
         }, [request])
+    }
+    public getActivities(request: number): Record<string, number> {
+        return {
+            "2023-05-12": 20,
+            "2023-05-14": 23,
+            "2023-06-16": 70,
+            "2023-06-17": 90,
+            "2023-06-19": 50,
+            "2023-06-20": 70,
+            "2023-07-12": 20,
+            "2023-07-14": 23,
+            "2023-07-16": 70,
+            "2023-07-17": 90,
+            "2023-07-19": 50,
+            "2023-07-20": 70,
+            "2023-07-21": 20,
+            "2023-07-23": 23,
+            "2023-07-24": 70,
+            "2023-07-26": 90,
+            "2023-07-29": 50,
+            "2023-07-30": 70,
+            "2023-08-20": 70
+        }
     }
 
     private call<T extends Function>(fn: T, args: Parameters<any>): Promise<ReturnType<any>> {

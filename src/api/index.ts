@@ -17,6 +17,7 @@ export interface IAPI {
     editUser(request: IInputUserForEdit): Promise<IEditUserResponse>;
     changeUserPassword(request: IChangeUserPasswoerRequest): Promise<void>;
     deleteUser(request: number): Promise<void>;
+    getActivities(userID: number): Record<string, number>;
 }
 
 export function useAPI(): IAPI {
