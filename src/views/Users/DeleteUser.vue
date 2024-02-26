@@ -68,22 +68,29 @@ export default defineComponent({
         }
     },
     async created() {
-        try {
-            const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
-            this.user = response;
-        }
-        catch(e) {
-            if (e instanceof BaseError) {
-                this.serverError = e.toComponentError();
-            } else {
-                this.serverError = {
-                    message: this.$t('server error')
-                };
-            }
-        }
-        finally {
-            this.loading = false;
-        }
+        this.$watch(
+            () => this.$route.params,
+            async () => {
+                this.loading = true;
+                try {
+                    const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
+                    this.user = response;
+                }
+                catch (e) {
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
+                }
+                finally {
+                    this.loading = false;
+                }
+            },
+            { immediate: true }
+        )
     }
 })
 

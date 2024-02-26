@@ -45,8 +45,8 @@
                                                 @update:model-value="dataChanged"></v-select>
 
                                             <div>{{ $t("user.email-address") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.meta.email" dir="ltr" class="mb-2"
-                                                :rules="[emailValidation]" />
+                                            <v-text-field variant="outlined" v-model="newUser.meta.email" dir="ltr"
+                                                class="mb-2" :rules="[emailValidation]" />
 
                                         </v-col>
                                         <v-col cols="6">
@@ -83,7 +83,7 @@
                                         </v-col>
                                     </v-row>
                                     <v-btn type="submit" class="px-5 float-end" color="primary" variant="flat"
-                                         :loading="updateLoading">{{ $t("edit.user.updates")
+                                        :loading="updateLoading">{{ $t("edit.user.updates")
                                         }}</v-btn>
                                 </v-form>
 
@@ -181,7 +181,7 @@ export default defineComponent({
                     country: "",
                     zipCode: "",
                 },
-                type_id:0,
+                type_id: 0,
                 status: undefined as unknown as UserStatus,
                 joiningDate: "",
             },
@@ -327,33 +327,36 @@ export default defineComponent({
             ]
         }
     },
-    async mounted() {
-        try {
-            const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
-            this.user = response;
-            console.log(this.user)
-            this.newUser.name = this.user.name;
-            this.newUser.meta.phoneNumber = this.user.meta.phoneNumber;
-            this.newUser.type_id = this.user.type_id;
-            this.newUser.status = this.user.status;
-            this.newUser.meta.email = this.user.meta.email;
-            this.newUser.meta.city = this.user.meta.city;
-            this.newUser.meta.country = this.user.meta.country;
-            this.newUser.meta.zipCode = this.user.meta.zipCode;
-            this.newUser.joiningDate = this.user.created_at.toLocaleDateString();
-        }
-        catch (e) {
-            if (e instanceof BaseError) {
-                this.serverError = e.toComponentError();
-            } else {
-                this.serverError = {
-                    message: this.$t('server error')
-                };
-            }
-        }
-        finally {
-            this.loading = false;
-        }
+    async created() {
+        this.$watch(
+            () => this.$route.params,
+            async () => {
+                this.loading = true;
+                try {
+                    const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
+                    this.user = response;
+                    console.log(this.user)
+                    this.newUser.name = this.user.name;
+                    this.newUser.meta = this.user.meta;
+                    this.newUser.type_id = this.user.type_id;
+                    this.newUser.status = this.user.status;
+                    this.newUser.joiningDate = this.user.created_at.toLocaleDateString();
+                }
+                catch (e) {
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
+                }
+                finally {
+                    this.loading = false;
+                }
+            },
+            { immediate: true }
+        )
     }
 })
 </script>

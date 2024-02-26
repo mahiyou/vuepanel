@@ -31,7 +31,7 @@ export default defineComponent({
     },
     mounted() {
         this.username = this.authStore.user ? this.authStore.user.name ? this.authStore.user.name : "کاربر" : "";
-        this.avatar = this.authStore.user ? this.authStore.user.avatar ? this.authStore.user.avatar : "/pics/default-avatar.jpg" : "";
+        this.avatar = this.authStore.user ? this.authStore.user.meta.avatar ? this.authStore.user.meta.avatar : "/pics/default-avatar.jpg" : "";
         this.authStore.setUser(undefined);
         setTimeout(() => { this.$router.push({ name: "login" , params: { lang: this.$vuetify.locale.current } }); }, 20000);
     }

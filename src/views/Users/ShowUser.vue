@@ -125,7 +125,8 @@
                                                 </v-col>
                                                 <v-col
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'"
-                                                    cols="7"> {{ `user ${data.id} ${data.event}` }}{{ data.subject_id !== null
+                                                    cols="7"> {{ `user ${data.id} ${data.event}` }}{{ data.subject_id !==
+                                                        null
                                                         ? ` user ${data.subject_id}` : "" }}</v-col>
                                                 <v-col cols="4" class="text-secondary"
                                                     :align="$vuetify.locale.isRtl ? 'left' : 'right'">{{
@@ -223,36 +224,42 @@ export default defineComponent({
             return [{ tilte: this.$t("user.phone-number"), value: this.user?.meta.cellphone }, { tilte: this.$t("user.email-address"), value: this.user?.meta.email }, { tilte: this.$t("user.joining-date"), value: this.user?.created_at }, { tilte: this.$t("user.city"), value: this.user?.meta.city }, { tilte: this.$t("user.country"), value: this.user?.meta.country }, { tilte: this.$t("user.role"), value: this.user?.type.title }, { tilte: this.$t("user.status"), value: this.user?.status }]
         }
     },
-    async mounted() {
-        try {
-            this.user = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
-            try {
-                this.userActivity = await useAPI().getUserActivity(parseInt(this.$route.params.id.toString()))
-            }
-            catch (e) {
-                if (e instanceof BaseError) {
-                    this.serverError = e.toComponentError();
-                } else {
-                    this.serverError = {
-                        message: this.$t('server error')
-                    };
+    created() {
+        this.$watch(
+            () => this.$route.params,
+            async () => {
+                this.loading = true;
+                try {
+                    this.user = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
+                    try {
+                        this.userActivity = await useAPI().getUserActivity(parseInt(this.$route.params.id.toString()))
+                    }
+                    catch (e) {
+                        if (e instanceof BaseError) {
+                            this.serverError = e.toComponentError();
+                        } else {
+                            this.serverError = {
+                                message: this.$t('server error')
+                            };
+                        }
+                    }
                 }
-            }
-
-        }
-        catch (e) {
-            if (e instanceof BaseError) {
-                this.serverError = e.toComponentError();
-            } else {
-                this.serverError = {
-                    message: this.$t('server error')
-                };
-            }
-        }
-        finally {
-            this.loading = false;
-        }
-    }
+                catch (e) {
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
+                }
+                finally {
+                    this.loading = false;
+                }
+            },
+            { immediate: true }
+        )
+    },
 })
 </script>
 <style lang="scss">
@@ -349,4 +356,5 @@ export default defineComponent({
         right: -26px;
         z-index: 2;
     }
-}</style>
+}
+</style>
