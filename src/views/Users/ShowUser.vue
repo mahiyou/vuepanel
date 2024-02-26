@@ -70,7 +70,8 @@
                                             <div><v-icon
                                                     :icon="$vuetify.locale.isRtl ? 'mdi-arrow-left' : 'mdi-arrow-right'"
                                                     class="me-1 mb-1"></v-icon>
-                                                {{ activitiesNumber }} {{ $t("user.profile.activities.this-year") }}</div>
+                                                {{ getNumberfActivities(userActivity.calendar) }} {{
+                                                    $t("user.profile.activities.this-year") }}</div>
                                         </v-col>
                                         <v-col cols="3">
                                             <span class="activity-boxes mx-5">
@@ -109,7 +110,8 @@
                                     </v-row>
                                     <v-divider class="mt-2" :thickness="1" />
                                     <v-table class="activities-table">
-                                        <ActivitiesTable :activitiesPerDate="userActivity.calendar" :first-day-of-week="0" />
+                                        <ActivitiesTable :activitiesPerDate="userActivity.calendar"
+                                            :first-day-of-week="0" />
                                     </v-table>
                                     <v-divider class="mb-6 mt-3"></v-divider>
                                     <div class="activities-content">
@@ -123,9 +125,12 @@
                                                 </v-col>
                                                 <v-col
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'"
-                                                    cols="7"> {{`user ${data.id} ${data.event}`}}{{ data.subject_id !== null ? ` user ${data.subject_id}`: "" }}</v-col>
+                                                    cols="7"> {{ `user ${data.id} ${data.event}` }}{{ data.subject_id !== null
+                                                        ? ` user ${data.subject_id}` : "" }}</v-col>
                                                 <v-col cols="4" class="text-secondary"
-                                                    :align="$vuetify.locale.isRtl ? 'left' : 'right'">{{ data.created_at.toLocaleDateString() +" "+ data.created_at.toLocaleTimeString()
+                                                    :align="$vuetify.locale.isRtl ? 'left' : 'right'">{{
+                                                        data.created_at.toLocaleDateString() + " " +
+                                                        data.created_at.toLocaleTimeString()
                                                     }}</v-col>
                                             </v-row>
                                         </v-card>
@@ -204,6 +209,13 @@ export default defineComponent({
                 return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60))) + " hours ago";
             }
             return 'recently'
+        },
+        getNumberfActivities(activitiesCalendar: Record<string, number>) {
+            let sum = 0;
+            for (const element of Object.values(activitiesCalendar)) {
+                sum = sum + element;
+            }
+            return sum;
         }
     },
     computed: {
@@ -217,7 +229,7 @@ export default defineComponent({
             try {
                 this.userActivity = await useAPI().getUserActivity(parseInt(this.$route.params.id.toString()))
             }
-            catch(e) {
+            catch (e) {
                 if (e instanceof BaseError) {
                     this.serverError = e.toComponentError();
                 } else {
@@ -337,5 +349,4 @@ export default defineComponent({
         right: -26px;
         z-index: 2;
     }
-}
-</style>
+}</style>
