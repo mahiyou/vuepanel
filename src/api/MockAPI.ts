@@ -1,13 +1,16 @@
 import { IAPI } from "@/api";
-import { IChangePasswordRequest, IEditUserResponse, IInputUserForEdit, ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse, IUser, Role, Status } from "./authentication";
+import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse, IUser, UserStatus } from "./authentication";
 import UserLoginError from "@/api/errors/UserLoginError";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import ServerInternalError from "./errors/ServerInternalError";
-import { IChangeUserPasswoerRequest, IGetUserResponse, ISearchUserRequest } from "./users";
+import { IChangeUserPasswordRequest, ISearchUserRequest, IUserActivity, IUserUpdateChangesRequest } from "./users";
 import NotFoundError from "./errors/NotFoundError";
 import InputValidationError from "./errors/InputValidationError";
 
 export default class MockAPI implements IAPI {
+    editUser(request: IUserUpdateChangesRequest): Promise<IUser> {
+        throw new Error("Method not implemented.");
+    }
     private myVar = 5;
     protected ourVar = 4;
     public anybodyVar = 2;
@@ -137,12 +140,15 @@ export default class MockAPI implements IAPI {
             return {
                 user: {
                     id: 2,
-                    token: "ddd",
-                    abilities: ["users-edit"],
                     name: "Alex",
-                    avatar: "/pics/avatar.jpg",
-                    status: Status.ACTIVE,
-                    role: Role.ADMIN
+                    meta: {
+                        avatar: "/pics/avatar.jpg",
+                    },
+                    status: UserStatus.ACTIVE,
+                    type_id: 2,
+                    updated_at: null,
+                    created_at: new Date(),
+                    online: false
                 },
                 notifications: this.getNotificationsItems(),
             };
@@ -157,13 +163,16 @@ export default class MockAPI implements IAPI {
             return {
                 user: {
                     id: 2,
-                    token: "ddd",
-                    abilities: ["users-edit"],
-                    name: "الکس",
-                    avatar: "/pics/avatar.jpg",
-                    status: Status.ACTIVE,
-                    role: Role.ADMIN
-                }
+                    name: "Alex",
+                    meta: {
+                        avatar: "/pics/avatar.jpg",
+                    },
+                    status: UserStatus.ACTIVE,
+                    type_id: 2,
+                    updated_at: null,
+                    created_at: new Date(),
+                    online: false
+                },
             };
         }, [request]);
     }
@@ -177,12 +186,15 @@ export default class MockAPI implements IAPI {
                 return {
                     user: {
                         id: 2,
-                        token: "ddd",
-                        abilities: ["users-edit"],
-                        name: "الکس",
-                        avatar: "/pics/avatar.jpg",
-                        status: Status.ACTIVE,
-                        role: Role.ADMIN
+                        name: "Alex",
+                        meta: {
+                            avatar: "/pics/avatar.jpg",
+                        },
+                        status: UserStatus.ACTIVE,
+                        type_id: 2,
+                        updated_at: null,
+                        created_at: new Date(),
+                        online: false
                     },
                     notifications: this.getNotificationsItems(),
                 };
@@ -231,7 +243,7 @@ export default class MockAPI implements IAPI {
     }
     public async searchUsers(request: ISearchUserRequest): Promise<any> {
     }
-    public async getUser(request: number): Promise<IRegisterResponse> {
+    public async getUser(request: number): Promise<any> {
         return this.call((request: number) => {
             if (Math.random() > 0.9) {
                 throw new ServerInternalError();
@@ -239,55 +251,13 @@ export default class MockAPI implements IAPI {
             return {
                 user: {
                     id: 2,
-                    token: "ddd",
-                    abilities: ["users-edit"],
-                    name: "Alex",
-                    avatar: "/pics/avatar.jpg",
-                    banner: "/pics/defaultBanner.jpg",
-                    status: Status.ACTIVE,
-                    role: Role.ADMIN,
-                    phoneNumber: "09123456789",
-                    email: "alex@gmail.com",
-                    city: "Toronto",
-                    country: "Canada",
-                    zipCode: "343",
-                    joiningDate: "1400-11-2"
                 }
             }
         }, [request])
     }
-    public async editUser(request: IInputUserForEdit): Promise<IEditUserResponse> {
-        return this.call((request: number) => {
-            console.log(request)
-            if (Math.random() > 0.9) {
-                throw new InputValidationError();
-            }
-            if (Math.random() > 0.8) {
-                throw new ServerInternalError();
-            }
-            return {
-                user: {
-                    id: 2,
-                    token: "ddd",
-                    abilities: ["users-edit"],
-                    name: "Alex2",
-                    avatar: "/pics/avatar2.jpg",
-                    banner: "/pics/defaultBanner.jpg",
-                    status: Status.ACTIVE,
-                    role: Role.ADMIN,
-                    phoneNumber: "09123456789",
-                    email: "alex@gmail.com",
-                    city: "Toronto",
-                    country: "Canada",
-                    zipCode: "343",
-                    joiningDate: "1400-11-2"
-                }
-            }
-        }, [request])
-    }
-    public async changeUserPassword(request: IChangeUserPasswoerRequest): Promise<void> {
-        return this.call((request: IChangeUserPasswoerRequest) => {
-            console.log(request)
+
+    public async changeUserPassword(request: IChangeUserPasswordRequest): Promise<void> {
+        return this.call((request: IChangeUserPasswordRequest) => {
             if (Math.random() > 0.9) {
                 throw new ServerInternalError();
             }
@@ -300,28 +270,64 @@ export default class MockAPI implements IAPI {
             }
         }, [request])
     }
-    public getActivities(request: number): Record<string, number> {
-        return {
-            "2023-05-12": 20,
-            "2023-05-14": 23,
-            "2023-06-16": 70,
-            "2023-06-17": 90,
-            "2023-06-19": 50,
-            "2023-06-20": 70,
-            "2023-07-12": 20,
-            "2023-07-14": 23,
-            "2023-07-16": 70,
-            "2023-07-17": 90,
-            "2023-07-19": 50,
-            "2023-07-20": 70,
-            "2023-07-21": 20,
-            "2023-07-23": 23,
-            "2023-07-24": 70,
-            "2023-07-26": 90,
-            "2023-07-29": 50,
-            "2023-07-30": 70,
-            "2023-08-20": 70
-        }
+    getUserActivity(userID: number): Promise<IUserActivity> {
+        return this.call((request: number) => {
+            if (Math.random() > 0.8) {
+                throw new ServerInternalError();
+            }
+            return {
+                calendar: {
+                    "2023-05-12": 20,
+                    "2023-05-14": 23,
+                    "2023-06-16": 70,
+                    "2023-06-17": 90,
+                    "2023-06-19": 50,
+                    "2023-06-20": 70,
+                    "2023-07-12": 20,
+                    "2023-07-14": 23,
+                    "2023-07-16": 70,
+                    "2023-07-17": 90,
+                    "2023-07-19": 50,
+                    "2023-07-20": 70,
+                    "2023-07-21": 20,
+                    "2023-07-23": 23,
+                    "2023-07-24": 70,
+                    "2023-07-26": 90,
+                    "2023-07-29": 50,
+                    "2023-07-30": 70,
+                    "2023-08-20": 70
+                },
+                logs: [
+                    {
+                        id: 1,
+                        event: "edited profile",
+                        user_id: 1,
+                        subject_id: 2,
+                        subject_type: "dnj\\AAA\\Models\\Type",
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    },
+                    {
+                        id: 2,
+                        event: "login",
+                        user_id: 1,
+                        subject_id: null,
+                        subject_type: null,
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    },
+                    {
+                        id: 3,
+                        event: "block",
+                        user_id: 1,
+                        subject_id: 2,
+                        subject_type: "dnj\\AAA\\Models\\Type",
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    }
+                ]
+            }
+        }, [userID])
     }
 
     private call<T extends Function>(fn: T, args: Parameters<any>): Promise<ReturnType<any>> {

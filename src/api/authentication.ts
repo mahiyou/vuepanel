@@ -1,61 +1,52 @@
 import { INotification } from "./notification";
-export enum Status {
+
+export enum UserStatus {
     ACTIVE = "ACTIVE",
     SUSPENDED = "SUSPENDED"
 }
-export enum Role {
-    ADMIN = "Admin",
-    USER = "User",
+
+interface IUsername {
+    user_id: number;
+    username: string;
 }
-export interface IUser {
-    id: number,
-    token: string;
-    abilities: string[];
-    status: Status
-    name?: string;
-    avatar?: string;
-    role: Role,
-    type_id:number,
-    phoneNumber?: string,
-    email?: string,
-    city?: string,
-    country?: string,
-    zipCode?: string,
-    joiningDate?: string,
-    banner?:string,
+
+export interface IUserSummary{
+    id: number;
+    status: UserStatus;
+    name: string;
+    meta: any;
+    type_id: number;
+    created_at: Date;
+    updated_at: Date | null;
+    online: boolean;
 }
+
+export interface IUser extends IUserSummary {
+    type: ILocalizedUserType;
+    // usernames: IUsername[];
+}
+
 export interface IUserType {
-    id: number,
-    abilities: string[],
-    children: number[],
-    created_at: string | null,
-    updated_at: string | null
+    id: number;
+    meta: any;
+    abilities: string[];
+    children: number[];
+    created_at: string | null;
+    updated_at: string | null;
 }
+
 export interface ILocalizedUserType extends IUserType {
-    locale: string,
-    title: string,
-}
-export interface IInputUserForEdit {
-    abilities?: string[];
-    status?: Status
-    name?: string;
-    avatar?: File;
-    role?: Role,
-    phoneNumber?: string,
-    email?: string,
-    city?: string,
-    country?: string,
-    zipCode?: string,
-    joiningDate?: string,
-    banner?: File,
+    locale: string;
+    title: string;
 }
 
 export interface ILoginRequest {
     username: string;
     password: string;
 }
+
 export interface ILoginResponse {
-    user: IUser;
+    user: IUserSummary;
     notifications: INotification[];
 }
 
@@ -65,7 +56,7 @@ export interface IRegisterRequest {
 }
 
 export interface IRegisterResponse {
-    user: IUser;
+    user: IUserSummary;
 }
 
 export interface IResetPasswordRequest {
@@ -83,10 +74,6 @@ export interface IChangePasswordRequest {
 
 export interface IOTP {
     digits: number;
-}
-
-export interface IEditUserResponse{
-    user: IUser;
 }
 
 

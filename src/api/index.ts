@@ -1,9 +1,8 @@
 import MockAPI from "@/api/MockAPI";
-import { ILoginRequest, ILoginResponse, IResetPasswordRequest, IResetPasswordResponse, IRegisterRequest, IRegisterResponse, IChangePasswordRequest, IUser, IInputUserForEdit, IEditUserResponse } from "./authentication";
+import { ILoginRequest, ILoginResponse, IResetPasswordRequest, IResetPasswordResponse, IRegisterRequest, IRegisterResponse, IChangePasswordRequest, IUser } from "./authentication";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest } from "./notification";
-import { IChangeUserPasswoerRequest, IGetUserResponse, ISearchUserRequest, ISearchUserResponse } from "./users";
+import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserResponse, IUserActivity, IUserUpdateChangesRequest } from "./users";
 import ServerAPI from "@/api/ServerAPI";
-
 
 export interface IAPI {
     login(request: ILoginRequest): Promise<ILoginResponse>;
@@ -13,11 +12,11 @@ export interface IAPI {
     getNotifications(request: IGetNotificationsRequest): Promise<IGetNotificationsResponse>;
     markNotificationsAsRead(request: IMarkNotificationsAsReadRequest): Promise<IGetNotificationsResponse>;
     searchUsers(request: ISearchUserRequest): Promise<ISearchUserResponse>;
-    getUser(request: number): Promise<IRegisterResponse>;
-    editUser(request: IInputUserForEdit): Promise<IEditUserResponse>;
-    changeUserPassword(request: IChangeUserPasswoerRequest): Promise<void>;
+    getUser(request: number): Promise<IUser>;
+    editUser(request: IUserUpdateChangesRequest): Promise<IUser>;
+    changeUserPassword(request: IChangeUserPasswordRequest): Promise<void>;
     deleteUser(request: number): Promise<void>;
-    getActivities(userID: number): Record<string, number>;
+    getUserActivity(userID: number): Promise<IUserActivity>;
 }
 
 export function useAPI(): IAPI {

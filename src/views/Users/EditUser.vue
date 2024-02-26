@@ -1,7 +1,7 @@
 <template>
     <div class="edit-user" v-if="!loading && !serverError">
         <div class="banner">
-            <v-img :src="bannerUrl || user.banner || '/pics/defaultBanner.jpg'">
+            <v-img :src="bannerUrl || user.meta.banner || '/pics/defaultBanner.jpg'">
                 <div class="bg-overlay"></div>
             </v-img>
         </div>
@@ -13,7 +13,7 @@
             <div class="cards">
                 <v-card class="pa-4 text-center" elevation="1">
                     <div class="avatar-div mx-auto">
-                        <v-img :src="avatarUrl || user.avatar || '/pics/default-avatar.jpg'"
+                        <v-img :src="avatarUrl || user.meta.avatar || '/pics/default-avatar.jpg'"
                             class="rounded-circle my-2 user-avatar" width="120px" height="120px">
                         </v-img>
                         <div class="camera-btn file-input">
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <h2 class="text-textColor">{{ user.name }}</h2>
-                    <div class="text-secondary">{{ user.role }}</div>
+                    <div class="text-secondary">{{ user.type.title }}</div>
                 </v-card>
                 <v-card class="pa-3 my-4" elevation="1">
                     <v-tabs v-model="tab" color="primary" align-tabs="start">
@@ -45,20 +45,20 @@
                                                 @update:model-value="dataChanged"></v-select>
 
                                             <div>{{ $t("user.email-address") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.email" dir="ltr" class="mb-2"
+                                            <v-text-field variant="outlined" v-model="newUser.meta.email" dir="ltr" class="mb-2"
                                                 :rules="[emailValidation]" />
 
                                         </v-col>
                                         <v-col cols="6">
                                             <div>{{ $t("user.phone-number") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.phoneNumber" dir="ltr"
+                                            <v-text-field variant="outlined" v-model="newUser.meta.phoneNumber" dir="ltr"
                                                 :rules="[phoneNumberValidation]" class="mb-2" />
 
                                             <div>{{ $t("user.role") }}</div>
-                                            <v-select v-model="newUser.role" clearable variant="outlined"
+                                            <!-- <v-select v-model="newUser.role" clearable variant="outlined"
                                                 :items="[Role.ADMIN, Role.USER]" class="mb-2"
                                                 :placeholder="$t('user.role.select')"
-                                                @update:model-value="dataChanged"></v-select>
+                                                @update:model-value="dataChanged"></v-select> -->
 
                                             <div>{{ $t("user.joining-date") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.joiningDate" dir="ltr"
@@ -68,22 +68,22 @@
                                     <v-row>
                                         <v-col>
                                             <div>{{ $t("user.city") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.city"
+                                            <v-text-field variant="outlined" v-model="newUser.meta.city"
                                                 :dir="$vuetify.locale.current" class="mb-2" />
                                         </v-col>
                                         <v-col>
                                             <div>{{ $t("user.country") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.country"
+                                            <v-text-field variant="outlined" v-model="newUser.meta.country"
                                                 :dir="$vuetify.locale.current" class="mb-2" />
                                         </v-col>
                                         <v-col>
                                             <div>{{ $t("user.zip-code") }}</div>
-                                            <v-text-field variant="outlined" v-model="newUser.zipCode" dir="ltr"
+                                            <v-text-field variant="outlined" v-model="newUser.meta.zipCode" dir="ltr"
                                                 class="mb-2" />
                                         </v-col>
                                     </v-row>
                                     <v-btn type="submit" class="px-5 float-end" color="primary" variant="flat"
-                                        :disabled="confirmBtn || !valid" :loading="updateLoading">{{ $t("edit.user.updates")
+                                         :loading="updateLoading">{{ $t("edit.user.updates")
                                         }}</v-btn>
                                 </v-form>
 
@@ -118,8 +118,8 @@
 
                             <ErrorAlert class="mt-4 mx-4" v-if="incorrectRepeatPass" :error="incorrectRepeatPass" />
 
-                            <v-alert closable class="mt-4 mx-4" v-if="successfulChangePass" :text="$t('user.update.succesful')"
-                                type="success" variant="tonal"></v-alert>
+                            <v-alert closable class="mt-4 mx-4" v-if="successfulChangePass"
+                                :text="$t('user.update.succesful')" type="success" variant="tonal"></v-alert>
 
                             <ErrorAlert class="mt-4 mx-4" v-if="serverErrorForPassChange"
                                 :error="serverErrorForPassChange" />
@@ -137,7 +137,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useAPI } from "@/api"
-import { IUser, Role, Status } from '@/api/authentication';
+import { IUser, UserStatus } from '@/api/authentication';
 import InputValidationError from '@/api/errors/InputValidationError';
 import { IErrorInComponent } from '@/utilities/error';
 import ErrorAlert from "@/components/ErrorAlert.vue"
@@ -148,7 +148,7 @@ export default defineComponent({
         ErrorAlert
     },
     setup() {
-        return { Status, Role }
+        return { UserStatus }
     },
     data() {
         return {
@@ -174,13 +174,15 @@ export default defineComponent({
 
             newUser: {
                 name: "",
-                phoneNumber: "",
-                role: undefined as unknown as Role,
-                status: undefined as unknown as Status,
-                email: "",
-                city: "",
-                country: "",
-                zipCode: "",
+                meta: {
+                    phoneNumber: "",
+                    email: "",
+                    city: "",
+                    country: "",
+                    zipCode: "",
+                },
+                type_id:0,
+                status: undefined as unknown as UserStatus,
                 joiningDate: "",
             },
 
@@ -220,32 +222,25 @@ export default defineComponent({
             this.successfulUpdate = false;
             try {
                 const response = await useAPI().editUser({
-                    abilities: this.user.abilities,
+                    userId: this.user.id.toString(),
                     name: this.newUser.name,
-                    role: this.newUser.role,
                     status: this.newUser.status,
-                    email: this.newUser.email,
-                    phoneNumber: this.newUser.phoneNumber,
-                    city: this.newUser.city,
-                    country: this.newUser.country,
-                    zipCode: this.newUser.zipCode,
-                    avatar: this.newAvatar ? this.newAvatar[0] : undefined,
-                    banner: this.newBanner ? this.newBanner[0] : undefined,
+                    type_id: this.newUser.type_id
                 })
-                this.user = response.user;
+                this.user = response;
 
 
-                this.newUser.name = this.user.name || "";
-                this.newUser.phoneNumber = this.user.phoneNumber || "";
-                this.newUser.role = this.user.role || "";
-                this.newUser.status = this.user.status || "";
-                this.newUser.email = this.user.email || "";
-                this.newUser.city = this.user.city || "";
-                this.newUser.country = this.user.country || "";
-                this.newUser.zipCode = this.user.zipCode || "";
-                this.newUser.joiningDate = this.user.joiningDate || "";
-                this.avatarUrl = this.user.avatar || "/pics/default-avatar.jpg";
-                this.bannerUrl = this.user.banner || "/pics/defaultBanner.jpg";
+                this.newUser.name = this.user.name;
+                this.newUser.meta.phoneNumber = this.user.meta.phoneNumber || undefined;
+                this.newUser.type_id = this.user.type_id || 0;
+                this.newUser.status = this.user.status;
+                this.newUser.meta.email = this.user.meta.email || undefined;
+                this.newUser.meta.city = this.user.meta.city || undefined;
+                this.newUser.meta.country = this.user.meta.country || undefined;
+                this.newUser.meta.zipCode = this.user.meta.zipCode || undefined;
+                this.newUser.joiningDate = this.user.created_at.toLocaleDateString();
+                this.avatarUrl = this.user.meta.avatar || "/pics/default-avatar.jpg";
+                this.bannerUrl = this.user.meta.banner || "/pics/defaultBanner.jpg";
 
 
                 this.successfulUpdate = true;
@@ -327,24 +322,25 @@ export default defineComponent({
     computed: {
         statusItems() {
             return [
-                { title: this.$t('user.status.ACTIVE'), value: Status.ACTIVE },
-                { title: this.$t('user.status.SUSPENDED'), value: Status.SUSPENDED }
+                { title: this.$t('user.status.ACTIVE'), value: UserStatus.ACTIVE },
+                { title: this.$t('user.status.SUSPENDED'), value: UserStatus.SUSPENDED }
             ]
         }
     },
     async mounted() {
         try {
             const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
-            this.user = response.user;
-            this.newUser.name = this.user.name || "";
-            this.newUser.phoneNumber = this.user.phoneNumber || "";
-            this.newUser.role = this.user.role || "";
-            this.newUser.status = this.user.status || "";
-            this.newUser.email = this.user.email || "";
-            this.newUser.city = this.user.city || "";
-            this.newUser.country = this.user.country || "";
-            this.newUser.zipCode = this.user.zipCode || "";
-            this.newUser.joiningDate = this.user.joiningDate || "";
+            this.user = response;
+            console.log(this.user)
+            this.newUser.name = this.user.name;
+            this.newUser.meta.phoneNumber = this.user.meta.phoneNumber;
+            this.newUser.type_id = this.user.type_id;
+            this.newUser.status = this.user.status;
+            this.newUser.meta.email = this.user.meta.email;
+            this.newUser.meta.city = this.user.meta.city;
+            this.newUser.meta.country = this.user.meta.country;
+            this.newUser.meta.zipCode = this.user.meta.zipCode;
+            this.newUser.joiningDate = this.user.created_at.toLocaleDateString();
         }
         catch (e) {
             if (e instanceof BaseError) {

@@ -1,7 +1,7 @@
 <template>
-    <div class="show-user" v-if="!loading && !serverError">
+    <div class="show-user" v-if="!loading && !serverError && user">
         <div class="banner">
-            <v-img :src="user.banner || '/pics/defaultBanner.jpg'">
+            <v-img :src="user.meta.avatar || '/pics/defaultBanner.jpg'">
                 <div class="bg-overlay"></div>
             </v-img>
         </div>
@@ -10,13 +10,13 @@
                 <v-card class="pa-4" elevation="1">
                     <v-row>
                         <v-col cols="2" align-self="center" :align="$vuetify.locale.isRtl ? 'left' : 'right'" class="pe-2">
-                            <v-img :src="user.avatar || '/pics/default-avatar.jpg'" class="rounded-circle  my-2 user-avatar"
-                                width="90px" height="90px">
+                            <v-img :src="user.meta.avatar || '/pics/default-avatar.jpg'"
+                                class="rounded-circle  my-2 data.data-avatar" width="90px" height="90px">
                             </v-img></v-col>
                         <v-col cols="6" align-self="center">
                             <div class="my-auto">
                                 <h2>{{ user.name }}</h2>
-                                <h4 class="text-secondary">{{ user.role }}</h4>
+                                <h4 class="text-secondary">{{ user.type.title }}</h4>
                             </div>
                         </v-col>
                         <v-col cols="4" :align="$vuetify.locale.isRtl ? 'left' : 'right'" class="btn-col">
@@ -37,15 +37,18 @@
                                     <tr v-for="(data, key) in userDatas" :key="key">
                                         <td>{{ data.tilte }}:</td>
                                         <td class="text-secondary">
-                                            <div v-if="data.value != 'status' && data.value != 'joiningDate'">{{
-                                                user[data.value] }}</div>
-                                            <v-chip v-if="data.value == 'status'" :color="backgroundOfStatus(user.status)">
-                                                {{ $t('user.status.' + user[data.value]) }}
+                                            <div v-if="data.value !== user.status && data.value !== user.created_at">{{
+                                                data.value }}</div>
+                                            <v-chip v-if="data.value === user.status"
+                                                :color="backgroundOfStatus(user.status)">
+                                                {{ $t('user.status.' + data.value) }}
                                             </v-chip>
-                                            <v-tooltip v-if="data.value == 'joiningDate'" :text="user.joiningDate"
+                                            <v-tooltip v-if="data.value == user.created_at"
+                                                :text="`${user.created_at?.toLocaleDateString()}  ${user.created_at?.toLocaleTimeString()}`"
                                                 location="top">
                                                 <template v-slot:activator="{ props }">
-                                                    <div v-bind="props">{{ user.joiningDate }}</div>
+                                                    <div v-bind="props">{{ user.created_at ?
+                                                        getTimeDifference(user.created_at) : "-" }}</div>
                                                 </template>
                                             </v-tooltip>
                                         </td>
@@ -106,23 +109,23 @@
                                     </v-row>
                                     <v-divider class="mt-2" :thickness="1" />
                                     <v-table class="activities-table">
-                                        <ActivitiesTable :activitiesPerDate="activitiesPerDate" :first-day-of-week="0"/>
+                                        <ActivitiesTable :activitiesPerDate="userActivity.calendar" :first-day-of-week="0" />
                                     </v-table>
                                     <v-divider class="mb-6 mt-3"></v-divider>
                                     <div class="activities-content">
                                         <v-card class="overflow-y-auto" max-height="200">
-                                            <v-row v-for="(data, key) in activitiesContent" :key="key" class="mx-1 ms-5"
+                                            <v-row v-for="(data, key) in userActivity.logs" :key="key" class="mx-1 ms-5"
                                                 :class="$vuetify.locale.isRtl ? 'dashed-border-rtl' : 'dashed-border-ltr'">
                                                 <v-col cols="1"
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'">
                                                     <span class="pa-1 rounded-pill bg-grey-lighten-3"><v-icon
-                                                            :icon="data.icon" :color="data.color"></v-icon></span>
+                                                            icon="mdi-ticket-outline" color="customGreen"></v-icon></span>
                                                 </v-col>
                                                 <v-col
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'"
-                                                    cols="7">{{ data.content }}</v-col>
+                                                    cols="7"> {{`user ${data.id} ${data.event}`}}{{ data.subject_id !== null ? ` user ${data.subject_id}`: "" }}</v-col>
                                                 <v-col cols="4" class="text-secondary"
-                                                    :align="$vuetify.locale.isRtl ? 'left' : 'right'">{{ data.date
+                                                    :align="$vuetify.locale.isRtl ? 'left' : 'right'">{{ data.created_at.toLocaleDateString() +" "+ data.created_at.toLocaleTimeString()
                                                     }}</v-col>
                                             </v-row>
                                         </v-card>
@@ -141,13 +144,14 @@
 </template>
 <script lang="ts">
 import { useAPI } from '@/api';
-import { IUser, Status } from '@/api/authentication';
+import { IUser, UserStatus } from '@/api/authentication';
 import BaseError from '@/api/errors/BaseError';
 import { IErrorInComponent } from '@/utilities/error';
 import { defineComponent } from 'vue';
 import ErrorAlert from '@/components/ErrorAlert.vue';
 import { title } from 'node:process';
 import ActivitiesTable from '@/components/ActivitiesTable.vue';
+import { IUserActivity } from '@/api/users';
 
 export default defineComponent({
     components: {
@@ -156,49 +160,73 @@ export default defineComponent({
     },
     data() {
         return {
-            user: {} as IUser,
+            user: undefined as IUser | undefined,
             serverError: undefined as undefined | IErrorInComponent,
             loading: true,
             tab: 1,
             activitiesNumber: 1234,
-            activitiesContent: [
-                { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
-                { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
-                { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
-                { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
-                { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
-                { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
-                { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
-                { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
-                { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
-                { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
-                { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
-                { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" }
-            ],
-            activitiesPerDate:{} as Record<string, number>
+            // activitiesContent: [
+            // { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
+            // { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
+            // { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
+            // { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
+            // { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
+            // { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
+            // { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
+            // { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
+            // { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
+            // { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
+            // { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
+            // { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" }
+            // ],
+            userActivity: {} as IUserActivity,
         }
     },
     methods: {
-        backgroundOfStatus(status: Status) {
-            console.log(status)
-            if (status == Status.ACTIVE) {
+        backgroundOfStatus(status: UserStatus) {
+            if (status == UserStatus.ACTIVE) {
                 return "green"
-            } else if (status == Status.SUSPENDED) {
+            } else if (status == UserStatus.SUSPENDED) {
                 return "red"
             }
         },
+        getTimeDifference(date: Date): string {
+            if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30 * 12)) !== 0) {
+                return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30 * 12))) + " years ago";
+            }
+            if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30)) !== 0) {
+                return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30))) + " monthes ago";
+            }
+            if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24)) !== 0) {
+                return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))) + " " + this.$t("user.creat-at.days-ago");
+            }
+            if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60)) !== 0) {
+                return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60))) + " hours ago";
+            }
+            return 'recently'
+        }
     },
     computed: {
         userDatas() {
-            return [{ tilte: this.$t("user.phone-number"), value: "phoneNumber" }, { tilte: this.$t("user.email-address"), value: "email" }, { tilte: this.$t("user.joining-date"), value: "joiningDate" }, { tilte: this.$t("user.city"), value: "city" }, { tilte: this.$t("user.country"), value: "country" }, { tilte: this.$t("user.role"), value: "role" }, { tilte: this.$t("user.status"), value: "status" }]
+            return [{ tilte: this.$t("user.phone-number"), value: this.user?.meta.cellphone }, { tilte: this.$t("user.email-address"), value: this.user?.meta.email }, { tilte: this.$t("user.joining-date"), value: this.user?.created_at }, { tilte: this.$t("user.city"), value: this.user?.meta.city }, { tilte: this.$t("user.country"), value: this.user?.meta.country }, { tilte: this.$t("user.role"), value: this.user?.type.title }, { tilte: this.$t("user.status"), value: this.user?.status }]
         }
     },
     async mounted() {
-        
         try {
-            const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
-            this.user = response.user;
-            this.activitiesPerDate = useAPI().getActivities(this.user.id)
+            this.user = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
+            try {
+                this.userActivity = await useAPI().getUserActivity(parseInt(this.$route.params.id.toString()))
+            }
+            catch(e) {
+                if (e instanceof BaseError) {
+                    this.serverError = e.toComponentError();
+                } else {
+                    this.serverError = {
+                        message: this.$t('server error')
+                    };
+                }
+            }
+
         }
         catch (e) {
             if (e instanceof BaseError) {
@@ -250,7 +278,7 @@ export default defineComponent({
     .v-table .v-table__wrapper>table>tbody>tr>td,
     th {
         --v-border-opacity: 0;
-        line-height: 10px;
+        font-size: 12.5px;
     }
 
 
@@ -275,6 +303,11 @@ export default defineComponent({
         width: 11px;
         padding: 0px;
         font-size: 10.7px;
+        line-height: 10px;
+
+        th {
+            line-height: 10px;
+        }
     }
 
     .v-table>.v-table__wrapper>table {

@@ -2,10 +2,10 @@
     <div class="edit-user" v-if="!loading && !serverError">
         <v-container class="pb-15">
             <v-card class="pa-4 text-center" elevation="1">
-                <v-img :src="user.avatar || '/pics/default-avatar.jpg'" class="rounded-circle my-2 mx-auto user-avatar"
+                <v-img :src="user.meta.avatar || '/pics/default-avatar.jpg'" class="rounded-circle my-2 mx-auto user-avatar"
                     width="120px" height="120px"></v-img>
                 <h2 class="text-textColor">{{ user.name }}</h2>
-                <div class="text-secondary mb-5">{{ user.role }}</div>
+                <div class="text-secondary mb-5">{{ user.type.title }}</div>
                 <div v-if="!userDeleted">
                     <v-btn variant="flat" color="red" width="130px" class="mb-3" :loading="loadingDelete"
                         @click="deleteUser(user.id)">{{ $t("user.delete") }}</v-btn>
@@ -67,10 +67,10 @@ export default defineComponent({
             }
         }
     },
-    async mounted() {
+    async created() {
         try {
             const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
-            this.user = response.user;
+            this.user = response;
         }
         catch(e) {
             if (e instanceof BaseError) {

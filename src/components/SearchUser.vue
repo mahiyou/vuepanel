@@ -27,7 +27,8 @@
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="status" clearable variant="outlined" :items="statusItems"
-                                    item-title="title" item-value="value" :placeholder="$t('user.status.select')"></v-select>
+                                    item-title="title" item-value="value"
+                                    :placeholder="$t('user.status.select')"></v-select>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -35,7 +36,7 @@
                                 <span>{{ $t("user.role") }}</span>
                             </v-col>
                             <v-col cols="10" class="pa-1">
-                                <v-select v-model="role" clearable variant="outlined" :items="[Role.ADMIN, Role.USER]"
+                                <v-select v-model="type_id" clearable variant="outlined" :items="types"
                                     :placeholder="$t('user.role.select')"></v-select>
                             </v-col>
                         </v-row>
@@ -45,7 +46,8 @@
                         <v-btn class="px-3" type="submit" color="customGreen" variant="flat">
                             {{ $t("user.search") }}
                         </v-btn>
-                        <v-btn class="px-3" variant="flat" color="secondary" @click="isActive.value = false">{{ $t("dialog.close") }}</v-btn>
+                        <v-btn class="px-3" variant="flat" color="secondary" @click="isActive.value = false">{{
+                            $t("dialog.close") }}</v-btn>
                     </v-card-actions>
                     <ErrorAlert v-if="error" :error="error" />
                 </v-form>
@@ -54,35 +56,47 @@
     </v-dialog>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { Role, Status } from "@/api/authentication";
+import { PropType, defineComponent } from "vue";
+import { UserStatus, ILocalizedUserType } from "@/api/authentication";
 import ErrorAlert from "@/components/ErrorAlert.vue"
 import { IErrorInComponent } from "@/utilities/error";
+import { ISearchUserRequest } from "@/api/users";
 
 export default defineComponent({
-    emits: ['update:title', 'searchUser'],
+    emits: ['update:title', 'submit'],
     components: {
         ErrorAlert
     },
     setup() {
-        return { Status, Role }
+        return { UserStatus }
     },
-
+    props: {
+        userTypes: {
+            type: Object as PropType<ILocalizedUserType[]>,
+            required: true
+        }
+    },
     data() {
         return {
-            id: undefined,
-            name: undefined,
-            status: undefined,
-            role: undefined,
+            id: undefined as string | undefined,
+            name: undefined as string | undefined ,
+            status: undefined as string | undefined,
+            type_id: undefined as number | undefined,
             error: undefined as undefined | IErrorInComponent,
-            statusItems: [{ title: this.$t('user.status.ACTIVE'), value: Status.ACTIVE }, { title: this.$t('user.status.SUSPENDED'), value: Status.SUSPENDED }]
+            statusItems: [{ title: this.$t('user.status.ACTIVE'), value: UserStatus.ACTIVE }, { title: this.$t('user.status.SUSPENDED'), value: UserStatus.SUSPENDED }],
         }
     },
     methods: {
         onSubmit() {
-            if (this.id || this.name || this.status || this.role) {
+            if (this.id || this.name || this.status || this.type_id) {
                 this.error = undefined;
-                this.$emit("searchUser", { id: this.id, name: this.name, status: this.status, role: this.role })
+                const request: ISearchUserRequest = {
+                    id: this.id ? parseInt(this.id) : undefined,
+                    name: this.name,
+                    status: this.status,
+                    type_id: this.type_id
+                };
+                this.$emit("submit", request);
             } else {
                 this.error = {
                     message: this.$t('field.fill.minimum-number')
@@ -91,6 +105,13 @@ export default defineComponent({
             }
         },
     },
+    computed: {
+        types(): Array<{value:number, title: string}>{
+            return this.userTypes.map((type) => {
+                return {value: type.id, title: type.title}
+            })
+        }
+    }
 })
 </script>
 <style lang="scss">

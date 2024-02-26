@@ -103,5 +103,10 @@
     "tooltip.activities.40":"Up to 40 activities",
     "tooltip.activities.50":"Up to 50 activities",
     "user.profile.activities.this-year":"activities in this year",
-    "user.activities.number.per-day":"Activities in"
+    "user.activities.number.per-day":"Activities in",
+    "user.creat-at.years-ago": "Years ago",
+    "user.creat-at.months-ago": "Months ago",
+    "user.creat-at.days-ago":"Days ago",
+    "user.creat-at.hours-ago": "Hours ago",
+    "user.creat-at.recently":"Recently"
 }

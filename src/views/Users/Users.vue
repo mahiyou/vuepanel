@@ -6,7 +6,7 @@
                     {{ $t('users') }}
                 </v-toolbar-title>
                 <template v-slot:append>
-                    <SearchUser @searchUser="onSearchUser" />
+                    <SearchUser v-if="response" :userTypes="response.types" @submit="onSearchUser" />
                 </template>
             </v-toolbar>
             <v-data-table @update:options="onLoadTableItems" :headers="headers" :items="response?.data" :items-per-page-options="[
@@ -22,7 +22,7 @@
                         {{ $t('user.status.' + value) }}
                     </v-chip>
                 </template>
-                <template v-slot:item.avatar="{ value }">
+                <template v-slot:item.meta.avatar="{ value }">
                     <v-img :src="value || '/pics/default-avatar.jpg'" class="rounded-circle my-2" width="45px"
                         height="45px"></v-img>
                 </template>
@@ -44,7 +44,7 @@
 import { useAPI } from "@/api"
 import TableRowActions from "@/components/TableRowActions.vue"
 import SearchUser from "@/components/SearchUser.vue"
-import { ILocalizedUserType, IUser, IUserType, Role, Status } from "@/api/authentication"
+import { ILocalizedUserType, IUser, IUserType, UserStatus } from "@/api/authentication"
 import { persianNumber } from "@/utilities"
 import { ISearchUserRequest, ISearchUserResponse } from "@/api/users"
 import NotFoundError from "@/api/errors/NotFoundError"
@@ -72,10 +72,10 @@ export default {
         }
     },
     methods: {
-        backgroundOfStatus(status: Status) {
-            if (status === Status.ACTIVE) {
+        backgroundOfStatus(status: UserStatus) {
+            if (status === UserStatus.ACTIVE) {
                 return "green"
-            } else if (status == Status.SUSPENDED) {
+            } else if (status == UserStatus.SUSPENDED) {
                 return "red"
             }
         },
@@ -119,7 +119,7 @@ export default {
                     id: request.id,
                     name: request.name,
                     status: request.status,
-                    role: request.role,
+                    type_id: request.type_id
                 }
             });
         },
@@ -159,7 +159,7 @@ export default {
                     id: this.$route.query.id ? parseInt(this.$route.query.id as string) : undefined,
                     name: this.$route.query.name ? this.$route.query.name as string : undefined,
                     status: this.$route.query.status ? this.$route.query.status as string : undefined,
-                    role: this.$route.query.role ? this.$route.query.role as string : undefined,
+                    type_id: this.$route.query.type_id ? parseInt(this.$route.query.type_id as string) : undefined,
                     ipp: this.$route.query.ipp ? parseInt(this.$route.query.ipp as string) : undefined,
                 })
             },
@@ -170,7 +170,7 @@ export default {
         headers() {
             return [
                 { key: 'id', sortable: false, title: this.$t("user.id") },
-                { key: 'avatar', sortable: false, title: this.$t("user.avatar") },
+                { key: 'meta.avatar', sortable: false, title: this.$t("user.avatar") },
                 { key: 'name', sortable: false, title: this.$t("user.name") },
                 { key: 'status', sortable: false, title: this.$t("user.status") },
                 { key: 'type_id', sortable: false, title: this.$t("user.role") },
