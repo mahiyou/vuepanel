@@ -1,3 +1,5 @@
+
+
 interface ILanguage{
     title:string,
     value:string
@@ -26,4 +28,20 @@ export function getCountryCode(languages: ILanguage[],locale: string): string {
         throw new Error();
     }
     return getCountryCode(languages,language.value);
+}
+
+export function getTimeDifference(date: Date): string {
+    if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30 * 12)) !== 0) {
+        return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30 * 12))) + " years ago";
+    }
+    if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30)) !== 0) {
+        return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30))) + " monthes ago";
+    }
+    if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24)) !== 0) {
+        return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))) + " " + " days ago";
+    }
+    if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60)) !== 0) {
+        return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60))) + " hours ago";
+    }
+    return 'recently'
 }

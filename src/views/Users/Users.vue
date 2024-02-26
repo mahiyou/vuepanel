@@ -5,16 +5,18 @@
                 <v-toolbar-title class="text-h5">
                     {{ $t('users') }}
                 </v-toolbar-title>
-                <template v-slot:append>
-                    <SearchUser v-if="response" :userTypes="response.types" @submit="onSearchUser" />
+                <template v-slot:append v-if="response">
+                    <SearchUser :userTypes="response.types" @submit="onSearchUser" />
+                    <AddUser :userTypes="response.types" @submit="onAddUser"></AddUser>
                 </template>
             </v-toolbar>
-            <v-data-table @update:options="onLoadTableItems" :headers="headers" :items="response?.data" :items-per-page-options="[
-                { value: 5, title: '5' },
-                { value: 10, title: '10' },
-                { value: 20, title: '20' },
-                { value: -1, title: $t('all') }
-            ]" v-model:items-per-page="ipp" :items-per-page-text="$t('items per page')" pageText="" show-current-page
+            <v-data-table @update:options="onLoadTableItems" :headers="headers" :items="response?.data"
+                :items-per-page-options="[
+                    { value: 5, title: '5' },
+                    { value: 10, title: '10' },
+                    { value: 20, title: '20' },
+                    { value: -1, title: $t('all') }
+                ]" v-model:items-per-page="ipp" :items-per-page-text="$t('items per page')" pageText="" show-current-page
                 :no-data-text="$t('search.no-data')">
 
                 <template v-slot:item.status="{ value }">
@@ -44,6 +46,7 @@
 import { useAPI } from "@/api"
 import TableRowActions from "@/components/TableRowActions.vue"
 import SearchUser from "@/components/SearchUser.vue"
+import AddUser from "@/components/AddUser.vue"
 import { ILocalizedUserType, IUser, IUserType, UserStatus } from "@/api/authentication"
 import { persianNumber } from "@/utilities"
 import { ISearchUserRequest, ISearchUserResponse } from "@/api/users"
@@ -56,6 +59,7 @@ export default {
     components: {
         TableRowActions,
         SearchUser,
+        AddUser,
         ErrorAlert
     },
     setup() {
@@ -147,8 +151,11 @@ export default {
                 query: Object.assign({}, this.$route.query, { ipp: options.itemsPerPage, page: options.page })
             });
         },
-        getType(typeId: number): ILocalizedUserType|undefined {
+        getType(typeId: number): ILocalizedUserType | undefined {
             return this.response?.types.find((type) => type.id === typeId);
+        },
+        onAddUser(){
+
         }
     },
     created() {

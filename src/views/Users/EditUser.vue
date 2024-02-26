@@ -55,10 +55,10 @@
                                                 :rules="[phoneNumberValidation]" class="mb-2" />
 
                                             <div>{{ $t("user.role") }}</div>
-                                            <!-- <v-select v-model="newUser.role" clearable variant="outlined"
-                                                :items="[Role.ADMIN, Role.USER]" class="mb-2"
+                                            <v-select v-model="newUser.type_id" clearable variant="outlined"
+                                                :items="[1, 2]" class="mb-2"
                                                 :placeholder="$t('user.role.select')"
-                                                @update:model-value="dataChanged"></v-select> -->
+                                                @update:model-value="dataChanged"></v-select>
 
                                             <div>{{ $t("user.joining-date") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.joiningDate" dir="ltr"
@@ -310,6 +310,7 @@ export default defineComponent({
                 return;
             }
             this.avatarUrl = URL.createObjectURL(this.newAvatar[0]);
+            console.log(this.avatarUrl)
         },
         onBannerChange() {
             this.confirmBtn = false;
@@ -335,7 +336,6 @@ export default defineComponent({
                 try {
                     const response = await useAPI().getUser(parseInt(this.$route.params.id.toString()));
                     this.user = response;
-                    console.log(this.user)
                     this.newUser.name = this.user.name;
                     this.newUser.meta = this.user.meta;
                     this.newUser.type_id = this.user.type_id;

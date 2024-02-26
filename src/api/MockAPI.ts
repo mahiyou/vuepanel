@@ -4,8 +4,6 @@ import UserLoginError from "@/api/errors/UserLoginError";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import ServerInternalError from "./errors/ServerInternalError";
 import { IChangeUserPasswordRequest, ISearchUserRequest, IUserActivity, IUserUpdateChangesRequest } from "./users";
-import NotFoundError from "./errors/NotFoundError";
-import InputValidationError from "./errors/InputValidationError";
 
 export default class MockAPI implements IAPI {
     editUser(request: IUserUpdateChangesRequest): Promise<IUser> {
@@ -300,15 +298,6 @@ export default class MockAPI implements IAPI {
                 logs: [
                     {
                         id: 1,
-                        event: "edited profile",
-                        user_id: 1,
-                        subject_id: 2,
-                        subject_type: "dnj\\AAA\\Models\\Type",
-                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
-                        created_at: new Date(),
-                    },
-                    {
-                        id: 2,
                         event: "login",
                         user_id: 1,
                         subject_id: null,
@@ -317,11 +306,65 @@ export default class MockAPI implements IAPI {
                         created_at: new Date(),
                     },
                     {
-                        id: 3,
-                        event: "block",
+                        id: 2,
+                        event: "edit-profile",
                         user_id: 1,
                         subject_id: 2,
-                        subject_type: "dnj\\AAA\\Models\\Type",
+                        subject_type: "user",
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    },
+                    {
+                        id: 3,
+                        event: "logout",
+                        user_id: 1,
+                        subject_id: null,
+                        subject_type: null,
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    },
+                    {
+                        id: 4,
+                        event: "login",
+                        user_id: 1,
+                        subject_id: null,
+                        subject_type: null,
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    },
+                    {
+                        id: 5,
+                        event: "edit-profile",
+                        user_id: 1,
+                        subject_id: null,
+                        subject_type: null,
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    },
+                    {
+                        id: 6,
+                        event: "delete-user",
+                        user_id: 1,
+                        subject_id: 4,
+                        subject_type: "user",
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    },
+                    {
+                        id: 7,
+                        event: "add-user",
+                        user_id: 1,
+                        subject_id: 42,
+                        subject_type: "user",
+                        ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
+                        created_at: new Date(),
+                    },
+                    {
+                        id: 8,
+                        event: "reset-password",
+                        user_id: 1,
+                        subject_id: null,
+                        subject_type: null,
                         ip: "1315:d05b:9059:24e4:4e0f:6184:35c1:e465",
                         created_at: new Date(),
                     }

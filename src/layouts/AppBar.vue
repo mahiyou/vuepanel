@@ -140,7 +140,7 @@ export default defineComponent({
         },
         getUserAvatar() {
             if (this.authStore.user) {
-                return this.authStore.user.avatar ? this.authStore.user.avatar : "/pics/default-avatar.jpg";
+                return this.authStore.user.meta.avatar ? this.authStore.user.meta.avatar : "/pics/default-avatar.jpg";
             }
             return "";
         },

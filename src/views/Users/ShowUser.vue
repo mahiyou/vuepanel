@@ -115,19 +115,19 @@
                                     </v-table>
                                     <v-divider class="mb-6 mt-3"></v-divider>
                                     <div class="activities-content">
-                                        <v-card class="overflow-y-auto" max-height="200">
+                                        <v-card class="overflow-y-auto py-1" max-height="200">
                                             <v-row v-for="(data, key) in userActivity.logs" :key="key" class="mx-1 ms-5"
                                                 :class="$vuetify.locale.isRtl ? 'dashed-border-rtl' : 'dashed-border-ltr'">
                                                 <v-col cols="1"
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'">
-                                                    <span class="pa-1 rounded-pill bg-grey-lighten-3"><v-icon
-                                                            icon="mdi-ticket-outline" color="customGreen"></v-icon></span>
+                                                    <span class="pa-1 rounded-pill bg-grey-lighten-3">
+                                                        <v-icon :icon="getIcon(data)"
+                                                            :color="getActivityColor(data)"></v-icon>
+                                                    </span>
                                                 </v-col>
                                                 <v-col
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'"
-                                                    cols="7"> {{ `user ${data.id} ${data.event}` }}{{ data.subject_id !==
-                                                        null
-                                                        ? ` user ${data.subject_id}` : "" }}</v-col>
+                                                    cols="7">{{ getActivityContent(data) }}</v-col>
                                                 <v-col cols="4" class="text-secondary"
                                                     :align="$vuetify.locale.isRtl ? 'left' : 'right'">{{
                                                         data.created_at.toLocaleDateString() + " " +
@@ -155,11 +155,16 @@ import BaseError from '@/api/errors/BaseError';
 import { IErrorInComponent } from '@/utilities/error';
 import { defineComponent } from 'vue';
 import ErrorAlert from '@/components/ErrorAlert.vue';
-import { title } from 'node:process';
 import ActivitiesTable from '@/components/ActivitiesTable.vue';
-import { IUserActivity } from '@/api/users';
+import { ILogSummary, IUserActivity } from '@/api/users';
+import { getTimeDifference } from '@/utilities';
 
 export default defineComponent({
+    setup() {
+        return {
+            getTimeDifference
+        }
+    },
     components: {
         ErrorAlert,
         ActivitiesTable
@@ -171,20 +176,6 @@ export default defineComponent({
             loading: true,
             tab: 1,
             activitiesNumber: 1234,
-            // activitiesContent: [
-            // { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
-            // { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
-            // { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
-            // { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
-            // { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
-            // { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
-            // { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
-            // { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
-            // { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" },
-            // { content: "Admin1 edited your profile", icon: "mdi-cog-outline", color: "customBlue", date: "2023/12/02 13:33:46" },
-            // { content: "Created a new ticket #1234", icon: "mdi-ticket-outline", color: "customGreen", date: "2023/12/02 16:33:46" },
-            // { content: "Admin1 edited your profile", icon: "mdi-cancel", color: "customRed", date: "2024/02/02 19:33:46" }
-            // ],
             userActivity: {} as IUserActivity,
         }
     },
@@ -196,27 +187,70 @@ export default defineComponent({
                 return "red"
             }
         },
-        getTimeDifference(date: Date): string {
-            if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30 * 12)) !== 0) {
-                return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30 * 12))) + " years ago";
-            }
-            if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30)) !== 0) {
-                return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 30))) + " monthes ago";
-            }
-            if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24)) !== 0) {
-                return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))) + " " + this.$t("user.creat-at.days-ago");
-            }
-            if (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60)) !== 0) {
-                return (Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60))) + " hours ago";
-            }
-            return 'recently'
-        },
         getNumberfActivities(activitiesCalendar: Record<string, number>) {
             let sum = 0;
             for (const element of Object.values(activitiesCalendar)) {
                 sum = sum + element;
             }
             return sum;
+        },
+        getIcon(activity: ILogSummary) {
+            if (activity.event === "edit-profile" && activity.subject_type === "user") {
+                return 'mdi-account-edit-outline'
+            }
+            if (activity.event === "edit-profile" && activity.subject_type === null) {
+                return 'mdi-pencil-outline'
+            }
+            if (activity.event === "delete-user" && activity.subject_type === "user") {
+                return 'mdi-delete-outline'
+            }
+            if (activity.event === "add-user" && activity.subject_type === "user") {
+                return 'mdi-account-plus-outline'
+            }
+            if (activity.event === "login" && activity.subject_type === null) {
+                return 'mdi-login'
+            }
+            if (activity.event === "reset-password" && activity.subject_type === null) {
+                return 'mdi-lock-reset'
+            }
+            if (activity.event === "logout" && activity.subject_type === null) {
+                return 'mdi-logout'
+            }
+
+        },
+        getActivityColor(activity: ILogSummary) {
+            if (activity.event === "edit-profile" || activity.event === "add-user") {
+                return 'customGreen'
+            }
+            if (activity.event === "delete-user" && activity.subject_type === "user" || activity.event === "logout") {
+                return 'customRed'
+            }
+            if (activity.event === "login" || activity.event === "reset-password") {
+                return 'primary'
+            }
+        },
+        getActivityContent(activity: ILogSummary) {
+            if (activity.event === "edit-profile" && activity.subject_type === "user") {
+                return `User ${activity.subject_id} profile edited`
+            }
+            if (activity.event === "edit-profile" && activity.subject_type === null) {
+                return `Profile edited`
+            }
+            if (activity.event === "delete-user" && activity.subject_type === "user") {
+                return `User ${activity.subject_id} deleted`
+            }
+            if (activity.event === "add-user" && activity.subject_type === "user") {
+                return `User ${activity.subject_id} added`
+            }
+            if (activity.event === "login" && activity.subject_type === null) {
+                return 'loged in'
+            }
+            if (activity.event === "reset-password" && activity.subject_type === null) {
+                return 'Password reset'
+            }
+            if (activity.event === "logout" && activity.subject_type === null) {
+                return 'Logged out'
+            }
         }
     },
     computed: {

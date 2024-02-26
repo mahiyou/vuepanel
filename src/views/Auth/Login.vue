@@ -87,7 +87,6 @@ export default defineComponent({
                 const response = await useAPI().login({ username: this.username, password: this.password });
                 this.authStore.setUser(response.user);
                 this.notificationStore.set(response.notifications);
-                console.log(this.$vuetify.locale.current);
                 const redirect = this.$route.query.redirect;
                 if (redirect && typeof redirect == "string") {
                     this.$router.push({ path: redirect });

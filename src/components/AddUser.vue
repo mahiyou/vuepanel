@@ -1,29 +1,23 @@
 <template class="search-user">
     <v-dialog width="500">
         <template v-slot:activator="{ props }">
-            <v-btn variant="flat" color="secondary" v-bind="props" prependIcon="mdi-magnify" width="110px">{{ $t("user.search") }}</v-btn>
+            <v-btn variant="flat" color="customGreen" v-bind="props" prependIcon="mdi-plus" class="ms-2" width="110px">{{
+                $t("user.add") }}</v-btn>
         </template>
-
         <template v-slot:default="{ isActive }">
             <v-card class="py-10 px-5">
                 <v-form @submit.prevent="onSubmit" class="text-start">
                     <v-card-text>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <div>{{ $t("user.id") }}</div>
-                            </v-col>
-                            <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="id" dir="ltr" /></v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="2" class="pa-1">
-                                <span>{{ $t("user.name") }}</span>
+                                <span>{{ $t("user.name") }} *</span>
                             </v-col>
                             <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="name"
                                     :dir="$vuetify.locale.current" /></v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <span>{{ $t("user.status") }}</span>
+                                <span>{{ $t("user.status") }} *</span>
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="status" clearable variant="outlined" :items="statusItems"
@@ -33,7 +27,7 @@
                         </v-row>
                         <v-row>
                             <v-col cols="2" class="pa-1">
-                                <span>{{ $t("user.role") }}</span>
+                                <span>{{ $t("user.role") }} *</span>
                             </v-col>
                             <v-col cols="10" class="pa-1">
                                 <v-select v-model="type_id" clearable variant="outlined" :items="types"
@@ -44,7 +38,7 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn class="px-3" type="submit" color="customGreen" variant="flat">
-                            {{ $t("user.search") }}
+                            {{ $t("user.add") }}
                         </v-btn>
                         <v-btn class="px-3" variant="flat" color="secondary" @click="isActive.value = false">{{
                             $t("dialog.close") }}</v-btn>
@@ -60,7 +54,7 @@ import { PropType, defineComponent } from "vue";
 import { UserStatus, ILocalizedUserType } from "@/api/authentication";
 import ErrorAlert from "@/components/ErrorAlert.vue"
 import { IErrorInComponent } from "@/utilities/error";
-import { ISearchUserRequest } from "@/api/users";
+import { IUserCreateRequest } from "@/api/users";
 
 export default defineComponent({
     emits: ['update:title', 'submit'],
@@ -78,8 +72,7 @@ export default defineComponent({
     },
     data() {
         return {
-            id: undefined as string | undefined,
-            name: undefined as string | undefined ,
+            name: undefined as string | undefined,
             status: undefined as string | undefined,
             type_id: undefined as number | undefined,
             error: undefined as undefined | IErrorInComponent,
@@ -88,10 +81,9 @@ export default defineComponent({
     },
     methods: {
         onSubmit() {
-            if (this.id || this.name || this.status || this.type_id) {
+            if (this.name && this.status && this.type_id) {
                 this.error = undefined;
-                const request: ISearchUserRequest = {
-                    id: this.id ? parseInt(this.id) : undefined,
+                const request: IUserCreateRequest = {
                     name: this.name,
                     status: this.status,
                     type_id: this.type_id
@@ -99,26 +91,18 @@ export default defineComponent({
                 this.$emit("submit", request);
             } else {
                 this.error = {
-                    message: this.$t('field.fill.minimum-number')
+                    message: this.$t('field.fill.essential')
                 };
                 return;
             }
         },
     },
     computed: {
-        types(): Array<{value:number, title: string}>{
+        types(): Array<{ value: number, title: string }> {
             return this.userTypes.map((type) => {
-                return {value: type.id, title: type.title}
+                return { value: type.id, title: type.title }
             })
         }
     }
 })
 </script>
-<style lang="scss">
-.v-field__input {
-    --v-field-input-padding-top: 7px;
-    --v-field-input-padding-bottom: 7px;
-    --v-input-control-height: 0px;
-    --v-field-padding-start: 20px;
-}
-</style>
