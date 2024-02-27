@@ -6,6 +6,9 @@ import ServerInternalError from "./errors/ServerInternalError";
 import { IChangeUserPasswordRequest, ISearchUserRequest, IUserActivity, IUserUpdateChangesRequest } from "./users";
 
 export default class MockAPI implements IAPI {
+    login(request: ILoginRequest): Promise<ILoginResponse> {
+        throw new Error("Method not implemented.");
+    }
     editUser(request: IUserUpdateChangesRequest): Promise<IUser> {
         throw new Error("Method not implemented.");
     }
@@ -127,31 +130,31 @@ export default class MockAPI implements IAPI {
             },
         }];
     }
-    public async login(request: ILoginRequest): Promise<ILoginResponse> {
-        return this.call((request: ILoginRequest): ILoginResponse => {
-            if (Math.random() > 0.9) {
-                throw new UserLoginError();
-            }
-            if (Math.random() > 0.8) {
-                throw new ServerInternalError();
-            }
-            return {
-                user: {
-                    id: 2,
-                    name: "Alex",
-                    meta: {
-                        avatar: "/pics/avatar.jpg",
-                    },
-                    status: UserStatus.ACTIVE,
-                    type_id: 2,
-                    updated_at: null,
-                    created_at: new Date(),
-                    online: false
-                },
-                notifications: this.getNotificationsItems(),
-            };
-        }, [request]);
-    }
+    // public async login(request: ILoginRequest) {
+        // return this.call((request: ILoginRequest): ILoginResponse => {
+        //     if (Math.random() > 0.9) {
+        //         throw new UserLoginError();
+        //     }
+        //     if (Math.random() > 0.8) {
+        //         throw new ServerInternalError();
+        //     }
+        //     return {
+        //         user: {
+        //             id: 2,
+        //             name: "Alex",
+        //             meta: {
+        //                 avatar: "/pics/avatar.jpg",
+        //             },
+        //             status: UserStatus.ACTIVE,
+        //             type_id: 2,
+        //             updated_at: null,
+        //             created_at: new Date(),
+        //             online: false
+        //         },
+        //         notifications: this.getNotificationsItems(),
+        //     };
+        // }, [request]);
+    // }
 
     public async register(request: IRegisterRequest): Promise<IRegisterResponse> {
         return this.call((request: ILoginRequest) => {

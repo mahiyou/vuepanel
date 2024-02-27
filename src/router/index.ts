@@ -13,7 +13,8 @@ import EditUserView from "@/views/Users/EditUser.vue"
 import { useAuthStore } from "@/store/auth";
 import vuetify from '../plugins/vuetify';
 import DeleteUserView from '@/views/Users/DeleteUser.vue';
-import ShowUserView from '@/views/Users/ShowUser.vue'
+import ShowUserView from '@/views/Users/ShowUser.vue';
+import AddUserView from '@/views/Users/AddUser.vue';
 
 
 const routes = [
@@ -91,15 +92,20 @@ const routes = [
                             },
                             {
                                 name: "editUser",
-                                path:"edit/:id",
+                                path: "edit/:id",
                                 component: EditUserView
                             },
                             {
                                 name: "deleteUser",
                                 path: "delete/:id",
                                 component: DeleteUserView
+                            },
+                            {
+                                name: "addUser",
+                                path: "add",
+                                component: AddUserView
                             }
-                        
+
                         ]
 
                     },

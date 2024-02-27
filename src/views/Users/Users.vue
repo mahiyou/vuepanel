@@ -7,7 +7,9 @@
                 </v-toolbar-title>
                 <template v-slot:append v-if="response">
                     <SearchUser :userTypes="response.types" @submit="onSearchUser" />
-                    <AddUser :userTypes="response.types" @submit="onAddUser"></AddUser>
+                    <v-btn :to="{ name: 'addUser' }" variant="flat" color="customGreen" prependIcon="mdi-plus" class="ms-2" width="110px">{{
+                        $t("user.add") }}
+                    </v-btn>
                 </template>
             </v-toolbar>
             <v-data-table @update:options="onLoadTableItems" :headers="headers" :items="response?.data"
@@ -16,8 +18,8 @@
                     { value: 10, title: '10' },
                     { value: 20, title: '20' },
                     { value: -1, title: $t('all') }
-                ]" v-model:items-per-page="ipp" :items-per-page-text="$t('items per page')" pageText="" show-current-page
-                :no-data-text="$t('search.no-data')">
+                ]" v-model:items-per-page="ipp" :items-per-page-text="$t('items per page')" pageText=""
+                show-current-page :no-data-text="$t('search.no-data')">
 
                 <template v-slot:item.status="{ value }">
                     <v-chip :color="backgroundOfStatus(value)">
@@ -46,7 +48,6 @@
 import { useAPI } from "@/api"
 import TableRowActions from "@/components/TableRowActions.vue"
 import SearchUser from "@/components/SearchUser.vue"
-import AddUser from "@/components/AddUser.vue"
 import { ILocalizedUserType, IUser, IUserType, UserStatus } from "@/api/authentication"
 import { persianNumber } from "@/utilities"
 import { ISearchUserRequest, ISearchUserResponse } from "@/api/users"
@@ -59,7 +60,6 @@ export default {
     components: {
         TableRowActions,
         SearchUser,
-        AddUser,
         ErrorAlert
     },
     setup() {
@@ -154,9 +154,6 @@ export default {
         getType(typeId: number): ILocalizedUserType | undefined {
             return this.response?.types.find((type) => type.id === typeId);
         },
-        onAddUser(){
-
-        }
     },
     created() {
         this.$watch(

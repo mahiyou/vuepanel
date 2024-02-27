@@ -78,7 +78,7 @@ export default class ServerAPI extends MockAPI implements IAPI {
         return this.normalizeUser(body.data);
     }
     public async editUser(request: IUserUpdateChangesRequest): Promise<IUser> {
-        
+
         const formData = new FormData();
         if (request.name) {
             formData.append('name', request.name.toString())
@@ -103,8 +103,6 @@ export default class ServerAPI extends MockAPI implements IAPI {
                 headers: {
                     Accept: "application/json",
                     "Accept-Language": vuetify.locale.current.value,
-                    // "Content-Type": "Application/json",
-                    // "Content-Length": body.length.toString(),
                     Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
                 },
             });
@@ -121,5 +119,22 @@ export default class ServerAPI extends MockAPI implements IAPI {
                     Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
                 },
             })
+    }
+    public async login(request: ILoginRequest): Promise<ILoginResponse> {
+        const body = JSON.stringify({
+            username: request.username,
+            password: request.password
+        })
+        const response = await fetch(`${this.baseURL}/login`,
+            {
+                body,
+                method: 'POST',
+                headers: {
+                    Accept: "application/json",
+                    "Accept-Language": vuetify.locale.current.value,
+                },
+            })
+            this.getUser(1)
+        return response.json();
     }
 }
