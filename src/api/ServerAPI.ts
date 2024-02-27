@@ -78,21 +78,33 @@ export default class ServerAPI extends MockAPI implements IAPI {
         return this.normalizeUser(body.data);
     }
     public async editUser(request: IUserUpdateChangesRequest): Promise<IUser> {
-        const body = JSON.stringify({
-            name: request.name || undefined,
-            type_id: request.type_id || undefined,
-            status: request.status || undefined,
-            meta: request.meta || undefined,
-        });
+        
+        const formData = new FormData();
+        if (request.name) {
+            formData.append('name', request.name.toString())
+        }
+        if (request.type_id) {
+            formData.append('type_id', request.type_id.toString())
+        }
+        if (request.status) {
+            formData.append('status', request.status.toString())
+        }
+        if (request.meta.avatar) {
+            formData.append('avatar', request.meta.avatar);
+        }
+        if (request.meta.banner) {
+            formData.append('banner', request.meta.banner);
+        }
+
         const response = await fetch(`${this.baseURL}/aaa/v1/users/${request.userId}`,
             {
                 method: 'PUT',
-                body,
+                body: formData,
                 headers: {
                     Accept: "application/json",
                     "Accept-Language": vuetify.locale.current.value,
-                    "Content-Type": "Application/json",
-                    "Content-Length": body.length.toString(),
+                    // "Content-Type": "Application/json",
+                    // "Content-Length": body.length.toString(),
                     Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
                 },
             });

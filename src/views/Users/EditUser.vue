@@ -142,6 +142,7 @@ import InputValidationError from '@/api/errors/InputValidationError';
 import { IErrorInComponent } from '@/utilities/error';
 import ErrorAlert from "@/components/ErrorAlert.vue"
 import BaseError from '@/api/errors/BaseError';
+import { tSThisType } from '@babel/types';
 
 export default defineComponent({
     components: {
@@ -225,7 +226,8 @@ export default defineComponent({
                     userId: this.user.id.toString(),
                     name: this.newUser.name,
                     status: this.newUser.status,
-                    type_id: this.newUser.type_id
+                    type_id: this.newUser.type_id,
+                    meta:{ avatar: this.newAvatar && this.newAvatar.length>0 ? this.newAvatar[0] : undefined, banner: this.newBanner && this.newBanner.length>0 ? this.newBanner[0] : undefined }
                 })
                 this.user = response;
 
