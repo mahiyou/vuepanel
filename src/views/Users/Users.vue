@@ -1,17 +1,21 @@
 <template>
-    <v-container>
-        <v-card class="pa-3" flat v-if="!loading && !error">
-            <v-toolbar color="white">
-                <v-toolbar-title class="text-h5">
-                    {{ $t('users') }}
-                </v-toolbar-title>
-                <template v-slot:append v-if="response">
+    <v-container class="users-list">
+        <v-card class="pa-sm-5 pa-3" flat v-if="!loading && !error">
+            <v-row class="mb-3">
+                <v-col sm="6" cols="12">
+                    <h1 :class="$vuetify.display.xs ? 'text-center' : $vuetify.locale.isRtl ? 'text-right' : 'text-left'">
+                        {{ $t('users') }}
+                    </h1>
+                </v-col>
+                <v-col sm="6" cols="12" v-if="response"
+                    :align="$vuetify.display.xs ? 'center' : $vuetify.locale.isRtl ? 'left' : 'right'" class="my-auto">
                     <SearchUser :userTypes="response.types" @submit="onSearchUser" />
-                    <v-btn :to="{ name: 'addUser' }" variant="flat" color="customGreen" prependIcon="mdi-plus" class="ms-2" width="110px">{{
-                        $t("user.add") }}
+                    <v-btn :to="{ name: 'addUser' }" variant="flat" color="customGreen" prependIcon="mdi-plus" class="ms-3"
+                        width="110px">{{
+                            $t("user.add") }}
                     </v-btn>
-                </template>
-            </v-toolbar>
+                </v-col>
+            </v-row>
             <v-data-table @update:options="onLoadTableItems" :headers="headers" :items="response?.data"
                 :items-per-page-options="[
                     { value: 5, title: '5' },
@@ -184,3 +188,22 @@ export default {
     }
 }
 </script>
+<style>
+.users-list {
+    .v-table>.v-table__wrapper>table>tbody>tr>td,
+    .v-table>.v-table__wrapper>table>tbody>tr>th,
+    .v-table>.v-table__wrapper>table>thead>tr>td,
+    .v-table>.v-table__wrapper>table>thead>tr>th{
+        padding: 0 8px;
+    }
+    .v-data-table-footer{
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        .v-data-table-footer__items-per-page{
+            padding-right: 0px;
+
+        }
+    }        
+}
+</style>

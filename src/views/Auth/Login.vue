@@ -6,10 +6,10 @@
             <div class="mt-9 mb-2">{{ $t("username(email or cell phone)") }}</div>
             <v-text-field variant="outlined" v-model="username" dir="ltr" :rules="[usernameValidation]" />
             <v-row class="mt-2">
-                <v-col cols="6">
+                <v-col cols="5">
                     <div class="mb-2">{{ $t("user.password") }}</div>
                 </v-col>
-                <v-col cols="6" class="">
+                <v-col cols="7" class="">
                     <router-link
                         :to="{ name: 'resetPassword', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }"
                         class="link text-secondary text-decoration-none float-end">{{ $t("user.login.forget password") }}</router-link>

@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer :modelValue="true" permanent :rail="drawer" color="primary" class="navigation">
+    <v-navigation-drawer :modelValue="true" :rail="drawer" color="primary" class="navigation" mobile-breakpoint="md">
         <v-img v-if="!drawer" width="60%" src="@/assets/pics/wideNavLogo.png" class="mx-auto mt-8 mb-4" />
         <v-img v-if="drawer" width="50%" src="@/assets/pics/navLogo.png" class="mx-auto mt-5" />
         <v-list :items="items" item-value="value" item-children="items" class="list-item" active-color="white" base-color="lightBlue" />
@@ -7,13 +7,15 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-
+import { useDisplay } from 'vuetify'
 export default defineComponent({
     props: {
         drawer: Boolean,
     },
     data() {
-        return {};
+        return {
+            
+        };
     },
     computed: {
         items() {

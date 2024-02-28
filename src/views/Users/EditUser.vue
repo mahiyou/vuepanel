@@ -24,7 +24,7 @@
                     <h2 class="text-textColor">{{ user.name }}</h2>
                     <div class="text-secondary">{{ user.type.title }}</div>
                 </v-card>
-                <v-card class="pa-3 my-4" elevation="1">
+                <v-card class="pa-sm-3 pa-1 my-4" elevation="1">
                     <v-tabs v-model="tab" color="primary" align-tabs="start">
                         <v-tab :value="1">{{ $t("user.personal-details") }}</v-tab>
                         <v-tab :value="2">{{ $t("user.change-password") }}</v-tab>
@@ -34,7 +34,7 @@
                             <v-container>
                                 <v-form @submit.prevent="onSubmit" @change="dataChanged" class="my-6" v-model="valid">
                                     <v-row>
-                                        <v-col cols="6">
+                                        <v-col sm="6" cols="12">
                                             <div>{{ $t("user.name") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.name"
                                                 :dir="$vuetify.locale.current" class="mb-2" />
@@ -49,7 +49,7 @@
                                                 class="mb-2" :rules="[emailValidation]" />
 
                                         </v-col>
-                                        <v-col cols="6">
+                                        <v-col sm="6" cols="12">
                                             <div>{{ $t("user.phone-number") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.meta.phoneNumber" dir="ltr"
                                                 :rules="[phoneNumberValidation]" class="mb-2" />
@@ -66,17 +66,17 @@
                                         </v-col>
                                     </v-row>
                                     <v-row>
-                                        <v-col>
+                                        <v-col sm="4" cols="12">
                                             <div>{{ $t("user.city") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.meta.city"
                                                 :dir="$vuetify.locale.current" class="mb-2" />
                                         </v-col>
-                                        <v-col>
+                                        <v-col sm="4" cols="12">
                                             <div>{{ $t("user.country") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.meta.country"
                                                 :dir="$vuetify.locale.current" class="mb-2" />
                                         </v-col>
-                                        <v-col>
+                                        <v-col sm="4" cols="12">
                                             <div>{{ $t("user.zip-code") }}</div>
                                             <v-text-field variant="outlined" v-model="newUser.meta.zipCode" dir="ltr"
                                                 class="mb-2" />
@@ -99,12 +99,12 @@
                                 <v-form @submit.prevent="onSubmitChangPassword" v-model="validChangPasswordForm"
                                     class="my-6">
                                     <v-row>
-                                        <v-col>
+                                        <v-col sm="6" cols="12">
                                             <div>{{ $t("user.new-password") }}*</div>
                                             <v-text-field variant="outlined" v-model="newPass" dir="ltr"
                                                 :rules="[passwordValidation]" />
                                         </v-col>
-                                        <v-col>
+                                        <v-col sm="6" cols="12">
                                             <div>{{ $t("confirm password") }}*</div>
                                             <v-text-field variant="outlined" v-model="confirmPass" dir="ltr"
                                                 :rules="[repeatPasswordValidation]" />

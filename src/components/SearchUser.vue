@@ -1,41 +1,43 @@
-<template class="search-user">
+<template>
     <v-dialog width="500">
         <template v-slot:activator="{ props }">
-            <v-btn variant="flat" color="secondary" v-bind="props" prependIcon="mdi-magnify" width="110px">{{ $t("user.search") }}</v-btn>
+            <v-btn variant="flat" color="secondary" v-bind="props" prependIcon="mdi-magnify" width="110px">{{
+                $t("user.search") }}</v-btn>
         </template>
 
         <template v-slot:default="{ isActive }">
-            <v-card class="py-10 px-5">
+            <v-card class="py-sm-10 py-5 px-sm-5 px-1">
                 <v-form @submit.prevent="onSubmit" class="text-start">
                     <v-card-text>
                         <v-row>
-                            <v-col cols="2" class="pa-1">
+                            <v-col sm="2" cols="3" class="pa-1">
                                 <div>{{ $t("user.id") }}</div>
                             </v-col>
-                            <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="id" dir="ltr" /></v-col>
+                            <v-col sm="10" cols="9" class="pa-1"><v-text-field variant="outlined" v-model="id"
+                                    dir="ltr" /></v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="2" class="pa-1">
+                            <v-col sm="2" cols="3" class="pa-1">
                                 <span>{{ $t("user.name") }}</span>
                             </v-col>
-                            <v-col cols="10" class="pa-1"><v-text-field variant="outlined" v-model="name"
+                            <v-col sm="10" cols="9" class="pa-1"><v-text-field variant="outlined" v-model="name"
                                     :dir="$vuetify.locale.current" /></v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="2" class="pa-1">
+                            <v-col sm="2" cols="3" class="pa-1">
                                 <span>{{ $t("user.status") }}</span>
                             </v-col>
-                            <v-col cols="10" class="pa-1">
+                            <v-col sm="10" cols="9" class="pa-1">
                                 <v-select v-model="status" clearable variant="outlined" :items="statusItems"
                                     item-title="title" item-value="value"
                                     :placeholder="$t('user.status.select')"></v-select>
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="2" class="pa-1">
+                            <v-col sm="2" cols="3" class="pa-1">
                                 <span>{{ $t("user.role") }}</span>
                             </v-col>
-                            <v-col cols="10" class="pa-1">
+                            <v-col sm="10" cols="9" class="pa-1">
                                 <v-select v-model="type_id" clearable variant="outlined" :items="types"
                                     :placeholder="$t('user.role.select')"></v-select>
                             </v-col>
@@ -79,7 +81,7 @@ export default defineComponent({
     data() {
         return {
             id: undefined as string | undefined,
-            name: undefined as string | undefined ,
+            name: undefined as string | undefined,
             status: undefined as string | undefined,
             type_id: undefined as number | undefined,
             error: undefined as undefined | IErrorInComponent,
@@ -106,9 +108,9 @@ export default defineComponent({
         },
     },
     computed: {
-        types(): Array<{value:number, title: string}>{
+        types(): Array<{ value: number, title: string }> {
             return this.userTypes.map((type) => {
-                return {value: type.id, title: type.title}
+                return { value: type.id, title: type.title }
             })
         }
     }
@@ -119,6 +121,6 @@ export default defineComponent({
     --v-field-input-padding-top: 7px;
     --v-field-input-padding-bottom: 7px;
     --v-input-control-height: 0px;
-    --v-field-padding-start: 20px;
+    --v-field-padding-start: 15px;
 }
 </style>

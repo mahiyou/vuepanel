@@ -22,10 +22,10 @@
                         </div>
                     </div>
                 </v-card>
-                <v-card class="pa-5 mt-4 mb-15" elevation="1">
+                <v-card class="pa-sm-5 px-3 pb-3 mt-4 mb-15" elevation="1">
                     <v-form @submit.prevent="onSubmit" class="my-6" v-model="valid">
                         <v-row>
-                            <v-col cols="6">
+                            <v-col sm="6" cols="12">
                                 <div>{{ $t("user.name") }}*</div>
                                 <v-text-field variant="outlined" v-model="newUser.name" :dir="$vuetify.locale.current"
                                     class="mb-2" :rules="[nameValidation]" />
@@ -41,7 +41,7 @@
                                     :rules="[passwordValidation]" />
 
                             </v-col>
-                            <v-col cols="6">
+                            <v-col sm="6" cols="12">
                                 <div>{{ $t("user.phone-number") }}</div>
                                 <v-text-field variant="outlined" v-model="newUser.meta.phoneNumber" dir="ltr"
                                     :rules="[phoneNumberValidation]" class="mb-2" />
@@ -59,17 +59,17 @@
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col>
+                            <v-col sm="4" cols="12">
                                 <div>{{ $t("user.city") }}</div>
                                 <v-text-field variant="outlined" v-model="newUser.meta.city" :dir="$vuetify.locale.current"
                                     class="mb-2" />
                             </v-col>
-                            <v-col>
+                            <v-col sm="4" cols="12">
                                 <div>{{ $t("user.country") }}</div>
                                 <v-text-field variant="outlined" v-model="newUser.meta.country"
                                     :dir="$vuetify.locale.current" class="mb-2" />
                             </v-col>
-                            <v-col>
+                            <v-col sm="4" cols="12">
                                 <div>{{ $t("user.zip-code") }}</div>
                                 <v-text-field variant="outlined" v-model="newUser.meta.zipCode" dir="ltr" class="mb-2" />
                             </v-col>
