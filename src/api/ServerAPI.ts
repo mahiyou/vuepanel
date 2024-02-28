@@ -1,5 +1,5 @@
 import { IAPI } from "@/api";
-import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserResponse, IUserActivity, IUserUpdateChangesRequest } from "./users";
+import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserResponse, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
 import { ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse, IChangePasswordRequest, IUser, IUserSummary, UserStatus } from "./authentication";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import MockAPI from "./MockAPI";
@@ -109,6 +109,27 @@ export default class ServerAPI extends MockAPI implements IAPI {
         const result = await response.json();
         return this.normalizeUser(result.data);
     }
+    public async addUser(request: IUserCreateRequest){
+        const body = JSON.stringify({
+            name: request.name,
+            statue: request.status,
+            type_id: request.type_id
+        })
+
+
+        const response = await fetch(`${this.baseURL}/aaa/v1/users/add`,
+            {
+                method: 'PUT',
+                body,
+                headers: {
+                    Accept: "application/json",
+                    "Accept-Language": vuetify.locale.current.value,
+                    Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
+                },
+            });
+        const result = await response.json();
+        return this.normalizeUser(result.data);
+    }
     public async deleteUser(userID: number): Promise<any> {
         const response = await fetch(`${this.baseURL}/aaa/v1/users/${userID}`,
             {
@@ -120,21 +141,21 @@ export default class ServerAPI extends MockAPI implements IAPI {
                 },
             })
     }
-    public async login(request: ILoginRequest): Promise<ILoginResponse> {
-        const body = JSON.stringify({
-            username: request.username,
-            password: request.password
-        })
-        const response = await fetch(`${this.baseURL}/login`,
-            {
-                body,
-                method: 'POST',
-                headers: {
-                    Accept: "application/json",
-                    "Accept-Language": vuetify.locale.current.value,
-                },
-            })
-            this.getUser(1)
-        return response.json();
-    }
+    // public async login(request: ILoginRequest): Promise<ILoginResponse> {
+    //     const body = JSON.stringify({
+    //         username: request.username,
+    //         password: request.password
+    //     })
+    //     const response = await fetch(`${this.baseURL}/login`,
+    //         {
+    //             body,
+    //             method: 'POST',
+    //             headers: {
+    //                 Accept: "application/json",
+    //                 "Accept-Language": vuetify.locale.current.value,
+    //             },
+    //         })
+    //         this.getUser(1)
+    //     return response.json();
+    // }
 }

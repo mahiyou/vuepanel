@@ -46,7 +46,7 @@ export interface ILoginRequest {
 }
 
 export interface ILoginResponse {
-    user: IUserSummary;
+    user: IUser;
     notifications: INotification[];
 }
 

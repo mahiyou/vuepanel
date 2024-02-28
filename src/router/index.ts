@@ -76,34 +76,46 @@ const routes = [
 
                     {
                         path: "users",
-                        meta: {
-                            ability: "users-edit"
-                        },
                         children: [
                             {
                                 name: "users",
                                 path: "",
                                 component: UsersView,
+                                meta: {
+                                    ability: "dnj\\AAA\\Contracts\\IUser@viewAny"
+                                }
                             },
                             {
                                 name: "showUser",
                                 path: "show/:id",
-                                component: ShowUserView
+                                component: ShowUserView,
+                                meta: {
+                                    ability: "dnj\AAA\Contracts\IUser@view"
+                                }
                             },
                             {
                                 name: "editUser",
                                 path: "edit/:id",
-                                component: EditUserView
+                                component: EditUserView,
+                                meta: {
+                                    ability: "dnj\AAA\Contracts\IUser@update"
+                                }
                             },
                             {
                                 name: "deleteUser",
                                 path: "delete/:id",
-                                component: DeleteUserView
+                                component: DeleteUserView,
+                                meta: {
+                                    ability: "dnj\AAA\Contracts\IUser@destroy"
+                                }
                             },
                             {
                                 name: "addUser",
                                 path: "add",
-                                component: AddUserView
+                                component: AddUserView,
+                                meta:{
+                                    ability: "dnj\\AAA\\Contracts\\IUser@create"
+                                }
                             }
 
                         ]

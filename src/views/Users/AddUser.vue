@@ -130,7 +130,7 @@ export default defineComponent({
                     country: "",
                     zipCode: "",
                 },
-                type_id: undefined,
+                type_id: 1,
                 status: undefined as unknown as UserStatus,
                 joiningDate: "",
             },
@@ -192,6 +192,17 @@ export default defineComponent({
             } else {
                 this.incorrectRepeatPass = undefined;
             }
+            try {
+                const response = await useAPI().addUser({
+                    name: this.newUser.name,
+                    status: this.newUser.status,
+                    type_id: this.newUser.type_id,
+                })
+            }
+            catch { 
+                
+            }
+
         },
 
         onAvatarChange() {
