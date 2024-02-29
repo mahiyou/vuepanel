@@ -9,17 +9,17 @@
             <div class="cards mb-5">
                 <v-card class="pa-4" elevation="1">
                     <v-row>
-                        <v-col cols="2" align-self="center" :align="$vuetify.locale.isRtl ? 'left' : 'right'" class="pe-2">
+                        <v-col md="2" sm="3" cols="6" align-self="center" :align="$vuetify.locale.isRtl ? 'left' : 'right'" class="pe-2">
                             <v-img :src="user.meta.avatar || '/pics/default-avatar.jpg'"
                                 class="rounded-circle  my-2 data.data-avatar" width="90px" height="90px">
                             </v-img></v-col>
-                        <v-col cols="6" align-self="center">
+                        <v-col md="4" sm="3" cols="6" align-self="center">
                             <div class="my-auto">
                                 <h2>{{ user.name }}</h2>
                                 <h4 class="text-secondary">{{ user.type.title }}</h4>
                             </div>
                         </v-col>
-                        <v-col cols="4" :align="$vuetify.locale.isRtl ? 'left' : 'right'" class="btn-col">
+                        <v-col sm="6" cols="12" :align="$vuetify.display.xs ? 'center' :  $vuetify.locale.isRtl ? 'left' : 'right'" class="btn-col">
                             <v-btn class="user-show-btn" prepend-icon="mdi-login-variant" color="customGreen" width="120px"
                                 height="30px">{{ $t("admin.login.as-user") }}</v-btn>
                             <v-btn class="user-show-btn ms-2" prepend-icon="mdi-cancel" color="customRed" width="120px"
@@ -29,7 +29,7 @@
                 </v-card>
 
                 <v-row class="mt-1">
-                    <v-col cols="4">
+                    <v-col md="4" cols="12">
                         <v-card class="pa-4" elevation="1" height="600px">
                             <h3 class="mb-5">{{ $t("user.Info") }}</h3>
                             <v-table class="data-table">
@@ -57,7 +57,7 @@
                             </v-table>
                         </v-card>
                     </v-col>
-                    <v-col cols="8" class="ps-0">
+                    <v-col md="8" cols="12" class="ps-0">
                         <v-card class="py-4 px-3 activities-card" elevation="1" height="600px">
                             <h3>{{ $t("user.profile.activities") }}</h3>
                             <v-tabs class="activities-tabs mt-3 mb-3" model-value="tab" color="primary" align-tabs="start">
@@ -66,14 +66,14 @@
                             <v-window>
                                 <v-window-item :value="1">
                                     <v-row>
-                                        <v-col cols="9">
+                                        <v-col md="9" cols="6">
                                             <div><v-icon
                                                     :icon="$vuetify.locale.isRtl ? 'mdi-arrow-left' : 'mdi-arrow-right'"
                                                     class="me-1 mb-1"></v-icon>
                                                 {{ getNumberfActivities(userActivity.calendar) }} {{
                                                     $t("user.profile.activities.this-year") }}</div>
                                         </v-col>
-                                        <v-col cols="3">
+                                        <v-col md="3" cols="6">
                                             <span class="activity-boxes mx-5">
                                                 <v-tooltip :text="$t('tooltip.activities.zero')" location="top">
                                                     <template v-slot:activator="{ props }">
@@ -109,10 +109,10 @@
                                         </v-col>
                                     </v-row>
                                     <v-divider class="mt-2" :thickness="1" />
-                                    <v-table class="activities-table">
+                                    
                                         <ActivitiesTable :activitiesPerDate="userActivity.calendar"
                                             :first-day-of-week="0" />
-                                    </v-table>
+                                   
                                     <v-divider class="mb-6 mt-3"></v-divider>
                                     <div class="activities-content">
                                         <v-card class="overflow-y-auto py-1" max-height="200">
@@ -344,30 +344,15 @@ export default defineComponent({
 
     .activity-boxes {
         .activity-box {
-            width: 10px;
-            height: 10px;
+            min-width: 10px;
+            min-height: 10px;
             display: inline-block;
             margin-right: 1.5px;
         }
     }
 
-    .activities-table.v-table.v-table--density-default>.v-table__wrapper>table>tbody>tr>td {
-        height: 11px;
-        width: 11px;
-        padding: 0px;
-        font-size: 10.7px;
-        line-height: 10px;
 
-        th {
-            line-height: 10px;
-        }
-    }
 
-    .v-table>.v-table__wrapper>table {
-        border-spacing: 1.2px;
-        margin: 20px auto;
-        width: fit-content;
-    }
 
     .dashed-border-ltr {
         border-left: 1px dashed rgb(var(--v-theme-secondary));

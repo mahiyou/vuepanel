@@ -1,24 +1,26 @@
 <template>
-    <v-table class="activities-table">
-        <tbody>
-            <tr>
-                <td></td>
-                <td class="pb-1" v-for="(span, month) in months" :colspan="span">{{ month }}</td>
-            </tr>
-            <tr v-for="d in daysOfWeek">
-                <td class="pe-2">{{ getNameOfDay(d) }}</td>
-                <template v-for="w in weeks.length">
-                    <v-tooltip
-                        :text="weeks[w - 1][d] ? (days?.[weeks[w - 1][d]] + ' ' + $t('user.activities.number.per-day') + ' ' + weeks[w - 1][d]) : ''"
-                        location="top">
-                        <template v-slot:activator="{ props }">
-                            <td v-bind="props" :class="getBackground(days?.[weeks[w - 1][d]])" />
-                        </template>
-                    </v-tooltip>
-                </template>
-            </tr>
-        </tbody>
-    </v-table>
+    <div class="activities">
+        <v-table class="activities-table">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td class="pb-1" v-for="(span, month) in months" :colspan="span">{{ month }}</td>
+                </tr>
+                <tr v-for="d in daysOfWeek">
+                    <td class="pe-2">{{ getNameOfDay(d) }}</td>
+                    <template v-for="w in weeks.length">
+                        <v-tooltip
+                            :text="weeks[w - 1][d] ? (days?.[weeks[w - 1][d]] + ' ' + $t('user.activities.number.per-day') + ' ' + weeks[w - 1][d]) : ''"
+                            location="top">
+                            <template v-slot:activator="{ props }">
+                                <td v-bind="props" :class="getBackground(days?.[weeks[w - 1][d]])" />
+                            </template>
+                        </v-tooltip>
+                    </template>
+                </tr>
+            </tbody>
+        </v-table>
+    </div>
 </template>
 <script lang="ts">
 import { PropType, defineComponent } from 'vue';
@@ -171,3 +173,31 @@ export default defineComponent({
     }
 })
 </script>
+<style lang="scss">
+.activities {
+
+    .activities-table.v-table.v-table--density-default>.v-table__wrapper>table>tbody>tr>td {
+        height: 11px;
+        width: 11px;
+        padding: 0px;
+        font-size: 10.7px;
+        line-height: 10px;
+
+        th {
+            line-height: 10px;
+        }
+    }
+
+    .v-table .v-table__wrapper>table>tbody>tr>td,
+    th {
+        --v-border-opacity: 0;
+        font-size: 12.5px;
+    }
+
+    .v-table>.v-table__wrapper>table {
+        border-spacing: 1.2px;
+        margin: 20px auto;
+        width: max-content;
+    }
+}
+</style>
