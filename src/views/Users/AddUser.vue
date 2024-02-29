@@ -29,10 +29,10 @@
                                 <div>{{ $t("user.name") }}*</div>
                                 <v-text-field variant="outlined" v-model="newUser.name" :dir="$vuetify.locale.current"
                                     class="mb-2" :rules="[nameValidation]" />
-                                <div>{{ $t("user.status") }}*</div>
+                                <div>{{ $t("user.status") }}</div>
                                 <v-select v-model="newUser.status" variant="outlined" :items="statusItems"
                                     item-title="title" item-value="value" class="mb-2"
-                                    :placeholder="$t('user.status.select')" :rules="[statusValidation]"></v-select>
+                                    :placeholder="$t('user.status.select')"></v-select>
                                 <div>{{ $t("user.email-address") }}</div>
                                 <v-text-field variant="outlined" v-model="newUser.meta.email" dir="ltr" class="mb-2"
                                     :rules="[emailValidation]" />
@@ -42,6 +42,9 @@
 
                             </v-col>
                             <v-col sm="6" cols="12">
+                                <div>{{ $t("user.username") }}*</div>
+                                <v-text-field variant="outlined" v-model="newUser.username" :dir="$vuetify.locale.current"
+                                    class="mb-2" :rules="[usernameValidation]" />
                                 <div>{{ $t("user.phone-number") }}</div>
                                 <v-text-field variant="outlined" v-model="newUser.meta.phoneNumber" dir="ltr"
                                     :rules="[phoneNumberValidation]" class="mb-2" />
@@ -49,9 +52,6 @@
                                 <div>{{ $t("user.role") }}*</div>
                                 <v-select v-model="newUser.type_id" variant="outlined" :items="[1, 2]" class="mb-2"
                                     :placeholder="$t('user.role.select')" :rules="[roleValidation]"></v-select>
-
-                                <div>{{ $t("user.joining-date") }}</div>
-                                <v-text-field variant="outlined" v-model="newUser.joiningDate" dir="ltr" class="mb-2" />
 
                                 <div>{{ $t("confirm password") }}*</div>
                                 <v-text-field variant="outlined" v-model="confirmPass" dir="ltr"
@@ -123,6 +123,7 @@ export default defineComponent({
 
             newUser: {
                 name: "",
+                username: "",
                 meta: {
                     phoneNumber: "",
                     email: "",
@@ -132,7 +133,6 @@ export default defineComponent({
                 },
                 type_id: 1,
                 status: undefined as unknown as UserStatus,
-                joiningDate: "",
             },
 
             password: "",
@@ -170,15 +170,16 @@ export default defineComponent({
             }
             return true;
         },
-        roleValidation(value: any): boolean | string {
+        usernameValidation(value: string): boolean | string {
             if (!value) {
-                return this.$t("user.role.required");
+                return this.$t("user.name.required");
             }
             return true;
         },
-        statusValidation(value: any): boolean | string {
+        
+        roleValidation(value: any): boolean | string {
             if (!value) {
-                return this.$t("user.status.required");
+                return this.$t("user.role.required");
             }
             return true;
         },
@@ -197,10 +198,11 @@ export default defineComponent({
                     name: this.newUser.name,
                     status: this.newUser.status,
                     type_id: this.newUser.type_id,
+                    usernames:[this.newUser.username]
                 })
             }
-            catch { 
-                
+            catch {
+
             }
 
         },

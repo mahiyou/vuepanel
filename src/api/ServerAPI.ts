@@ -113,17 +113,19 @@ export default class ServerAPI extends MockAPI implements IAPI {
         const body = JSON.stringify({
             name: request.name,
             statue: request.status,
-            type_id: request.type_id
+            type_id: request.type_id,
+            usernames: request.usernames
         })
 
 
-        const response = await fetch(`${this.baseURL}/aaa/v1/users/add`,
+        const response = await fetch(`${this.baseURL}/aaa/v1/users`,
             {
-                method: 'PUT',
+                method: 'POST',
                 body,
                 headers: {
                     Accept: "application/json",
                     "Accept-Language": vuetify.locale.current.value,
+                    "Content-Type": "application/json",
                     Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
                 },
             });
@@ -141,21 +143,23 @@ export default class ServerAPI extends MockAPI implements IAPI {
                 },
             })
     }
-    // public async login(request: ILoginRequest): Promise<ILoginResponse> {
-    //     const body = JSON.stringify({
-    //         username: request.username,
-    //         password: request.password
-    //     })
-    //     const response = await fetch(`${this.baseURL}/login`,
-    //         {
-    //             body,
-    //             method: 'POST',
-    //             headers: {
-    //                 Accept: "application/json",
-    //                 "Accept-Language": vuetify.locale.current.value,
-    //             },
-    //         })
-    //         this.getUser(1)
-    //     return response.json();
-    // }
+    public async login(request: ILoginRequest): Promise<any> {
+        console.log(request)
+        const body = JSON.stringify({
+            username: request.username,
+            password: request.password
+        })
+        const response = await fetch(`${this.baseURL}/login`,
+            {
+                body,
+                method: 'POST',
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Accept-Language": vuetify.locale.current.value,
+                },
+            })
+        return response.json();
+    }
+    
 }

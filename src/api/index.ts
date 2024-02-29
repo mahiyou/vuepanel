@@ -5,7 +5,7 @@ import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserResponse, IU
 import ServerAPI from "@/api/ServerAPI";
 
 export interface IAPI {
-    login(request: ILoginRequest): Promise<ILoginResponse>;
+    login(request: ILoginRequest): Promise<any>;
     register(request: IRegisterRequest): Promise<IRegisterResponse>;
     resetPassword(request: IResetPasswordRequest): Promise<IResetPasswordResponse | ILoginResponse>;
     changePassword(request: IChangePasswordRequest): Promise<void>;

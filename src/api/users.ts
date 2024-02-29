@@ -44,7 +44,8 @@ export interface IChangeUserPasswordRequest{
 export interface IUserCreateRequest {
     name: string;
     type_id: number;
-    status: string;
+    usernames: string[];
+    status?: string;
     meta?: any;
 }
 

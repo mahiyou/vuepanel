@@ -12,13 +12,15 @@
                 <v-col cols="7" class="">
                     <router-link
                         :to="{ name: 'resetPassword', query: { redirect: $route.query.redirect }, params: { lang: $vuetify.locale.current } }"
-                        class="link text-secondary text-decoration-none float-end">{{ $t("user.login.forget password") }}</router-link>
+                        class="link text-secondary text-decoration-none float-end">{{ $t("user.login.forget password")
+                        }}</router-link>
                 </v-col>
             </v-row>
 
             <v-text-field variant="outlined" v-model="password" dir="ltr" :rules="[passwordValidation]" />
 
-            <v-checkbox color="primary" v-model="checkbox" :label="$t('user.login.remember me')" class="checkbox"></v-checkbox>
+            <v-checkbox color="primary" v-model="checkbox" :label="$t('user.login.remember me')"
+                class="checkbox"></v-checkbox>
 
             <v-btn class="px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat" :loading="loading"
                 :disabled="!valid">
@@ -86,7 +88,20 @@ export default defineComponent({
             try {
                 const response = await useAPI().login({ username: this.username, password: this.password });
                 this.authStore.setUser(response.user);
-                this.notificationStore.set(response.notifications);
+                try {
+                    const notifications = await useAPI().getNotifications(response.user)
+                    this.notificationStore.set(notifications.notifications);
+                }
+                catch(e) {
+                    if (e instanceof BaseError) {
+                        this.serverError = e.toComponentError();
+                    } else {
+                        this.serverError = {
+                            message: this.$t('server error')
+                        };
+                    }
+                }
+                
                 const redirect = this.$route.query.redirect;
                 if (redirect && typeof redirect == "string") {
                     this.$router.push({ path: redirect });
@@ -118,9 +133,6 @@ export default defineComponent({
         usernameValidation(value: string): boolean | string {
             if (!value) {
                 return this.$t("username is necessary");
-            }
-            if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) && !/^0\d{10}$/.test(value)) {
-                return this.$t("inputed username is invalid");
             }
             return true;
         },

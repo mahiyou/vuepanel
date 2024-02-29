@@ -6,44 +6,47 @@ import ServerInternalError from "./errors/ServerInternalError";
 import { IChangeUserPasswordRequest, ISearchUserRequest, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
 
 export default class MockAPI implements IAPI {
+    login(request: ILoginRequest): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
     addUser(request: IUserCreateRequest): Promise<IUser> {
         throw new Error("Method not implemented.");
     }
-    public async login(request: ILoginRequest): Promise<ILoginResponse> {
-        return this.call((request: ILoginRequest): ILoginResponse => {
-            if (Math.random() > 0.9) {
-                throw new UserLoginError();
-            }
-            if (Math.random() > 0.8) {
-                throw new ServerInternalError();
-            }
-            return {
-                user: {
-                    id: 2,
-                    name: "Alex",
-                    meta: {
-                        avatar: "/pics/avatar.jpg",
-                    },
-                    status: UserStatus.ACTIVE,
-                    type_id: 2,
-                    updated_at: null,
-                    created_at: new Date(),
-                    online: false,
-                    type:{
-                        title: "manager",
-                        locale: "en",
-                        id: 1,
-                        meta: undefined,
-                        abilities: ["dnj\\AAA\\Contracts\\IUser@viewAny", "dnj\AAA\Contracts\IUser@view", "dnj\AAA\Contracts\IUser@update", "dnj\AAA\Contracts\IUser@destroy", "dnj\\AAA\\Contracts\\IUser@create"],
-                        children: [],
-                        created_at: null,
-                        updated_at: null
-                    }
-                },
-                notifications: this.getNotificationsItems(),
-            };
-        }, [request]);
-    }
+    // public async login(request: ILoginRequest): Promise<ILoginResponse> {
+    //     return this.call((request: ILoginRequest): ILoginResponse => {
+    //         if (Math.random() > 0.9) {
+    //             throw new UserLoginError();
+    //         }
+    //         if (Math.random() > 0.8) {
+    //             throw new ServerInternalError();
+    //         }
+    //         return {
+    //             user: {
+    //                 id: 2,
+    //                 name: "Alex",
+    //                 meta: {
+    //                     avatar: "/pics/avatar.jpg",
+    //                 },
+    //                 status: UserStatus.ACTIVE,
+    //                 type_id: 2,
+    //                 updated_at: null,
+    //                 created_at: new Date(),
+    //                 online: false,
+    //                 type:{
+    //                     title: "manager",
+    //                     locale: "en",
+    //                     id: 1,
+    //                     meta: undefined,
+    //                     abilities: ["dnj\\AAA\\Contracts\\IUser@viewAny", "dnj\AAA\Contracts\IUser@view", "dnj\AAA\Contracts\IUser@update", "dnj\AAA\Contracts\IUser@destroy", "dnj\\AAA\\Contracts\\IUser@create"],
+    //                     children: [],
+    //                     created_at: null,
+    //                     updated_at: null
+    //                 }
+    //             },
+    //             notifications: this.getNotificationsItems(),
+    //         };
+    //     }, [request]);
+    // }
     editUser(request: IUserUpdateChangesRequest): Promise<IUser> {
         throw new Error("Method not implemented.");
     }

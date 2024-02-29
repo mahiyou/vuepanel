@@ -90,7 +90,7 @@ const routes = [
                                 path: "show/:id",
                                 component: ShowUserView,
                                 meta: {
-                                    ability: "dnj\AAA\Contracts\IUser@view"
+                                    ability: "dnj\\AAA\Contracts\\IUser@view"
                                 }
                             },
                             {
@@ -98,7 +98,7 @@ const routes = [
                                 path: "edit/:id",
                                 component: EditUserView,
                                 meta: {
-                                    ability: "dnj\AAA\Contracts\IUser@update"
+                                    ability: "dnj\\AAA\\Contracts\\IUser@update"
                                 }
                             },
                             {
@@ -106,7 +106,7 @@ const routes = [
                                 path: "delete/:id",
                                 component: DeleteUserView,
                                 meta: {
-                                    ability: "dnj\AAA\Contracts\IUser@destroy"
+                                    ability: "dnj\\AAA\\Contracts\\IUser@destroy"
                                 }
                             },
                             {
@@ -114,7 +114,7 @@ const routes = [
                                 path: "add",
                                 component: AddUserView,
                                 meta:{
-                                    ability: "dnj\\AAA\\Contracts\\IUser@create"
+                                    ability: "dnj\\AAA\\Contracts\\IUser@store"
                                 }
                             }
 
