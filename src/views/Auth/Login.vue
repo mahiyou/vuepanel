@@ -88,6 +88,7 @@ export default defineComponent({
             try {
                 const response = await useAPI().login({ username: this.username, password: this.password });
                 this.authStore.setUser(response.user);
+                this.authStore.setToken(response.token);
                 try {
                     const notifications = await useAPI().getNotifications(response.user)
                     this.notificationStore.set(notifications.notifications);

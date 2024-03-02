@@ -5,7 +5,9 @@ import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("auth", {
     state: () => ({
-        user: getUserFromLocalStorage() as undefined | IUser,
+        user: undefined as undefined | IUser,
+        token: getTokenFromLocalStorage() as undefined | string
+
     }),
     getters: {
         isUserLoggedIn(): boolean {
@@ -18,19 +20,22 @@ export const useAuthStore = defineStore("auth", {
         },
         setUser(user: IUser | undefined) {
             this.user = user;
-            if (user) {
-                localStorage.setItem("auth", JSON.stringify(user));
-            }else{
-                localStorage.removeItem("auth");
+        },
+        setToken(token: string | undefined) {
+            this.token = token;
+            if (token) {
+                localStorage.setItem("token", JSON.stringify(token));
+            } else {
+                localStorage.removeItem("token");
             }
         },
     }
 });
 
-function getUserFromLocalStorage(): undefined | IUser {
-    const user = localStorage.getItem("auth")
-    if (user) {
-        return JSON.parse(user);
+function getTokenFromLocalStorage(): undefined | string {
+    const token = localStorage.getItem("token")
+    if (token) {
+        return JSON.parse(token);
     } else {
         return undefined;
     }
