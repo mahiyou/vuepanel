@@ -23,11 +23,11 @@
                         <v-col sm="6" cols="12"
                             :align="$vuetify.display.xs ? 'center' : $vuetify.locale.isRtl ? 'left' : 'right'"
                             class="btn-col">
-                            <v-btn class="user-show-btn" prepend-icon="mdi-login-variant" color="customGreen" width="120px"
+                            <v-btn class="user-show-btn mx-1 mb-2" prepend-icon="mdi-login-variant" color="customGreen" width="120px"
                                 height="30px">{{ $t("admin.login.as-user") }}</v-btn>
-                            <v-btn class="user-show-btn ms-2" prepend-icon="mdi-cancel" color="black" width="120px"
+                            <v-btn class="user-show-btn mb-2 mx-1" prepend-icon="mdi-cancel" color="black" width="120px"
                                 height="30px">{{ $t("user.block") }}</v-btn>
-                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn ms-2" prepend-icon="mdi-delete-outline"
+                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn mb-2 mx-1" prepend-icon="mdi-delete-outline"
                                 color="customRed" width="120px" height="30px">{{ $t("user.delete") }}</v-btn>
                         </v-col>
                     </v-row>
@@ -35,7 +35,7 @@
 
                 <v-row class="mt-1">
                     <v-col md="4" cols="12">
-                        <v-card class="pa-4" elevation="1" height="600px">
+                        <v-card class="pa-4" elevation="1" max-height="600px">
                             <h3 class="mb-5">{{ $t("user.Info") }}</h3>
                             <v-table class="data-table">
                                 <tbody>
@@ -62,22 +62,22 @@
                             </v-table>
                         </v-card>
                     </v-col>
-                    <v-col md="8" cols="12" class="ps-0">
-                        <v-card class="pa-10" elevation="1" height="600px">
+                    <v-col md="8" cols="12" class="ps-md-0 ps-3">
+                        <v-card class="pa-sm-10 pa-6" elevation="1" max-height="600px">
                             <h4><v-icon icon="mdi-alert-outline" color="customRed" class="me-2 mb-1"></v-icon>{{
                                 $t('user.delete.alert') }}</h4>
                             <div class="mt-2">{{ $t('user.delete.alert.all-data-will-be-deleted') }}</div>
                             <div class="mt-8 text-secondary">{{ $t('user.delete.confirm') }} "{{ user.id }}":</div>
                             <v-row class="mt-1">
-                                <v-col cols="5"> <v-text-field variant="outlined" v-model="inputedUserID"
+                                <v-col sm="5" cols="12"> <v-text-field variant="outlined" v-model="inputedUserID"
                                         :dir="$vuetify.locale.current" />
                                 </v-col>
-                                <v-col cols="3">
+                                <v-col sm="3" cols="7">
                                     <v-btn class="user-show-btn" prepend-icon="mdi-delete-outline" color="customRed"
                                         width="100%" :loading="loadingDelete" :disabled="inputedUserID.length === 0"
                                         @click="deleteUser(user.id)">{{ $t("user.delete") }}</v-btn>
                                 </v-col>
-                                <v-col cols="2">
+                                <v-col sm="2" cols="3">
                                     <v-btn variant="tonal" class="user-show-btn" color="customGreen"
                                         :to="{ name: 'users' }">{{
                                             $t("cancel") }}</v-btn>
@@ -225,7 +225,7 @@ export default defineComponent({
     }
 
     .user-show-btn {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .v-table .v-table__wrapper>table>tbody>tr>td,

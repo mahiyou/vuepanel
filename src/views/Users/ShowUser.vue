@@ -23,19 +23,20 @@
                         <v-col sm="6" cols="12"
                             :align="$vuetify.display.xs ? 'center' : $vuetify.locale.isRtl ? 'left' : 'right'"
                             class="btn-col">
-                            <v-btn class="user-show-btn" prepend-icon="mdi-login-variant" color="customGreen" width="120px"
-                                height="30px">{{ $t("admin.login.as-user") }}</v-btn>
-                            <v-btn class="user-show-btn ms-2" prepend-icon="mdi-cancel" color="black" width="120px"
+                            <v-btn class="user-show-btn mx-2 mb-2" prepend-icon="mdi-login-variant" color="customGreen"
+                                width="120px" height="30px">{{ $t("admin.login.as-user") }}</v-btn>
+                            <v-btn class="user-show-btn mb-2 mx-2" prepend-icon="mdi-cancel" color="black" width="120px"
                                 height="30px">{{ $t("user.block") }}</v-btn>
-                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn ms-2" prepend-icon="mdi-delete-outline"
-                                color="customRed" width="120px" height="30px">{{ $t("user.delete") }}</v-btn>
+                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn mx-2 mb-2"
+                                prepend-icon="mdi-delete-outline" color="customRed" width="120px" height="30px">{{
+                                    $t("user.delete") }}</v-btn>
                         </v-col>
                     </v-row>
                 </v-card>
 
                 <v-row class="mt-1">
                     <v-col md="4" cols="12">
-                        <v-card class="pa-4" elevation="1" height="600px">
+                        <v-card class="pa-4" elevation="1" max-height="600px">
                             <h3 class="mb-5">{{ $t("user.Info") }}</h3>
                             <v-table class="data-table">
                                 <tbody>
@@ -62,7 +63,7 @@
                             </v-table>
                         </v-card>
                     </v-col>
-                    <v-col md="8" cols="12" class="ps-0">
+                    <v-col md="8" cols="12" class="ps-md-0 ps-3">
                         <v-card class="py-4 px-3 activities-card" elevation="1" height="600px">
                             <h3>{{ $t("user.profile.activities") }}</h3>
                             <v-tabs class="activities-tabs mt-3 mb-3" model-value="tab" color="primary" align-tabs="start">
@@ -119,16 +120,14 @@
                                     </v-row>
                                     <v-divider class="mt-2" :thickness="1" />
 
-                                    <ActivitiesTable :activitiesPerDate="userActivity.calendar"
-                                        :first-day-of-week="0" />
+                                    <ActivitiesTable :activitiesPerDate="userActivity.calendar" :first-day-of-week="0" />
 
                                     <v-divider class="mb-6 mt-3"></v-divider>
                                     <div class="activities-content">
                                         <v-card class="overflow-y-auto py-1" max-height="200">
-                                            <v-row v-for="( data, key ) in  userActivity.logs " :key="key"
-                                                class="mx-1 ms-5"
+                                            <v-row v-for="( data, key ) in  userActivity.logs " :key="key" class="mx-1 ms-5"
                                                 :class="$vuetify.locale.isRtl ? 'dashed-border-rtl' : 'dashed-border-ltr'">
-                                                <v-col cols="1"
+                                                <v-col sm="1" cols="2"
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'">
                                                     <span class="pa-1 rounded-pill bg-grey-lighten-3">
                                                         <v-icon :icon="getIcon(data)"
@@ -137,11 +136,10 @@
                                                 </v-col>
                                                 <v-col
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'"
-                                                    cols="7">{{ getActivityContent(data) }}</v-col>
-                                                <v-col cols="4" class="text-secondary"
+                                                    sm="7" cols="6">{{ getActivityContent(data) }}</v-col>
+                                                <v-col sm="4" cols="4" class="text-secondary"
                                                     :align="$vuetify.locale.isRtl ? 'left' : 'right'">{{
-                                                        data.created_at.toLocaleDateString() + " " +
-                                                        data.created_at.toLocaleTimeString()
+                                                        $vuetify.display.xs ? data.created_at.toLocaleDateString() : data.created_at.toLocaleDateString() + " " + data.created_at.toLocaleTimeString()
                                                     }}</v-col>
                                             </v-row>
                                         </v-card>
@@ -154,8 +152,7 @@
             </div>
         </v-container>
     </div>
-    <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate
-            color="primary"></v-progress-circular>
+    <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
     </div>
     <ErrorAlert class="mx-4" v-if="serverError" :error="serverError" />
 </template>
@@ -336,7 +333,7 @@ export default defineComponent({
     }
 
     .user-show-btn {
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .v-table .v-table__wrapper>table>tbody>tr>td,
@@ -386,4 +383,5 @@ export default defineComponent({
         right: -26px;
         z-index: 2;
     }
-}</style>
+}
+</style>
