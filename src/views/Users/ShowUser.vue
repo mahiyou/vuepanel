@@ -27,7 +27,7 @@
                                 height="30px">{{ $t("admin.login.as-user") }}</v-btn>
                             <v-btn class="user-show-btn ms-2" prepend-icon="mdi-cancel" color="black" width="120px"
                                 height="30px">{{ $t("user.block") }}</v-btn>
-                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn ms-2" prepend-icon="mdi-delete"
+                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn ms-2" prepend-icon="mdi-delete-outline"
                                 color="customRed" width="120px" height="30px">{{ $t("user.delete") }}</v-btn>
                         </v-col>
                     </v-row>

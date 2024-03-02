@@ -1,6 +1,7 @@
 <template>
     <v-container class="users-list">
         <v-card class="pa-sm-5 pa-3" flat v-if="!loading && !error">
+            <ErrorAlert v-if="userDeleted" :error="userDeleted" />
             <v-row class="mb-3">
                 <v-col sm="6" cols="12">
                     <h1 :class="$vuetify.display.xs ? 'text-center' : $vuetify.locale.isRtl ? 'text-right' : 'text-left'">
@@ -75,6 +76,7 @@ export default {
         return {
             response: undefined as ISearchUserResponse | undefined,
             error: undefined as undefined | IErrorInComponent,
+            userDeleted: undefined as undefined | IErrorInComponent,
             loading: true,
             ipp: 5
         }
@@ -160,6 +162,11 @@ export default {
         },
     },
     created() {
+        if(this.$route.query.deletedUser){
+            this.userDeleted = {
+                message: this.$route.query.deletedUser +" "+ this.$t('user.delete.successful')
+            };
+        }
         this.$watch(
             () => this.$route.query,
             () => {

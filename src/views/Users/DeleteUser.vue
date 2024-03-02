@@ -27,7 +27,7 @@
                                 height="30px">{{ $t("admin.login.as-user") }}</v-btn>
                             <v-btn class="user-show-btn ms-2" prepend-icon="mdi-cancel" color="black" width="120px"
                                 height="30px">{{ $t("user.block") }}</v-btn>
-                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn ms-2" prepend-icon="mdi-delete"
+                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn ms-2" prepend-icon="mdi-delete-outline"
                                 color="customRed" width="120px" height="30px">{{ $t("user.delete") }}</v-btn>
                         </v-col>
                     </v-row>
@@ -63,34 +63,28 @@
                         </v-card>
                     </v-col>
                     <v-col md="8" cols="12" class="ps-0">
-                        <v-card class="pa-5" elevation="1" height="600px">
-                            <h4><v-icon icon="mdi-alert-outline" color="customRed" class="me-2 mb-1"></v-icon>Are you sure
-                                to delete this user?</h4>
-                            <div class="mt-2">Deleting this user will remove all of its records from database.</div>
-                            <div class="mt-8 text-secondary">to confirm this, type user ID:</div>
+                        <v-card class="pa-10" elevation="1" height="600px">
+                            <h4><v-icon icon="mdi-alert-outline" color="customRed" class="me-2 mb-1"></v-icon>{{
+                                $t('user.delete.alert') }}</h4>
+                            <div class="mt-2">{{ $t('user.delete.alert.all-data-will-be-deleted') }}</div>
+                            <div class="mt-8 text-secondary">{{ $t('user.delete.confirm') }} "{{ user.id }}":</div>
                             <v-row class="mt-1">
                                 <v-col cols="5"> <v-text-field variant="outlined" v-model="inputedUserID"
                                         :dir="$vuetify.locale.current" />
                                 </v-col>
                                 <v-col cols="3">
                                     <v-btn class="user-show-btn" prepend-icon="mdi-delete-outline" color="customRed"
-                                        width="100%" :loading="loadingDelete"
+                                        width="100%" :loading="loadingDelete" :disabled="inputedUserID.length === 0"
                                         @click="deleteUser(user.id)">{{ $t("user.delete") }}</v-btn>
                                 </v-col>
                                 <v-col cols="2">
                                     <v-btn variant="tonal" class="user-show-btn" color="customGreen"
                                         :to="{ name: 'users' }">{{
-                                            $t("cancle") }}</v-btn>
+                                            $t("cancel") }}</v-btn>
                                 </v-col>
                             </v-row>
-                            <div v-if="userDeleted">
-                                <h3 class="text-red my-4">{{ $t("user.delete.successful") }}</h3>
-                                <v-btn variant="flat" color="secondary" class="ms-3 mb-3" width="220px"
-                                    :to="{ name: 'users' }">{{
-                                        $t("users.list.page") }}</v-btn>
-                            </div>
-                            <ErrorAlert v-if="serverError" :error="serverError" />
-
+                            <ErrorAlert v-if="wrongUserId" :error="wrongUserId" />
+                            <ErrorAlert v-if="serverErrorForDelete" :error="serverErrorForDelete" />
                         </v-card>
                     </v-col>
                 </v-row>
@@ -123,9 +117,10 @@ export default defineComponent({
         return {
             user: {} as IUser,
             serverError: undefined as undefined | IErrorInComponent,
+            wrongUserId: undefined as undefined | IErrorInComponent,
+            serverErrorForDelete: undefined as undefined | IErrorInComponent,
             loading: true,
             loadingDelete: false,
-            userDeleted: false,
             inputedUserID: "",
         }
     },
@@ -138,17 +133,27 @@ export default defineComponent({
             }
         },
         async deleteUser(id: number) {
-            this.loadingDelete = true;
             this.serverError = undefined;
+            this.wrongUserId = undefined;
+            this.serverErrorForDelete = undefined;
+
+            if (this.inputedUserID !== this.user.id.toString()) {
+                this.wrongUserId = {
+                    message: this.$t('user.delete.confirm-userId')
+                };
+                this.inputedUserID = "";
+                return;
+            }
+            this.loadingDelete = true;
             try {
                 await useAPI().deleteUser(id);
-                this.userDeleted = true;
+                this.$router.push({name: 'users',query:{deletedUser:this.user.name} });
             }
             catch (e) {
                 if (e instanceof BaseError) {
-                    this.serverError = e.toComponentError();
+                    this.serverErrorForDelete = e.toComponentError();
                 } else {
-                    this.serverError = {
+                    this.serverErrorForDelete = {
                         message: this.$t('server error')
                     };
                 }
@@ -222,4 +227,12 @@ export default defineComponent({
     .user-show-btn {
         font-size: 11px;
     }
-}</style>
+
+    .v-table .v-table__wrapper>table>tbody>tr>td,
+    th {
+        --v-border-opacity: 0;
+        font-size: 12.5px;
+    }
+
+}
+</style>

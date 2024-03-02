@@ -87,7 +87,7 @@
     "invalid.email": "ایمیل وارد شده معتبر نیست",
     "user.update.succesful": "به روز رسانی با موفقیت انجام شد.",
     "cancel": "انصراف",
-    "user.delete.successful": "کاربر با موفقیت حذف شد.",
+    "user.delete.successful": "با موفقیت حذف شد",
     "users.list.page": "رفتن به صغحه لیست کاربران",
     "dialog.close": "بستن پنجره",
     "field.fill.minimum-number": "حداقل یک گزینه را وارد کنید",
@@ -113,5 +113,9 @@
     "user.creat-at.months-ago": "ماه قبل",
     "user.creat-at.days-ago": "روز قبل",
     "user.creat-at.hours-ago": "ساعت قبل",
-    "user.creat-at.recently": "به تازگی"
+    "user.creat-at.recently": "به تازگی",
+    "user.delete.alert": "آیا اطمینان دارید که میخواهید این کاربر را حذف کنید؟",
+    "user.delete.alert.all-data-will-be-deleted": "در صورت حذف، همه ی اطلاعات کاربر از پایگاه داده حذف می شود.",
+    "user.delete.confirm": "اگر از حذف کاربر اطمینان دارید، آی دی کاربر را وارد کنید",
+    "user.delete.confirm-userId": "شناسه کاربری وارد شده صحیح نیست"
 }
