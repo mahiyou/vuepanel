@@ -90,7 +90,7 @@ const routes = [
                                 path: "show/:id",
                                 component: ShowUserView,
                                 meta: {
-                                    ability: "dnj\\AAA\Contracts\\IUser@view"
+                                    ability: "dnj\\AAA\\Contracts\\IUser@view"
                                 }
                             },
                             {

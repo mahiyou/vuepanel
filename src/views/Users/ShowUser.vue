@@ -9,7 +9,8 @@
             <div class="cards mb-5">
                 <v-card class="pa-4" elevation="1">
                     <v-row>
-                        <v-col md="2" sm="3" cols="6" align-self="center" :align="$vuetify.locale.isRtl ? 'left' : 'right'" class="pe-2">
+                        <v-col md="2" sm="3" cols="6" align-self="center" :align="$vuetify.locale.isRtl ? 'left' : 'right'"
+                            class="pe-2">
                             <v-img :src="user.meta.avatar || '/pics/default-avatar.jpg'"
                                 class="rounded-circle  my-2 data.data-avatar" width="90px" height="90px">
                             </v-img></v-col>
@@ -19,11 +20,15 @@
                                 <h4 class="text-secondary">{{ user.type.title }}</h4>
                             </div>
                         </v-col>
-                        <v-col sm="6" cols="12" :align="$vuetify.display.xs ? 'center' :  $vuetify.locale.isRtl ? 'left' : 'right'" class="btn-col">
+                        <v-col sm="6" cols="12"
+                            :align="$vuetify.display.xs ? 'center' : $vuetify.locale.isRtl ? 'left' : 'right'"
+                            class="btn-col">
                             <v-btn class="user-show-btn" prepend-icon="mdi-login-variant" color="customGreen" width="120px"
                                 height="30px">{{ $t("admin.login.as-user") }}</v-btn>
-                            <v-btn class="user-show-btn ms-2" prepend-icon="mdi-cancel" color="customRed" width="120px"
+                            <v-btn class="user-show-btn ms-2" prepend-icon="mdi-cancel" color="black" width="120px"
                                 height="30px">{{ $t("user.block") }}</v-btn>
+                            <v-btn :to="{ name: 'deleteUser' }" class="user-show-btn ms-2" prepend-icon="mdi-delete"
+                                color="customRed" width="120px" height="30px">{{ $t("user.delete") }}</v-btn>
                         </v-col>
                     </v-row>
                 </v-card>
@@ -34,7 +39,7 @@
                             <h3 class="mb-5">{{ $t("user.Info") }}</h3>
                             <v-table class="data-table">
                                 <tbody>
-                                    <tr v-for="(data, key) in userDatas" :key="key">
+                                    <tr v-for="( data, key ) in  userDatas " :key="key">
                                         <td>{{ data.tilte }}:</td>
                                         <td class="text-secondary">
                                             <div v-if="data.value !== user.status && data.value !== user.created_at">{{
@@ -77,22 +82,26 @@
                                             <span class="activity-boxes mx-5">
                                                 <v-tooltip :text="$t('tooltip.activities.zero')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box bg-primary-lighten-4"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary-lighten-4">
+                                                        </div>
                                                     </template>
                                                 </v-tooltip>
                                                 <v-tooltip :text="$t('tooltip.activities.20')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box bg-primary-lighten-3"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary-lighten-3">
+                                                        </div>
                                                     </template>
                                                 </v-tooltip>
                                                 <v-tooltip :text="$t('tooltip.activities.30')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box bg-primary-lighten-2"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary-lighten-2">
+                                                        </div>
                                                     </template>
                                                 </v-tooltip>
                                                 <v-tooltip :text="$t('tooltip.activities.40')" location="top">
                                                     <template v-slot:activator="{ props }">
-                                                        <div v-bind="props" class="activity-box bg-primary-lighten-1"></div>
+                                                        <div v-bind="props" class="activity-box bg-primary-lighten-1">
+                                                        </div>
                                                     </template>
                                                 </v-tooltip>
                                                 <v-tooltip :text="$t('tooltip.activities.50')" location="top">
@@ -109,14 +118,15 @@
                                         </v-col>
                                     </v-row>
                                     <v-divider class="mt-2" :thickness="1" />
-                                    
-                                        <ActivitiesTable :activitiesPerDate="userActivity.calendar"
-                                            :first-day-of-week="0" />
-                                   
+
+                                    <ActivitiesTable :activitiesPerDate="userActivity.calendar"
+                                        :first-day-of-week="0" />
+
                                     <v-divider class="mb-6 mt-3"></v-divider>
                                     <div class="activities-content">
                                         <v-card class="overflow-y-auto py-1" max-height="200">
-                                            <v-row v-for="(data, key) in userActivity.logs" :key="key" class="mx-1 ms-5"
+                                            <v-row v-for="( data, key ) in  userActivity.logs " :key="key"
+                                                class="mx-1 ms-5"
                                                 :class="$vuetify.locale.isRtl ? 'dashed-border-rtl' : 'dashed-border-ltr'">
                                                 <v-col cols="1"
                                                     :class="$vuetify.locale.isRtl ? 'col-position-rtl' : 'col-position-ltr'">
@@ -144,7 +154,8 @@
             </div>
         </v-container>
     </div>
-    <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
+    <div class="text-center my-10"><v-progress-circular v-if="loading" indeterminate
+            color="primary"></v-progress-circular>
     </div>
     <ErrorAlert class="mx-4" v-if="serverError" :error="serverError" />
 </template>
@@ -375,5 +386,4 @@ export default defineComponent({
         right: -26px;
         z-index: 2;
     }
-}
-</style>
+}</style>
