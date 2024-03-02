@@ -88,6 +88,7 @@
     "invalid.user.phone-number": "inputed phone number is invalid",
     "invalid.email":"inputed email is invalid",
     "user.update.succesful":"succesful update",
+    "user.add.succesful": "succesful update",
     "cancel":"Cancel",
     "user.delete.successful":"deleted successfully",
     "users.list.page":"Go to the user list page",

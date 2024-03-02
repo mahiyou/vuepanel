@@ -144,7 +144,6 @@ export default class ServerAPI extends MockAPI implements IAPI {
             })
     }
     public async login(request: ILoginRequest): Promise<any> {
-        console.log(request)
         const body = JSON.stringify({
             username: request.username,
             password: request.password

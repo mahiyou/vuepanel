@@ -86,6 +86,7 @@
     "invalid.user.phone-number": "شماره موبایل وارد شده معتبر نیست",
     "invalid.email": "ایمیل وارد شده معتبر نیست",
     "user.update.succesful": "به روز رسانی با موفقیت انجام شد.",
+    "user.add.succesful": "کاربر با موفقیت اضافه شد",
     "cancel": "انصراف",
     "user.delete.successful": "با موفقیت حذف شد",
     "users.list.page": "رفتن به صغحه لیست کاربران",

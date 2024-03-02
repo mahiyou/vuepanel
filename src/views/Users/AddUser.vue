@@ -74,15 +74,15 @@
                                 <v-text-field variant="outlined" v-model="newUser.meta.zipCode" dir="ltr" class="mb-2" />
                             </v-col>
                         </v-row>
-                        <v-btn type="submit" class="px-5 float-end" color="primary" variant="flat"
-                            :loading="updateLoading">{{ $t("user.add")
+                        <v-btn type="submit" class="px-5 float-end" color="primary" variant="flat" :loading="updateLoading"
+                            :disabled="!valid">{{ $t("user.add")
                             }}</v-btn>
                     </v-form>
 
                     <ErrorAlert class="mt-15 mx-4" v-if="incorrectRepeatPass" :error="incorrectRepeatPass" />
                     <ErrorAlert class="mt-15 mx-4" v-if="invalidInputError" :error="invalidInputError" />
                     <ErrorAlert class="mt-15 mx-4" v-if="serverErrorForUpdate" :error="serverErrorForUpdate" />
-                    <v-alert closable class="mt-15 mx-4" v-if="successfulUpdate" :text="$t('user.update.succesful')"
+                    <v-alert closable class="mt-15 mx-4" v-if="successfulUpdate" :text="$t('user.add.succesful')"
                         type="success" variant="tonal"></v-alert>
 
                 </v-card>
@@ -111,7 +111,6 @@ export default defineComponent({
             invalidInputError: undefined as undefined | IErrorInComponent,
             updateLoading: false,
             serverErrorForUpdate: undefined as undefined | IErrorInComponent,
-            serverErrorForPassChange: undefined as undefined | IErrorInComponent,
             incorrectRepeatPass: undefined as undefined | IErrorInComponent,
             successfulUpdate: false,
             confirmBtn: true,
@@ -176,7 +175,7 @@ export default defineComponent({
             }
             return true;
         },
-        
+
         roleValidation(value: any): boolean | string {
             if (!value) {
                 return this.$t("user.role.required");
@@ -185,6 +184,8 @@ export default defineComponent({
         },
         async onSubmit() {
             this.incorrectRepeatPass = undefined;
+            this.serverErrorForUpdate = undefined;
+            this.successfulUpdate = false;
             if (this.password !== this.confirmPass) {
                 this.incorrectRepeatPass = {
                     message: this.$t('password.confirm-password.not-matching')
@@ -193,16 +194,27 @@ export default defineComponent({
             } else {
                 this.incorrectRepeatPass = undefined;
             }
+            this.updateLoading = true;
             try {
-                const response = await useAPI().addUser({
+                await useAPI().addUser({
                     name: this.newUser.name,
                     status: this.newUser.status,
                     type_id: this.newUser.type_id,
-                    usernames:[this.newUser.username]
+                    usernames: [this.newUser.username]
                 })
+                this.successfulUpdate = true;
             }
-            catch {
-
+            catch (e) {
+                if (e instanceof BaseError) {
+                    this.serverErrorForUpdate = e.toComponentError();
+                } else {
+                    this.serverErrorForUpdate = {
+                        message: this.$t('server error')
+                    }
+                }
+            }
+            finally {
+                this.updateLoading = false;
             }
 
         },

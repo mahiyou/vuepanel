@@ -83,7 +83,7 @@
                                         </v-col>
                                     </v-row>
                                     <v-btn type="submit" class="px-5 float-end" color="primary" variant="flat"
-                                        :loading="updateLoading">{{ $t("edit.user.updates")
+                                        :loading="updateLoading" :disabled="confirmBtn || !valid">{{ $t("edit.user.updates")
                                         }}</v-btn>
                                 </v-form>
 
@@ -199,13 +199,13 @@ export default defineComponent({
             return true;
         },
         phoneNumberValidation(value: string): boolean | string {
-            if (!/^0\d{10}$/.test(value)) {
+            if (value && !/^0\d{10}$/.test(value)) {
                 return this.$t("invalid.user.phone-number");
             }
             return true;
         },
         emailValidation(value: string): boolean | string {
-            if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value)) {
+            if (value && !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value)) {
                 return this.$t("invalid.email");
             }
             return true;
