@@ -103,10 +103,11 @@ export default class ServerAPI extends MockAPI implements IAPI {
         if (request.meta.banner) {
             formData.append('banner', request.meta.banner);
         }
+        formData.append('_method', 'PUT')
 
         const response = await fetch(`${this.baseURL}/aaa/v1/users/${request.userId}`,
             {
-                method: 'PUT',
+                method: 'POST',
                 body: formData,
                 headers: {
                     Accept: "application/json",
