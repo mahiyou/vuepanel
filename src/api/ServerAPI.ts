@@ -4,6 +4,7 @@ import { ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IRe
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import MockAPI from "./MockAPI";
 import vuetify from '../plugins/vuetify';
+import { useAuthStore } from "@/store/auth";
 
 
 export default class ServerAPI extends MockAPI implements IAPI {
@@ -13,7 +14,14 @@ export default class ServerAPI extends MockAPI implements IAPI {
         super();
         this.baseURL = baseURL;
     }
-
+    public getToken(): string {
+        const token = useAuthStore().token
+        if (token !== undefined) {
+            return "Bearer "+token
+        } else {
+            throw new Error("no user")
+        }
+    }
     public prepaireData(request: any): Record<string, string> {
         const result: Record<string, string> = {};
 
@@ -59,7 +67,7 @@ export default class ServerAPI extends MockAPI implements IAPI {
             headers: {
                 Accept: "application/json",
                 "Accept-Language": vuetify.locale.current.value,
-                Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
+                Authorization:  this.getToken()
             },
         });
         const body: ISearchUserResponse = await response.json();
@@ -71,7 +79,7 @@ export default class ServerAPI extends MockAPI implements IAPI {
             headers: {
                 Accept: "application/json",
                 "Accept-Language": vuetify.locale.current.value,
-                Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
+                Authorization: this.getToken()
             },
         })
         const body = await response.json();
@@ -103,13 +111,13 @@ export default class ServerAPI extends MockAPI implements IAPI {
                 headers: {
                     Accept: "application/json",
                     "Accept-Language": vuetify.locale.current.value,
-                    Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
+                    Authorization:  this.getToken()
                 },
             });
         const result = await response.json();
         return this.normalizeUser(result.data);
     }
-    public async addUser(request: IUserCreateRequest){
+    public async addUser(request: IUserCreateRequest) {
         const body = JSON.stringify({
             name: request.name,
             statue: request.status,
@@ -126,7 +134,7 @@ export default class ServerAPI extends MockAPI implements IAPI {
                     Accept: "application/json",
                     "Accept-Language": vuetify.locale.current.value,
                     "Content-Type": "application/json",
-                    Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
+                    Authorization:  this.getToken()
                 },
             });
         const result = await response.json();
@@ -139,7 +147,7 @@ export default class ServerAPI extends MockAPI implements IAPI {
                 headers: {
                     Accept: "application/json",
                     "Accept-Language": vuetify.locale.current.value,
-                    Authorization: "Bearer 12|3OBFQj0Kaax21p5QsvQiWRu4sVpy5Z0FHsyd5R6b"
+                    Authorization:  this.getToken()
                 },
             })
     }
@@ -160,5 +168,5 @@ export default class ServerAPI extends MockAPI implements IAPI {
             })
         return response.json();
     }
-    
+
 }
