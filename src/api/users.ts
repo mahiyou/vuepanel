@@ -27,13 +27,13 @@ export interface ISearchUserRequest {
     type_id?: number;
     page?: number;
     ipp?: number;
+    cursor?: string;
 }
 
 export interface ISearchUserResponse {
     data: IUser[];
     types: ILocalizedUserType[];
-    meta: {
-    }
+    meta: any
 }
 
 export interface IChangeUserPasswordRequest{

@@ -6,7 +6,7 @@ import DashboardView from "@/views/Dashboard.vue";
 import ForbiddenView from "@/views/Forbidden.vue";
 import NotFoundView from "@/views/NotFound.vue";
 import ResetPasswordView from "@/views/Auth/ResetPassword.vue";
-import RegisterView from "@/views/Auth/register.vue";
+import RegisterView from "@/views/Auth/Register.vue";
 import UsersView from "@/views/Users/Users.vue";
 import Logout from "@/views/Auth/Logout.vue";
 import EditUserView from "@/views/Users/EditUser.vue"
@@ -15,6 +15,7 @@ import vuetify from '../plugins/vuetify';
 import DeleteUserView from '@/views/Users/DeleteUser.vue';
 import ShowUserView from '@/views/Users/ShowUser.vue';
 import AddUserView from '@/views/Users/AddUser.vue';
+import UserTypesView from "@/views/Settings/UserTypes.vue";
 
 
 const routes = [
@@ -113,7 +114,7 @@ const routes = [
                                 name: "addUser",
                                 path: "add",
                                 component: AddUserView,
-                                meta:{
+                                meta: {
                                     ability: "dnj\\AAA\\Contracts\\IUser@store"
                                 }
                             }
@@ -121,6 +122,16 @@ const routes = [
                         ]
 
                     },
+                    {
+                        path: "settings",
+                        children: [
+                            {
+                                name: "userTypes",
+                                path: "userTypes",
+                                component: UserTypesView,
+                            },
+                        ]
+                    }
 
                 ]
             },

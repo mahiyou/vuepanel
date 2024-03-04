@@ -118,5 +118,6 @@
     "user.delete.alert": "آیا اطمینان دارید که میخواهید این کاربر را حذف کنید؟",
     "user.delete.alert.all-data-will-be-deleted": "در صورت حذف، همه ی اطلاعات کاربر از پایگاه داده حذف می شود.",
     "user.delete.confirm": "اگر از حذف کاربر اطمینان دارید، آی دی کاربر را وارد کنید",
-    "user.delete.confirm-userId": "شناسه کاربری وارد شده صحیح نیست"
+    "user.delete.confirm-userId": "شناسه کاربری وارد شده صحیح نیست",
+    "settings.user-types":"سطوح کاربری"
 }
