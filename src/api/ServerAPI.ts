@@ -194,4 +194,14 @@ export default class ServerAPI extends MockAPI implements IAPI {
         }
         return response.json();
     }
+    public async searchUserTypes(): Promise<any> {
+        const response = await fetch(`${this.baseURL}/aaa/v1/types`, {
+            headers: {
+                Accept: "application/json",
+                "Accept-Language": vuetify.locale.current.value,
+                Authorization: this.getToken()
+            },
+        });
+        return response.json();
+    }
 }

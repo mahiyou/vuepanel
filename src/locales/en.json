@@ -123,5 +123,10 @@
     "user.delete.alert.all-data-will-be-deleted":"By deleting this user, all its records will be deleted from the database.",
     "user.delete.confirm":"To confirm this, type user ID",
     "user.delete.confirm-userId":"Inputed user ID is wrong",
-    "settings.user-types":"User types"
+    "settings.user-types":"User types",
+    "user-types.title":"title",
+    "user-types.abilities": "abilities",
+    "user-types.priorities": "priorities",
+    "user-types.delete": "delete",
+    "user-types.edit": "edit"
 }

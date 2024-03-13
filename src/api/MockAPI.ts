@@ -6,6 +6,9 @@ import ServerInternalError from "./errors/ServerInternalError";
 import { IChangeUserPasswordRequest, ISearchUserRequest, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
 
 export default class MockAPI implements IAPI {
+    searchUserTypes(): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
     register(request: IRegisterRequest): Promise<any> {
         throw new Error("Method not implemented.");
     }

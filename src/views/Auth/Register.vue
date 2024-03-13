@@ -107,8 +107,6 @@ export default defineComponent({
                 const authStore = useAuthStore();
                 authStore.setUser(response.user);
                 authStore.setToken(response.token)
-                console.log(response)
-                console.log(authStore.token)
                 const redirect = this.$route.query.redirect;
                 if (redirect && typeof redirect == "string") {
                     this.$router.push({ path: redirect })
@@ -118,7 +116,6 @@ export default defineComponent({
             }
             catch (e) {
                 if (e instanceof InvalidInputResponse) {
-                    console.log(e.errors)
                     this.errors = e.errors;
                 }
                 else {
