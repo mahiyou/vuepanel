@@ -1,10 +1,13 @@
 import { IAPI } from "@/api";
 import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserResponse, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
-import { ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse, IChangePasswordRequest, IUser, IUserSummary, UserStatus } from "./authentication";
+import { ILoginRequest, ILoginResponse, IRegisterRequest, IResetPasswordRequest, IResetPasswordResponse, IChangePasswordRequest, IUser, IUserSummary, UserStatus } from "./authentication";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import MockAPI from "./MockAPI";
 import vuetify from '../plugins/vuetify';
 import { useAuthStore } from "@/store/auth";
+import InputValidationError from "./errors/InputValidationError";
+import BaseError from "./errors/BaseError";
+import { generateServerError } from "./errors/GenerateServerError";
 
 
 export default class ServerAPI extends MockAPI implements IAPI {
@@ -169,5 +172,26 @@ export default class ServerAPI extends MockAPI implements IAPI {
             })
         return response.json();
     }
-
+    public async register(request: IRegisterRequest): Promise<any> {
+        const body = JSON.stringify({
+            name: request.name,
+            email: request.email,
+            cellphone: request.cellphone,
+            password: request.password
+        });
+        const response = await fetch(`${this.baseURL}/register`,
+            {
+                body,
+                method: 'POST',
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Accept-Language": vuetify.locale.current.value,
+                },
+            });
+        if(!response.ok){
+           return generateServerError(response);
+        }
+        return response.json();
+    }
 }

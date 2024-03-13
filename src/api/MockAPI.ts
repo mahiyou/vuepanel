@@ -1,11 +1,14 @@
 import { IAPI } from "@/api";
-import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse, IResetPasswordRequest, IResetPasswordResponse, IUser, UserStatus } from "./authentication";
+import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest, IResetPasswordRequest, IResetPasswordResponse, IUser, UserStatus } from "./authentication";
 import UserLoginError from "@/api/errors/UserLoginError";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import ServerInternalError from "./errors/ServerInternalError";
 import { IChangeUserPasswordRequest, ISearchUserRequest, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
 
 export default class MockAPI implements IAPI {
+    register(request: IRegisterRequest): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
     login(request: ILoginRequest): Promise<any> {
         throw new Error("Method not implemented.");
     }
@@ -169,27 +172,27 @@ export default class MockAPI implements IAPI {
         }];
     }
 
-    public async register(request: IRegisterRequest): Promise<IRegisterResponse> {
-        return this.call((request: ILoginRequest) => {
-            if (Math.random() > 0.5) {
-                throw new UserLoginError();
-            }
-            return {
-                user: {
-                    id: 2,
-                    name: "Alex",
-                    meta: {
-                        avatar: "/pics/avatar.jpg",
-                    },
-                    status: UserStatus.ACTIVE,
-                    type_id: 2,
-                    updated_at: null,
-                    created_at: new Date(),
-                    online: false
-                },
-            };
-        }, [request]);
-    }
+    // public async register(request: IRegisterRequest): Promise<IRegisterResponse> {
+    //     return this.call((request: ILoginRequest) => {
+    //         if (Math.random() > 0.5) {
+    //             throw new UserLoginError();
+    //         }
+    //         return {
+    //             user: {
+    //                 id: 2,
+    //                 name: "Alex",
+    //                 meta: {
+    //                     avatar: "/pics/avatar.jpg",
+    //                 },
+    //                 status: UserStatus.ACTIVE,
+    //                 type_id: 2,
+    //                 updated_at: null,
+    //                 created_at: new Date(),
+    //                 online: false
+    //             },
+    //         };
+    //     }, [request]);
+    // }
 
     public async resetPassword(request: IResetPasswordRequest): Promise<IResetPasswordResponse | ILoginResponse> {
         return this.call((request: IResetPasswordRequest) => {

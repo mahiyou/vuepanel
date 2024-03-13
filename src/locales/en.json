@@ -30,6 +30,8 @@
     "user.name.required":"Name is necessary",
     "user.username.required": "Username is necessary",
     "user.role.required":"Role is necessary",
+    "user.phone-number.required": "Phone number is necessary",
+    "user.email.required": "Email address is necessary",
     "user.status.required": "Status is necessary",
     "user.forgot-password":"Forgot your password?",
     "user.reset-password":"Reset your password",

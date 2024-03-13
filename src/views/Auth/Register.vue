@@ -3,8 +3,17 @@
         <div class="text-primary title">{{ $t("new account") }}</div>
         <div class="sub-title mt-2 text-secondary">{{ $t("create your own account") }}</div>
         <v-form @submit.prevent="onSubmit" v-model="valid" class="text-start">
-            <div class="mt-6 mb-2">{{ $t("username(email or cell phone)") }}<span class="text-red"> *</span></div>
-            <v-text-field variant="outlined" v-model="username" dir="ltr" :rules="[usernameValidation]" />
+
+            <div class="mt-6 mb-2">{{ $t("user.name") }}<span class="text-red"> *</span></div>
+            <v-text-field variant="outlined" v-model="name" dir="ltr" :rules="[nameValidation]" />
+
+            <div class="mt-6 mb-2">{{ $t("user.phone-number") }}<span class="text-red"> *</span></div>
+            <v-text-field variant="outlined" v-model="phone" @change="phoneChanged" dir="ltr"
+                :error-messages="errors ? errors.cellphone : ''" :rules="[phoneValidation]" />
+
+            <div class="mt-6 mb-2">{{ $t("user.email-address") }}<span class="text-red"> *</span></div>
+            <v-text-field variant="outlined" v-model="email" dir="ltr" @change="emailChanged"
+                :error-messages="errors ? errors.email : ''" :rules="[emailValidation]" />
 
             <div class="mt-2 mb-2">{{ $t("user.password") }}<span class="text-red"> *</span></div>
             <v-text-field variant="outlined" v-model="password" dir="ltr" :rules="[passwordValidation]" />
@@ -13,7 +22,8 @@
             <v-text-field variant="outlined" v-model="repeartPassword" dir="ltr" :rules="[repeatPasswordValidation]" />
 
             <div class="text-secondary mt-2">{{ $t("By registering you agree to the terms") }} <router-link
-                    :to="{ name: 'register', params: { lang: $vuetify.locale.current } }" class="text-primary">{{ $t("terms and conditions") }}</router-link></div>
+                    :to="{ name: 'register', params: { lang: $vuetify.locale.current } }" class="text-primary">{{
+                    $t("terms and conditions") }}</router-link></div>
 
             <v-btn class="mt-6 px-2 submit-btn" width="100%" type="submit" color="customGreen" variant="flat"
                 :disabled="!valid" :loading="loading">
@@ -40,14 +50,14 @@
         </v-form>
     </v-container>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useAuthStore } from "@/store/auth";
 import { useAPI } from "@/api";
-import UserLoginError from "@/api/errors/UserLoginError";
 import ErrorAlert from "@/components/ErrorAlert.vue"
 import { IErrorInComponent } from "@/utilities/error";
-import BaseError from "@/api/errors/BaseError";
+import InvalidInputResponse from "@/api/errors/InvalidInputResponse";
 
 export default defineComponent({
     components: {
@@ -58,12 +68,16 @@ export default defineComponent({
             valid: false,
             password: "",
             checkbox: false,
+            name: "",
+            phone: "",
+            email: "",
             username: "",
             repeartPassword: "",
             loading: false,
             serverError: undefined as undefined | IErrorInComponent,
             invalidInputError: undefined as undefined | IErrorInComponent,
             incorrectRepeatPass: undefined as undefined | IErrorInComponent,
+            errors: undefined as undefined | Record<string, string[]>
         };
     },
     methods: {
@@ -84,12 +98,17 @@ export default defineComponent({
             this.loading = true;
             try {
                 const response = await useAPI().register({
-                    username: this.username,
+                    name: this.name,
+                    cellphone: this.phone,
+                    email: this.email,
                     password: this.password,
                 });
 
                 const authStore = useAuthStore();
                 authStore.setUser(response.user);
+                authStore.setToken(response.token)
+                console.log(response)
+                console.log(authStore.token)
                 const redirect = this.$route.query.redirect;
                 if (redirect && typeof redirect == "string") {
                     this.$router.push({ path: redirect })
@@ -98,34 +117,52 @@ export default defineComponent({
                 }
             }
             catch (e) {
-                if (e instanceof UserLoginError) {
-                    if (e instanceof BaseError) {
-                        this.invalidInputError = e.toComponentError();
-                    } else {
-                        this.invalidInputError = {
-                            message: this.$t('wrong inputed information')
-                        };
-                    }
-                } else {
-                    if (e instanceof BaseError) {
-                        this.serverError = e.toComponentError();
-                    } else {
-                        this.serverError = {
-                            message: this.$t('server error')
-                        };
-                    }
+                if (e instanceof InvalidInputResponse) {
+                    console.log(e.errors)
+                    this.errors = e.errors;
                 }
+                else {
+                    this.serverError = {
+                        message: this.$t('server error')
+                    };
+                }
+
             }
             finally {
                 this.loading = false;
             }
         },
-        usernameValidation(value: string): boolean | string {
+        nameValidation(value: string): boolean | string {
             if (!value) {
-                return this.$t("username is necessary");
+                return this.$t("user.name.required");
             }
-            if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) && !/^0\d{10}$/.test(value)) {
-                return this.$t("inputed username is invalid");
+            return true;
+        },
+        phoneChanged() {
+            if (this.errors){
+                this.errors.cellphone = [];
+            }
+        },
+        emailChanged() {
+            if (this.errors) {
+                this.errors.email = [];
+            }
+        },
+        phoneValidation(value: string): boolean | string {
+            if (!value) {
+                return this.$t("user.phone-number.required");
+            }
+            if (!/^0\d{10}$/.test(value)) {
+                return this.$t("invalid.user.phone-number");
+            }
+            return true;
+        },
+        emailValidation(value: string): boolean | string {
+            if (!value) {
+                return this.$t("user.email.required");
+            }
+            if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value)) {
+                return this.$t("invalid.email");
             }
             return true;
         },
@@ -145,6 +182,7 @@ export default defineComponent({
 });
 
 </script>
+
 <style lang="scss">
 .register {
     .title {
@@ -173,4 +211,4 @@ export default defineComponent({
     }
 
 }
-</style>
+</style>@/api/errors/InvalidInputResponse

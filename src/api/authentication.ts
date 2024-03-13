@@ -51,12 +51,10 @@ export interface ILoginResponse {
 }
 
 export interface IRegisterRequest {
-    username: string;
+    name: string;
+    cellphone: string
+    email: string;
     password: string;
-}
-
-export interface IRegisterResponse {
-    user: IUserSummary;
 }
 
 export interface IResetPasswordRequest {

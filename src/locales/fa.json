@@ -27,6 +27,8 @@
     "user.have-account": "قبلا ثبت نام کرده اید؟",
     "user.password-confirmation.required": "وارد کردن تکرار رمز عبور الزامی است.",
     "user.name.required": "وارد کردن نام الزامی است",
+    "user.phone-number.required": "وارد کردن شماره تلفن ضروری است.",
+    "user.email.required": "وارد کردن ایمیل ضروری است.",
     "user.username.required": "وارد کردن نام کاربری الزامی است",
     "user.role.required": "وارد کردن نقش الزامی است",
     "user.status.required": "وارد کردن وضعیت الزامی است",
