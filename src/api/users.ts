@@ -36,7 +36,18 @@ export interface ISearchUserResponse {
     meta: any
 }
 
-export interface IChangeUserPasswordRequest{
+export interface ISearchUserTypeRequest {
+    id?: number;
+    title?: string;
+}
+
+export interface ISearchUserTypeResponse {
+    data: ILocalizedUserType[];
+    links: any;
+    meta: any;
+}
+
+export interface IChangeUserPasswordRequest {
     id: number;
     password: string;
 }

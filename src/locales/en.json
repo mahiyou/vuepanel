@@ -124,9 +124,12 @@
     "user.delete.confirm":"To confirm this, type user ID",
     "user.delete.confirm-userId":"Inputed user ID is wrong",
     "settings.user-types":"User types",
+    "user-types.id": "ID",
     "user-types.title":"title",
     "user-types.abilities": "abilities",
     "user-types.priorities": "priorities",
+    "user-types.add": "add user types",
     "user-types.delete": "delete",
-    "user-types.edit": "edit"
+    "user-types.edit": "edit",
+    "user-types.search": "search"
 }

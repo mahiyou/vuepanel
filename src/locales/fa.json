@@ -122,9 +122,12 @@
     "user.delete.confirm": "اگر از حذف کاربر اطمینان دارید، آی دی کاربر را وارد کنید",
     "user.delete.confirm-userId": "شناسه کاربری وارد شده صحیح نیست",
     "settings.user-types": "سطوح کاربری",
+    "user-types.id": "شناسه",
     "user-types.title": "عنوان",
     "user-types.abilities": "دسترسی ها",
     "user-types.priorities": "اولویت ها",
+    "user-types.add": "افزودن سطح کاربری",
     "user-types.delete": "حذف",
-    "user-types.edit": "ویرایش"
+    "user-types.edit": "ویرایش",
+    "user-types.search": "جستجو"
 }

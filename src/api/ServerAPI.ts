@@ -1,5 +1,5 @@
 import { IAPI } from "@/api";
-import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserResponse, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
+import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserResponse, ISearchUserTypeRequest, ISearchUserTypeResponse, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
 import { ILoginRequest, ILoginResponse, IRegisterRequest, IResetPasswordRequest, IResetPasswordResponse, IChangePasswordRequest, IUser, IUserSummary, UserStatus } from "./authentication";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import MockAPI from "./MockAPI";
@@ -194,8 +194,9 @@ export default class ServerAPI extends MockAPI implements IAPI {
         }
         return response.json();
     }
-    public async searchUserTypes(): Promise<any> {
-        const response = await fetch(`${this.baseURL}/aaa/v1/types`, {
+    public async searchUserTypes(request: ISearchUserTypeRequest): Promise<ISearchUserTypeResponse> {
+        const params = new URLSearchParams(this.prepaireData(request));
+        const response = await fetch(`${this.baseURL}/aaa/v1/types?${params.toString()}`, {
             headers: {
                 Accept: "application/json",
                 "Accept-Language": vuetify.locale.current.value,

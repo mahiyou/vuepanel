@@ -3,10 +3,10 @@ import { IChangePasswordRequest, ILoginRequest, ILoginResponse, IRegisterRequest
 import UserLoginError from "@/api/errors/UserLoginError";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest, INotification } from "./notification";
 import ServerInternalError from "./errors/ServerInternalError";
-import { IChangeUserPasswordRequest, ISearchUserRequest, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
+import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserTypeRequest, ISearchUserTypeResponse, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
 
 export default class MockAPI implements IAPI {
-    searchUserTypes(): Promise<any> {
+    searchUserTypes(request: ISearchUserTypeRequest): Promise<ISearchUserTypeResponse> {
         throw new Error("Method not implemented.");
     }
     register(request: IRegisterRequest): Promise<any> {

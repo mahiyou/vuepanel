@@ -16,6 +16,7 @@ import DeleteUserView from '@/views/Users/DeleteUser.vue';
 import ShowUserView from '@/views/Users/ShowUser.vue';
 import AddUserView from '@/views/Users/AddUser.vue';
 import UserTypesView from "@/views/Settings/UserTypes.vue";
+import AddUserTypes from "@/views/Settings/AddUserTypes.vue";
 
 
 const routes = [
@@ -126,9 +127,19 @@ const routes = [
                         path: "settings",
                         children: [
                             {
-                                name: "userTypes",
                                 path: "userTypes",
-                                component: UserTypesView,
+                                children: [
+                                    {
+                                        name: "userTypes",
+                                        path: "",
+                                        component: UserTypesView,
+                                    },
+                                    {
+                                        name: "addUserTypes",
+                                        path: "add",
+                                        component: AddUserTypes,
+                                    }
+                                ]
                             },
                         ]
                     }
