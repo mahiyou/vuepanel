@@ -10,7 +10,7 @@ interface IUsername {
     username: string;
 }
 
-export interface IUserSummary{
+export interface IUserSummary {
     id: number;
     status: UserStatus;
     name: string;
@@ -33,6 +33,18 @@ export interface IUserType {
     children: number[];
     created_at: string | null;
     updated_at: string | null;
+}
+
+interface translate {
+    type_id: number,
+    locale: string,
+    title: string,
+    created_at: Date;
+    updated_at: Date | null;
+}
+
+export interface IMultilanguageUserType extends IUserType {
+    translates: Record<string, translate>
 }
 
 export interface ILocalizedUserType extends IUserType {

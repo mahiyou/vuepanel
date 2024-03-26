@@ -15,8 +15,9 @@ import vuetify from '../plugins/vuetify';
 import DeleteUserView from '@/views/Users/DeleteUser.vue';
 import ShowUserView from '@/views/Users/ShowUser.vue';
 import AddUserView from '@/views/Users/AddUser.vue';
-import UserTypesView from "@/views/Settings/UserTypes.vue";
-import AddUserTypes from "@/views/Settings/AddUserTypes.vue";
+import UserTypesView from "@/views/Settings/UserTypes/UserTypes.vue";
+import AddUserTypesView from "@/views/Settings/UserTypes/AddUserTypes.vue";
+import EditUserTypesView from "@/views/Settings/UserTypes/EditUserTypes.vue"
 
 
 const routes = [
@@ -137,7 +138,12 @@ const routes = [
                                     {
                                         name: "addUserTypes",
                                         path: "add",
-                                        component: AddUserTypes,
+                                        component: AddUserTypesView,
+                                    },
+                                    {
+                                        name: "editUserTypes",
+                                        path: "edit/:id",
+                                        component: EditUserTypesView,
                                     }
                                 ]
                             },

@@ -1,6 +1,6 @@
 <template>
     <v-container class="userTypes-list">
-        <v-card v-if="!loading" class="pa-sm-5 pa-3" flat>
+        <v-card v-if="!loading && !error" class="pa-sm-5 pa-3" flat>
             <v-row class="mb-3">
                 <v-col sm="6" cols="12">
                     <h1
@@ -13,7 +13,7 @@
                     <SearchUserType @submit="onSearchUserType" />
                     <v-btn :to="{ name: 'addUserTypes' }" variant="flat" color="customGreen" prependIcon="mdi-plus"
                         class="ms-3" width="150px">{{
-            $t("user-types.add") }}
+                        $t("user-types.add") }}
                     </v-btn>
                 </v-col>
             </v-row>
@@ -36,14 +36,15 @@
                     </v-chip>
                 </template>
 
-                <template v-slot:item.actions>
-                    <TableRowActions :tableRowAction="tableRowAction()" />
+                <template v-slot:item.actions="{ item }">
+                    <TableRowActions :tableRowAction="tableRowAction(item.id)" />
                 </template>
             </v-data-table>
         </v-card>
         <div class="text-center my-10">
             <v-progress-circular v-if="loading" indeterminate color="primary" />
         </div>
+        <ErrorAlert v-if="error" :error="error" />
     </v-container>
 </template>
 <script lang="ts">
@@ -52,27 +53,40 @@ import { defineComponent } from 'vue';
 import TableRowActions from "@/components/TableRowActions.vue";
 import SearchUserType from '@/components/SearchUserType.vue';
 import { ISearchUserTypeRequest, ISearchUserTypeResponse } from '@/api/users';
+import { IErrorInComponent } from '@/utilities/error';
+import ErrorAlert from '@/components/ErrorAlert.vue';
+import BaseError from '@/api/errors/BaseError';
 
 export default defineComponent({
     components: {
         TableRowActions,
-        SearchUserType
+        SearchUserType,
+        ErrorAlert
     },
     data() {
         return {
             response: undefined as undefined | ISearchUserTypeResponse,
+            error: undefined as undefined | IErrorInComponent,
             loading: true,
         }
     },
     methods: {
         async getTypes(request: ISearchUserTypeRequest) {
+            this.error = undefined;
+            this.response = undefined;
             this.loading = true;
             try {
                 const res = await useAPI().searchUserTypes(request);
                 this.response = res;
             }
-            catch {
-
+            catch (e) {
+                if (e instanceof BaseError) {
+                    this.error = e.toComponentError();
+                } else {
+                    this.error = {
+                        message: this.$t('server error')
+                    };
+                }
             }
             finally {
                 this.loading = false;
@@ -86,7 +100,7 @@ export default defineComponent({
                 }
             });
         },
-        tableRowAction() {
+        tableRowAction(typeId:number) {
             return [
                 {
                     title: this.$t("user-types.edit"),
@@ -94,9 +108,8 @@ export default defineComponent({
                     props: {
                         prependIcon: "mdi-note-edit-outline",
                         color: "blue",
-                        // to: { name: `editUser`, params: { id: user.id } },
+                        to: { name: `editUserTypes`, params: { id: typeId } },
                     }
-
                 },
                 {
                     title: this.$t("user-types.delete"),

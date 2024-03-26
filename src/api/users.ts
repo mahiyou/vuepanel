@@ -1,4 +1,4 @@
-import { ILocalizedUserType, IUser, UserStatus } from "./authentication";
+import { ILocalizedUserType, IMultilanguageUserType, IUser, UserStatus } from "./authentication";
 
 export interface ILogSummary {
     id: number;
@@ -45,6 +45,10 @@ export interface ISearchUserTypeResponse {
     data: ILocalizedUserType[];
     links: any;
     meta: any;
+}
+
+export interface IGetUserTypeResponse {
+    data: IMultilanguageUserType;
 }
 
 export interface IChangeUserPasswordRequest {

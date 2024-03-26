@@ -1,7 +1,7 @@
 import MockAPI from "@/api/MockAPI";
 import { ILoginRequest, ILoginResponse, IResetPasswordRequest, IResetPasswordResponse, IRegisterRequest, IChangePasswordRequest, IUser } from "./authentication";
 import { IGetNotificationsRequest, IGetNotificationsResponse, IMarkNotificationsAsReadRequest } from "./notification";
-import { IChangeUserPasswordRequest, ISearchUserRequest, ISearchUserResponse, ISearchUserTypeRequest, ISearchUserTypeResponse, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
+import { IChangeUserPasswordRequest, IGetUserTypeResponse, ISearchUserRequest, ISearchUserResponse, ISearchUserTypeRequest, ISearchUserTypeResponse, IUserActivity, IUserCreateRequest, IUserUpdateChangesRequest } from "./users";
 import ServerAPI from "@/api/ServerAPI";
 
 export interface IAPI {
@@ -19,6 +19,7 @@ export interface IAPI {
     getUserActivity(userID: number): Promise<IUserActivity>;
     addUser(request: IUserCreateRequest): Promise<IUser>;
     searchUserTypes(request: ISearchUserTypeRequest): Promise<ISearchUserTypeResponse>;
+    getUserType(request: number): Promise<IGetUserTypeResponse>;
 }
 
 export function useAPI(): IAPI {
