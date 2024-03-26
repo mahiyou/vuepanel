@@ -1,10 +1,10 @@
 <template>
     <v-container>
         <v-card v-if="!loading && !error" class="pa-sm-5 pa-3" flat>
-            <h1 class="mb-6">ویرایش سطح کاربری</h1>
+            <h1 class="mb-6">{{ $t("user-type.edit") }}</h1>
             <v-row v-if="userType?.translates" v-for="title in Object.keys(userType?.translates)">
                 <v-col cols="2">
-                    <h3 class="float-end">عنوان به زبان {{ title }}</h3>
+                    <h3 class="float-end">{{ $t("user-type.title.language") }} "{{ title }}"</h3>
                 </v-col>
                 <v-col cols="4">
                     <v-text-field variant="outlined" v-model="userType.translates[title].title"
@@ -14,7 +14,7 @@
             <v-row>
                 <v-col cols="6">
                     <v-expansion-panels>
-                        <v-expansion-panel title="دسترسی ها" elevation="2">
+                        <v-expansion-panel :title="$t('user-types.abilities')" elevation="2">
                             <v-expansion-panel-text>
                                 <v-list select-strategy="classic">
                                     <v-list-item v-for="ability, index in authStore.user?.type.abilities" :key="index"
@@ -33,10 +33,10 @@
                 </v-col>
                 <v-col cols="6">
                     <v-expansion-panels>
-                        <v-expansion-panel title="سطوح زیرمجموعه" elevation="2">
+                        <v-expansion-panel :title="$t('user-types.priorities')" elevation="2">
                             <v-expansion-panel-text>
                                 <v-list select-strategy="classic">
-                                    <v-list-item v-for="children, index in authStore.user?.type.children" :key="index"
+                                    <v-list-item v-for=" children, index  in authStore.user?.type.children" :key="index"
                                         :value="children">
                                         <template v-slot:prepend="{ isActive }">
                                             <v-list-item-action start>
@@ -52,8 +52,7 @@
                 </v-col>
             </v-row>
             <div class=" text-center">
-                <v-btn color="primary" width="40%" class="mt-12 mb-5">{{
-            $t('update') }}</v-btn>
+                <v-btn color="primary" width="40%" class="mt-12 mb-5">{{ $t('user-type.update') }}</v-btn>
             </div>
         </v-card>
         <div class="text-center my-10">

@@ -129,5 +129,8 @@
     "user-types.add": "افزودن سطح کاربری",
     "user-types.delete": "حذف",
     "user-types.edit": "ویرایش",
-    "user-types.search": "جستجو"
+    "user-types.search": "جستجو",
+    "user-type.edit": "ویرایش سطح کاربری",
+    "user-type.title.language": "عنوان به زبان",
+    "user-type.update": "به روز رسانی"
 }

@@ -131,5 +131,8 @@
     "user-types.add": "add user types",
     "user-types.delete": "delete",
     "user-types.edit": "edit",
-    "user-types.search": "search"
+    "user-types.search": "search",
+    "user-type.edit": "Edit User Type",
+    "user-type.title.language": "Title in",
+    "user-type.update": "update"
 }
